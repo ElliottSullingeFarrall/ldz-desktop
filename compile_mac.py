@@ -29,4 +29,5 @@ for file in files:
             os.remove(file)
         except Exception:
             shutil.rmtree(file)
+        print(f'{file} removed')
 print('Done!')
