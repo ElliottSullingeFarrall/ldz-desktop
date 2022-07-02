@@ -14,8 +14,7 @@ if platform.system() == 'Windows':
         '-i=stag.ico',
         '--distpath=',
         '--add-data=*.ico;.',
-        '--hidden-import=babel.numbers',
-        '--enable-shared'
+        '--hidden-import=babel.numbers'
     ])
     PyInstaller.__main__.run([
         'Sync.py',
@@ -24,8 +23,7 @@ if platform.system() == 'Windows':
         '--noconfirm',
         '-i=stag.ico',
         '--distpath=',
-        '--add-data=*.ico;.',
-        '--enable-shared'
+        '--add-data=*.ico;.'
     ])
 else:
     PyInstaller.__main__.run([
@@ -36,8 +34,7 @@ else:
         '-i=stag.icns',
         '--distpath=',
         '--add-data=*.icns:.',
-        '--hidden-import=babel.numbers',
-        '--enable-framework'
+        '--hidden-import=babel.numbers'
     ])
     PyInstaller.__main__.run([
         'Sync.py',
@@ -46,8 +43,7 @@ else:
         '--noconfirm',
         '-i=stag.icns',
         '--distpath=',
-        '--add-data=*.icns:.',
-        '--enable-framework'
+        '--add-data=*.icns:.'
     ])
     shutil.rmtree('Record.app')
     shutil.rmtree('Sync.app')
