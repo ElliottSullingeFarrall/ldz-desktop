@@ -5,75 +5,74 @@ from tkcalendar import DateEntry
 
 import openpyxl as xl
 import os
-import platform
 
 import datetime
 
-if platform.system() == 'Windows':
-    icon_path = 'stag.ico'
-else:
-    icon_path = 'stag.icns'
+hours = [f'{hour:02}' for hour in range(0, 24, 1)]
+mints = [f'{mint:02}' for mint in range(0, 60, 5)]
 
-def num_to_str(num):
-    if num < 10:
-        return '0' + str(num)
-    else:
-        return str(num)
+class config_file:
+    def __init__(self, filename):
+        self.filename = filename
 
-hours = list(range(0, 24, 1))
-hours = [num_to_str(hour) for hour in hours]
-mints = list(range(0, 60, 5))
-mints = [num_to_str(mint) for mint in mints]
-
-def load_config(filename):
-    if os.path.exists(filename):
-        try:
-            config = xl.load_workbook(filename=filename)
-        except PermissionError:
-            answer = messagebox.askretrycancel(message='Unable to load the config file. Please try again.')
+    def __enter__(self):
+        if os.path.exists(self.filename):
+            try:
+                self.wb = xl.load_workbook(filename=self.filename)
+                self.table = self.wb.active
+            except PermissionError:
+                answer = messagebox.askretrycancel(message='Unable to load the config file. Please try again.')
+                if answer:
+                    config.load()
+                else:
+                    window.destroy()
+        else:
+            answer = messagebox.showerror(message='No config file found.')
             if answer:
-                load_config(filename)
-            else:
                 window.destroy()
-    else:
-        answer = messagebox.showerror(message='No config file found.')
-        if answer:
-            window.destroy()
-    return config, filename
+        return self.table
 
-def load_data(filename):
-    if os.path.exists(filename):
-        try:
-            data = xl.load_workbook(filename=filename)
-        except PermissionError:
-            answer = messagebox.askretrycancel(message='Unable to load the data file. Please try again.')
-            if answer:
-                load_data(filename)
-            else:
-                window.destroy()
-    else:
-        data = xl.Workbook()
-        data.security.lockStructure = True
-        data.active.protection.enable()
-        data.active.append(list(get_vars().keys()))
-    return data, filename
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.wb.save(filename=self.filename)
+        self.wb.close()
+        print(f'{self.filename} closed')
 
-def save_file(file, filename):
-    file.save(filename=filename)
-    file.close()
+class data_file:
+    def __init__(self, filename):
+        self.filename = filename
 
-filename_config = 'config.xlsx'
-filename_data   = 'data.xlsx'
+    def __enter__(self):
+        if os.path.exists(self.filename):
+            try:
+                self.wb = xl.load_workbook(filename=self.filename)
+                self.table = self.wb.active
+            except PermissionError:
+                answer = messagebox.askretrycancel(message='Unable to load the data file. Please try again.')
+                if answer:
+                    self.load()
+                else:
+                    window.destroy()
+        else:
+            self.wb = xl.Workbook()
+            self.wb.security.lockStructure = True
+            self.wb.active.protection.enable()
+            self.wb.active.append(list(get_vars().keys()))
+            self.table = self.wb.active
+        return self.table
 
-config, filename = load_config(filename=filename_config)
-fields = []
-for col in config.active.iter_cols():
-            fields.append({'name' : col[0].value, 'default' : col[1].value, 'values' : list(filter(None, [cell.value for cell in col[1:]]))})
-save_file(config, filename)
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.wb.save(filename=self.filename)
+        self.wb.close()
+        print(f'{self.filename} closed')
+
+with config_file('config.xlsx') as config:
+    fields = []
+    for col in config.iter_cols():
+                fields.append({'name' : col[0].value, 'default' : col[1].value, 'values' : list(filter(None, [cell.value for cell in col[1:]]))})
 
 window = tk.Tk()
 window.title('Record')
-window.iconbitmap(icon_path)
+window.iconphoto(True, tk.PhotoImage(file='images/stag.png'))
 window.resizable(False, False)
 
 date = tk.StringVar()
@@ -109,9 +108,8 @@ def submit_func():
     if '' in get_vars().values():
         messagebox.showinfo(message='Please fill in all the fields.')
     else:
-        data, filename = load_data(filename=filename_data)
-        data.active.append(list(get_vars().values()))
-        save_file(data, filename)
+        with data_file('data.xlsx') as data:
+            data.append(list(get_vars().values()))
         init_vars()        
 submit_button = ttk.Button(text='Submit', command=submit_func)
 submit_button.grid(row=5+pos, column=0, columnspan=2)
@@ -119,20 +117,18 @@ submit_button.grid(row=5+pos, column=0, columnspan=2)
 def del_func():
     del_window = tk.Toplevel(window)
     del_window.title('Data')
-    del_window.iconbitmap(icon_path)
     del_window.resizable(False, False)
     del_window.attributes('-topmost', 'true')
     del_window.grab_set()
 
-    data, filename = load_data(filename=filename_data)
-    columns = [cell.value for cell in data.active[1]]
-    table = ttk.Treeview(del_window, columns=columns, show='headings', selectmode='browse')
-    for col in columns:
-        table.heading(col, text=col, anchor=tk.CENTER)
-        table.column(col, stretch=False, anchor=tk.CENTER, width=100)
-    for row in data.active.iter_rows(min_row=2):
-        table.insert(parent='', index='end', values=[cell.value for cell in row])
-    save_file(data, filename)
+    with data_file('data.xlsx') as data:
+        columns = [cell.value for cell in data[1]]
+        table = ttk.Treeview(del_window, columns=columns, show='headings', selectmode='browse')
+        for col in columns:
+            table.heading(col, text=col, anchor=tk.CENTER)
+            table.column(col, stretch=False, anchor=tk.CENTER, width=100)
+        for row in data.iter_rows(min_row=2):
+            table.insert(parent='', index='end', values=[cell.value for cell in row])
     table.grid(row=0, column=0)
 
     vsb = ttk.Scrollbar(del_window, orient="vertical", command=table.yview)
@@ -145,9 +141,8 @@ def del_func():
             pass
         else:
             row_num = table.index(table.selection()) + 2
-            data, filename = load_data(filename=filename_data)
-            data.active.delete_rows(row_num, 1)
-            save_file(data, filename)
+            with data_file('data.xlsx') as data:
+                data.delete_rows(row_num, 1)
             del_window.destroy()
     table.bind("<<TreeviewSelect>>", del_selection)
 del_button = ttk.Button(text='Delete...', command=del_func)
