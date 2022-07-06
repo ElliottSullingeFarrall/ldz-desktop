@@ -1,3 +1,4 @@
+from platform import platform
 import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
@@ -93,6 +94,8 @@ class variables:
         for field in self.fields:
             vars[field['name']] = field['var'].get()
         return vars
+
+os.chdir(os.path.dirname(__file__))
 
 if __name__ == '__main__':
     window = tk.Tk()
