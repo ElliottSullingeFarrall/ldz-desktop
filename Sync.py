@@ -3,17 +3,11 @@ from tkinter import ttk
 
 import openpyxl as xl
 import os
-import platform
-
-if platform.system() == 'Windows':
-    icon_path = 'stag.ico'
-else:
-    icon_path = 'stag.icns'
 
 window = tk.Tk()
 window.resizable(False, False)
 window.title('Sync')
-window.iconbitmap(icon_path)
+window.iconphoto(True, tk.PhotoImage(file='images/stag.png'))
 
 os.chdir('Input')
 files = os.listdir()

@@ -8,8 +8,8 @@ import os
 
 import datetime
 
-hours = [f'{hour:02}' for hour in range(0, 24, 1)]
-mints = [f'{mint:02}' for mint in range(0, 60, 5)]
+hours = [f"{hour:02}" for hour in range(0, 24, 1)]
+mints = [f"{mint:02}" for mint in range(0, 60, 5)]
 
 class config_file:
     def __init__(self, filename):
@@ -35,7 +35,6 @@ class config_file:
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.wb.save(filename=self.filename)
         self.wb.close()
-        print(f'{self.filename} closed')
 
 class data_file:
     def __init__(self, filename):
@@ -56,61 +55,86 @@ class data_file:
             self.wb = xl.Workbook()
             self.wb.security.lockStructure = True
             self.wb.active.protection.enable()
-            self.wb.active.append(list(get_vars().keys()))
+            self.wb.active.append(list(vars.get().keys()))
             self.table = self.wb.active
         return self.table
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.wb.save(filename=self.filename)
         self.wb.close()
-        print(f'{self.filename} closed')
 
-with config_file('config.xlsx') as config:
-    fields = []
-    for col in config.iter_cols():
-                fields.append({'name' : col[0].value, 'default' : col[1].value, 'values' : list(filter(None, [cell.value for cell in col[1:]]))})
+class variables:
+    def __init__(self, fields):
+        self.date = {'var' : tk.StringVar()}
+        self.start_hour = {'var' : tk.StringVar()}
+        self.start_mint = {'var' : tk.StringVar()}
+        self.end_hour = {'var' : tk.StringVar()}
+        self.end_mint = {'var' : tk.StringVar()}
+        for field in fields:
+            field['var'] = tk.StringVar()
+        self.fields = fields
+        self.students = {'var' : tk.IntVar()}
+        self.full_room = {'var' : tk.StringVar()}
+
+    def refresh(self):
+        self.date['var'].set(datetime.datetime.now().strftime("%d/%m/%Y"))
+        self.start_hour['var'].set('12')
+        self.start_mint['var'].set('00')
+        self.end_hour['var'].set('12')
+        self.end_mint['var'].set('00')
+        for field in self.fields:
+            field['var'].set(field['default'] or '')
+        self.students['var'].set(1)
+        self.full_room['var'].set('No')
+
+    def get(self):
+        start_time = datetime.datetime.strptime(self.start_hour['var'].get() +':' + self.start_mint['var'].get(), '%H:%M')
+        end_time = datetime.datetime.strptime(self.end_hour['var'].get() +':' + self.end_mint['var'].get(), '%H:%M')
+        diff_time = end_time - start_time
+        vars = {'Date' : self.date['var'].get(), 'Time In' : start_time.strftime('%H:%M'), 'Time Out' : end_time.strftime('%H:%M'), 'Time of Session' : str(diff_time)[:-3], 'Number of identical queries' : self.students['var'].get(), 'Room Full?' : self.full_room['var'].get()}
+        for field in self.fields:
+            vars[field['name']] = field['var'].get()
+        return vars
 
 window = tk.Tk()
 window.title('Record')
 window.iconphoto(True, tk.PhotoImage(file='images/stag.png'))
 window.resizable(False, False)
 
-date = tk.StringVar()
+with config_file('config.xlsx') as config:
+    fields = []
+    for col in config.iter_cols():
+                fields.append({'name' : col[0].value, 'default' : col[1].value, 'values' : list(filter(None, [cell.value for cell in col[1:]]))})
+vars = variables(fields)
+
 ttk.Label(text='Date:').grid(row=0, column=0, sticky='e')
-DateEntry(textvariable=date, date_pattern='dd/mm/yyyy', state='readonly', selectmode = 'day').grid(row=0, column=1, columnspan=3, sticky='we')
+DateEntry(textvariable=vars.date['var'], date_pattern='dd/mm/yyyy', state='readonly', selectmode = 'day').grid(row=0, column=1, columnspan=3, sticky='we')
 
-start_hour = tk.StringVar()
-start_mint = tk.StringVar()
 ttk.Label(text='Time In:').grid(row=1, column=0, sticky='e')
-ttk.Spinbox(textvariable=start_hour, values=hours, state='readonly', wrap=True, width=3).grid(row=1, column=1, sticky='w')
-ttk.Spinbox(textvariable=start_mint, values=mints, state='readonly', wrap=True, width=3).grid(row=1, column=2, columnspan=2, sticky='w')
+ttk.Spinbox(textvariable=vars.start_hour['var'], values=hours, state='readonly', wrap=True, width=3).grid(row=1, column=1, sticky='w')
+ttk.Spinbox(textvariable=vars.start_mint['var'], values=mints, state='readonly', wrap=True, width=3).grid(row=1, column=2, columnspan=2, sticky='w')
 
-end_hour = tk.StringVar()
-end_mint = tk.StringVar()
 ttk.Label(text='Time Out:').grid(row=2, column=0, sticky='e')
-ttk.Spinbox(textvariable=end_hour, values=hours, state='readonly', wrap=True, width=3).grid(row=2, column=1, sticky='w')
-ttk.Spinbox(textvariable=end_mint, values=mints, state='readonly', wrap=True, width=3).grid(row=2, column=2, columnspan=2, sticky='w')
+ttk.Spinbox(textvariable=vars.end_hour['var'], values=hours, state='readonly', wrap=True, width=3).grid(row=2, column=1, sticky='w')
+ttk.Spinbox(textvariable=vars.end_mint['var'], values=mints, state='readonly', wrap=True, width=3).grid(row=2, column=2, columnspan=2, sticky='w')
 
-for pos, field in enumerate(fields):
-    field['var'] = tk.StringVar()
-    ttk.Label(text=field['name']+':').grid(row=3+pos, column=0, sticky='e')
+for pos, field in enumerate(vars.fields):
+    ttk.Label(text=f"{field['name']}:").grid(row=3+pos, column=0, sticky='e')
     ttk.Combobox(textvariable=field['var'], values=field['values'], state='readonly').grid(row=3+pos, column=1, columnspan=3, sticky='ew')
 
-students = tk.IntVar()
 ttk.Label(text='No. of Students:').grid(row=4+pos, column=0, sticky='e')
-ttk.Spinbox(textvariable=students, from_=1, to=9, state='readonly', width=2).grid(row=4+pos, column=1, sticky='w')
+ttk.Spinbox(textvariable=vars.students['var'], from_=1, to=9, state='readonly', width=2).grid(row=4+pos, column=1, sticky='w')
 
-full_room = tk.StringVar()
 ttk.Label(text='Was the room full?').grid(row=4+pos, column=2, sticky='e')
-ttk.Checkbutton(variable=full_room, offvalue='No', onvalue='Yes').grid(row=4+pos, column=3, sticky='e')
+ttk.Checkbutton(variable=vars.full_room['var'], offvalue='No', onvalue='Yes').grid(row=4+pos, column=3, sticky='e')
 
 def submit_func():
-    if '' in get_vars().values():
+    if '' in vars.get().values():
         messagebox.showinfo(message='Please fill in all the fields.')
     else:
         with data_file('data.xlsx') as data:
-            data.append(list(get_vars().values()))
-        init_vars()        
+            data.append(list(vars.get().values()))
+        vars.refresh()       
 submit_button = ttk.Button(text='Submit', command=submit_func)
 submit_button.grid(row=5+pos, column=0, columnspan=2)
 
@@ -148,25 +172,6 @@ def del_func():
 del_button = ttk.Button(text='Delete...', command=del_func)
 del_button.grid(row=5+pos, column=2, columnspan=2)
 
-def init_vars():
-    date.set(datetime.datetime.now().strftime("%d/%m/%Y"))
-    start_hour.set('12')
-    start_mint.set('00')
-    end_hour.set('12')
-    end_mint.set('00')
-    for field in fields:
-        field['var'].set(field['default'] or '')
-    students.set(1)
-    full_room.set('No')
-
-def get_vars():
-    start_time = datetime.datetime.strptime(start_hour.get() +':' + start_mint.get(), '%H:%M')
-    end_time = datetime.datetime.strptime(end_hour.get() +':' + end_mint.get(), '%H:%M')
-    diff_time = end_time - start_time
-    vars = {'Date' : date.get(), 'Time In' : start_time.strftime('%H:%M'), 'Time Out' : end_time.strftime('%H:%M'), 'Time of Session' : str(diff_time)[:-3], 'Number of identical queries' : students.get(), 'Room Full?' : full_room.get()}
-    for field in fields:
-        vars[field['name']] = field['var'].get()
-    return vars
-
-init_vars()
-window.mainloop()
+if __name__ == '__main__':
+    vars.refresh()
+    window.mainloop()
