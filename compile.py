@@ -3,14 +3,18 @@ import os
 import shutil
 import platform
 
+seps = {"Windows" : ";", "Darwin" : ":"}
+icons = {"Windows" : "stag.ico", "Darwin" : "stag.icns"}
+
 args_run = [
     "Record.py",
     "--onefile",
     "--windowed",
     "--noconfirm",
     "--distpath=",
-    "--add-data=images/*.png;.",
-    "--hidden-import=babel.numbers",
+    f"-i=images/{icons[platform.system()]}",
+    f"--add-data=images/*.png{seps[platform.system()]}.",
+    "--hidden-import=babel.numbers"
 ]
 args_sync = [
     "Sync.py",
@@ -18,12 +22,9 @@ args_sync = [
     "--windowed",
     "--noconfirm",
     "--distpath=",
-    "--add-data=images/*.png;.",
+    f"-i=images/{icons[platform.system()]}",
+    f"--add-data=images/*.png{seps[platform.system()]}."
 ]
-
-icons = {"Windows" : "stag.ico", "Darwin" : "stag.icns"}
-args_run.append(f"-i=images/{icons[platform.system()]}")
-args_sync.append(f"-i=images/{icons[platform.system()]}")
 
 PyInstaller.__main__.run(args_run)
 PyInstaller.__main__.run(args_sync)
