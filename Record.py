@@ -1,4 +1,3 @@
-from platform import platform
 import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
@@ -62,15 +61,13 @@ class data_file:
         self.wb.close()
 
 class variables:
-    def __init__(self, fields):
+    def __init__(self, config):
         self.date = {'var' : tk.StringVar()}
         self.start_hour = {'var' : tk.StringVar()}
         self.start_mint = {'var' : tk.StringVar()}
         self.end_hour = {'var' : tk.StringVar()}
         self.end_mint = {'var' : tk.StringVar()}
-        for field in fields:
-            field['var'] = tk.StringVar()
-        self.fields = fields
+        self.add_fields = [{'name' : col[0].value, 'default' : col[1].value, 'values' : list(filter(None, [cell.value for cell in col[1:]])), 'var' : tk.StringVar()} for col in config.iter_cols()]
         self.students = {'var' : tk.IntVar()}
         self.full_room = {'var' : tk.StringVar()}
         self.refresh()
@@ -81,7 +78,7 @@ class variables:
         self.start_mint['var'].set('00')
         self.end_hour['var'].set('12')
         self.end_mint['var'].set('00')
-        for field in self.fields:
+        for field in self.add_fields:
             field['var'].set(field['default'] or '')
         self.students['var'].set(1)
         self.full_room['var'].set('No')
@@ -91,7 +88,7 @@ class variables:
         end_time = datetime.datetime.strptime(self.end_hour['var'].get() +':' + self.end_mint['var'].get(), '%H:%M')
         diff_time = end_time - start_time
         vars = {'Date' : self.date['var'].get(), 'Time In' : start_time.strftime('%H:%M'), 'Time Out' : end_time.strftime('%H:%M'), 'Time of Session' : str(diff_time)[:-3], 'Number of identical queries' : self.students['var'].get(), 'Room Full?' : self.full_room['var'].get()}
-        for field in self.fields:
+        for field in self.add_fields:
             vars[field['name']] = field['var'].get()
         return vars
 
@@ -106,10 +103,7 @@ if __name__ == '__main__':
     hours = [f"{hour:02}" for hour in range(0, 24, 1)]
     mints = [f"{mint:02}" for mint in range(0, 60, 5)]
     with config_file('config.xlsx') as config:
-        fields = []
-        for col in config.iter_cols():
-                    fields.append({'name' : col[0].value, 'default' : col[1].value, 'values' : list(filter(None, [cell.value for cell in col[1:]]))})
-    vars = variables(fields)
+        vars = variables(config)
 
     ttk.Label(text='Date:').grid(row=0, column=0, sticky='e')
     DateEntry(textvariable=vars.date['var'], date_pattern='dd/mm/yyyy', state='readonly', selectmode = 'day').grid(row=0, column=1, columnspan=3, sticky='we')
@@ -122,7 +116,7 @@ if __name__ == '__main__':
     ttk.Spinbox(textvariable=vars.end_hour['var'], values=hours, state='readonly', wrap=True, width=3).grid(row=2, column=1, sticky='w')
     ttk.Spinbox(textvariable=vars.end_mint['var'], values=mints, state='readonly', wrap=True, width=3).grid(row=2, column=2, columnspan=2, sticky='w')
 
-    for pos, field in enumerate(vars.fields):
+    for pos, field in enumerate(vars.add_fields):
         ttk.Label(text=f"{field['name']}:").grid(row=3+pos, column=0, sticky='e')
         ttk.Combobox(textvariable=field['var'], values=field['values'], state='readonly').grid(row=3+pos, column=1, columnspan=3, sticky='ew')
 

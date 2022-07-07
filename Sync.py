@@ -1,54 +1,43 @@
-import tkinter as tk
-from tkinter import ttk
-
 import openpyxl as xl
-import os
+import sys
 
-window = tk.Tk()
-window.resizable(False, False)
-window.title('Sync')
-window.iconphoto(True, tk.PhotoImage(file='images/stag.png'))
+class output_file:
+    def __init__(self, filename):
+        self.filename = filename
 
-os.chdir('Input')
-files = os.listdir()
+    def __enter__(self):
+        try:
+            self.wb = xl.Workbook()
+            self.table = self.wb.active
+        except PermissionError:
+            raise Exception("Unable to load the data file. Please try again.")
+        return self.table
 
-files_list = tk.Listbox(selectmode=tk.MULTIPLE)
-for file in files:
-    files_list.insert(tk.END, file)
-files_list.grid(row=0, column=0, columnspan=2, sticky='ew')
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.wb.save(filename=self.filename)
+        self.wb.close()
 
-def select_all():
-    files_list.select_set(0, tk.END)
-select_button = ttk.Button(text='Select All', command=select_all)
-select_button.grid(row=1, column=0, sticky='ew')
+class data_file:
+    def __init__(self, filename):
+        self.filename = filename
 
-def sync():
-    sync_button['state']   = tk.DISABLED
-    select_button['state'] = tk.DISABLED
-    files_list.bindtags((files_list, window, "all"))
+    def __enter__(self):
+        try:
+            self.wb = xl.load_workbook(filename=self.filename)
+            self.table = self.wb.active
+        except PermissionError:
+            raise Exception("Unable to load the data file. Please try again.")
+        return self.table
 
-    output = xl.Workbook()
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.wb.save(filename=self.filename)
+        self.wb.close()
 
-    def get_index(idx):
-        if idx == 0:
-            return 1
-        else:
-            return 2
 
-    files = [files_list.get(idx) for idx in files_list.curselection()]
+files = sys.argv[1:]
+
+with output_file("Output.xlsx") as output:
     for idx, filename in enumerate(files):
-        data = xl.load_workbook(filename=filename)
-        for row in data.active.iter_rows(min_row=get_index(idx)):
-            row_values = [cell.value for cell in row]
-            output.active.append(row_values)
-        data.save(filename=filename)
-        files_list.selection_clear(idx)
-        window.update()
-
-    os.chdir('..')
-    output.save(filename='Output.xlsx')
-    window.destroy()
-sync_button = ttk.Button(text='Sync', command=sync)
-sync_button.grid(row=1, column=1, sticky='ew')
-
-window.mainloop()
+        with data_file(filename) as data:
+            for row in data.iter_rows(min_row=1 if idx == 0 else 2):
+                output.append([cell.value for cell in row])
