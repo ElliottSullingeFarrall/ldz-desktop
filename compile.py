@@ -1,9 +1,7 @@
 import PyInstaller.__main__
 import os
 import shutil
-import platform
 
-seps = {"Windows" : ";", "Darwin" : ":"}
 icons = {"Windows" : "stag.ico", "Darwin" : "stag.icns"}
 
 args_run = [
@@ -11,9 +9,10 @@ args_run = [
     "--onefile",
     "--windowed",
     "--noconfirm",
+    "--argv-emulation",
     "--distpath=",
-    f"-i=images/{icons[platform.system()]}",
-    f"--add-data=images/*.png{seps[platform.system()]}.",
+    f"-i=images/{icons[os.uname().sysname]}",
+    f"--add-data=images{os.pathsep}images",
     "--hidden-import=babel.numbers"
 ]
 args_sync = [
@@ -21,15 +20,16 @@ args_sync = [
     "--onefile",
     "--windowed",
     "--noconfirm",
+    "--argv-emulation",
     "--distpath=",
-    f"-i=images/{icons[platform.system()]}",
-    f"--add-data=images/*.png{seps[platform.system()]}."
+    f"-i=images/{icons[os.uname().sysname]}",
+    f"--add-data=images{os.pathsep}images"
 ]
 
 PyInstaller.__main__.run(args_run)
 PyInstaller.__main__.run(args_sync)
 
-files = ["Record.app", "Sync.app", "Record.spec", "Sync.spec", "build"]
+files = ["Record.spec", "Sync.spec", "build"]
 for file in files:
     if os.path.exists(file):
         try:

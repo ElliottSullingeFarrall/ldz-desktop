@@ -1,4 +1,5 @@
 import openpyxl as xl
+import os
 import sys
 
 class output_file:
@@ -33,11 +34,20 @@ class data_file:
         self.wb.save(filename=self.filename)
         self.wb.close()
 
+def main():
+    files = sys.argv[1:]
 
-files = sys.argv[1:]
+    path = os.path.dirname(sys.argv[0])
+    os.chdir(path)
+    while 'Record.app' in path:
+        path = os.path.dirname(path)
+        os.chdir(path)
 
-with output_file("Output.xlsx") as output:
-    for idx, filename in enumerate(files):
-        with data_file(filename) as data:
-            for row in data.iter_rows(min_row=1 if idx == 0 else 2):
-                output.append([cell.value for cell in row])
+    with output_file("Output.xlsx") as output:
+        for idx, filename in enumerate(files):
+            with data_file(filename) as data:
+                for row in data.iter_rows(min_row=1 if idx == 0 else 2):
+                    output.append([cell.value for cell in row])
+
+if __name__ == '__main__':
+    main()

@@ -3,10 +3,11 @@ from tkinter import ttk
 from tkinter import messagebox
 from tkcalendar import DateEntry
 
+import datetime
+
 import openpyxl as xl
 import os
-
-import datetime
+import sys
 
 class config_file:
     def __init__(self, filename):
@@ -20,7 +21,7 @@ class config_file:
             except PermissionError:
                 answer = messagebox.askretrycancel(message='Unable to load the config file. Please try again.')
                 if answer:
-                    config.load()
+                    self.__enter__()
                 else:
                     window.destroy()
         else:
@@ -45,7 +46,7 @@ class data_file:
             except PermissionError:
                 answer = messagebox.askretrycancel(message='Unable to load the data file. Please try again.')
                 if answer:
-                    self.load()
+                    self.__enter__()
                 else:
                     window.destroy()
         else:
@@ -92,12 +93,16 @@ class variables:
             vars[field['name']] = field['var'].get()
         return vars
 
-#os.chdir(os.path.dirname(__file__))
-
 def main():
+    path = os.path.dirname(sys.argv[0])
+    os.chdir(path)
+    while 'Record.app' in path:
+        path = os.path.dirname(path)
+        os.chdir(path)
+
     window = tk.Tk()
     window.title('Record')
-    window.iconphoto(True, tk.PhotoImage(file='images/stag.png'))
+    window.iconphoto(True, tk.PhotoImage(file=f'{sys._MEIPASS}/images/stag.png'))
     window.resizable(False, False)
 
     hours = [f"{hour:02}" for hour in range(0, 24, 1)]
