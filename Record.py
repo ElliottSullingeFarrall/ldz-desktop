@@ -92,9 +92,9 @@ class variables:
             vars[field['name']] = field['var'].get()
         return vars
 
-os.chdir(os.path.dirname(__file__))
+#os.chdir(os.path.dirname(__file__))
 
-if __name__ == '__main__':
+def main():
     window = tk.Tk()
     window.title('Record')
     window.iconphoto(True, tk.PhotoImage(file='images/stag.png'))
@@ -171,3 +171,6 @@ if __name__ == '__main__':
     del_button.grid(row=5+pos, column=2, columnspan=2)
 
     window.mainloop()
+
+if __name__ == '__main__':
+    main()
