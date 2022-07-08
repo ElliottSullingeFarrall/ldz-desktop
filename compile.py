@@ -1,6 +1,7 @@
 import PyInstaller.__main__
 import os
 import shutil
+import platform
 
 icons = {"Windows" : "stag.ico", "Darwin" : "stag.icns"}
 
@@ -11,7 +12,7 @@ args_run = [
     "--noconfirm",
     "--argv-emulation",
     "--distpath=",
-    f"-i=images/{icons[os.uname().sysname]}",
+    f"-i=images/{icons[platform.system()]}",
     f"--add-data=images{os.pathsep}images",
     "--hidden-import=babel.numbers"
 ]
@@ -22,7 +23,7 @@ args_sync = [
     "--noconfirm",
     "--argv-emulation",
     "--distpath=",
-    f"-i=images/{icons[os.uname().sysname]}",
+    f"-i=images/{icons[platform.system()]}",
     f"--add-data=images{os.pathsep}images"
 ]
 
