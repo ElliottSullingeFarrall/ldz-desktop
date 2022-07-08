@@ -5,7 +5,7 @@ import platform
 
 icons = {"Windows" : "stag.ico", "Darwin" : "stag.icns"}
 
-args_run = [
+args_record = [
     "Record.py",
     "--onefile",
     "--windowed",
@@ -27,10 +27,15 @@ args_sync = [
     f"--add-data=images{os.pathsep}images"
 ]
 
-PyInstaller.__main__.run(args_run)
-PyInstaller.__main__.run(args_sync)
+if platform.system() == 'Windows':
+    PyInstaller.__main__.run(args_record)
+    PyInstaller.__main__.run(args_sync)
+elif platform.system() == 'Darwin':
+    PyInstaller.__main__.run(args_record)
+else:
+    print(f'The {platform.system()} is not supported!')
 
-files = ["Record.spec", "Sync.spec", "build"]
+files = ["Record", "Sync", "Record.spec", "Sync.spec", "build"]
 for file in files:
     if os.path.exists(file):
         try:
