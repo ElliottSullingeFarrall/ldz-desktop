@@ -19,7 +19,6 @@ args_record = [
 args_sync = [
     "Sync.py",
     "--onefile",
-    "--windowed",
     "--noconfirm",
     "--argv-emulation",
     "--distpath=",

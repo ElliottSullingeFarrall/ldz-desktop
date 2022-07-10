@@ -1,7 +1,7 @@
 import openpyxl as xl
 import sys
 
-class output_file:
+class Output:
     def __init__(self, filename):
         self.filename = filename
 
@@ -10,36 +10,42 @@ class output_file:
             self.wb = xl.Workbook()
             self.table = self.wb.active
         except PermissionError:
-            raise Exception("Unable to load the data file. Please try again.")
+            raise Exception("Unable to load the output file. Please try again.")
         return self.table
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        self.wb.save(filename=self.filename)
-        self.wb.close()
+        try:
+            self.wb.save(filename=self.filename)
+            self.wb.close()
+        except PermissionError:
+            raise Exception("Unable to save the output file. Please try again.")
 
-class data_file:
+class Data:
     def __init__(self, filename):
         self.filename = filename
 
     def __enter__(self):
         try:
-            self.wb = xl.load_workbook(filename=self.filename)
+            self.wb = xl.Workbook()
             self.table = self.wb.active
         except PermissionError:
-            raise Exception("Unable to load the data file. Please try again.")
+            raise Exception(f"Unable to load the data file ({self.filename}). Please try again.")
         return self.table
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        self.wb.save(filename=self.filename)
-        self.wb.close()
+        try:
+            self.wb.save(filename=self.filename)
+            self.wb.close()
+        except PermissionError:
+            raise Exception(f"Unable to save the data file ({self.filename}). Please try again.")
 
 def main():
     files = sys.argv[1:]
     files = ['test_data/1.xlsx', 'test_data/2.xlsx', 'test_data/3.xlsx']
 
-    with output_file("Output.xlsx") as output:
+    with Output("output.xlsx") as output:
         for idx, filename in enumerate(files):
-            with data_file(filename) as data:
+            with Data(filename) as data:
                 for row in data.iter_rows(min_row=1 if idx == 0 else 2, values_only=True):
                     output.append(row)
 
