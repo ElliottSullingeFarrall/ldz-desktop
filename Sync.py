@@ -35,12 +35,13 @@ class data_file:
 
 def main():
     files = sys.argv[1:]
+    files = ['test_data/1.xlsx', 'test_data/2.xlsx', 'test_data/3.xlsx']
 
     with output_file("Output.xlsx") as output:
         for idx, filename in enumerate(files):
             with data_file(filename) as data:
-                for row in data.iter_rows(min_row=1 if idx == 0 else 2):
-                    output.append([cell.value for cell in row])
+                for row in data.iter_rows(min_row=1 if idx == 0 else 2, values_only=True):
+                    output.append(row)
 
 if __name__ == '__main__':
     main()

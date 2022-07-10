@@ -68,7 +68,7 @@ class variables:
         self.start_mint = {'var' : tk.StringVar()}
         self.end_hour = {'var' : tk.StringVar()}
         self.end_mint = {'var' : tk.StringVar()}
-        self.add_fields = [{'name' : col[0].value, 'default' : col[1].value, 'values' : list(filter(None, [cell.value for cell in col[1:]])), 'var' : tk.StringVar()} for col in config.iter_cols()]
+        self.add_fields = [{'name' : col[0], 'default' : col[1], 'values' : list(filter(None, col[1:])), 'var' : tk.StringVar()} for col in config.iter_cols(values_only=True)]
         self.students = {'var' : tk.IntVar()}
         self.full_room = {'var' : tk.StringVar()}
         self.refresh()
@@ -99,10 +99,14 @@ def main():
     while 'Record.app' in path:
         path = os.path.dirname(path)
         os.chdir(path)
+    try:
+        image = f'{sys._MEIPASS}/images/stag.png'
+    except AttributeError:
+        image = f'images/stag.png'
 
     window = tk.Tk()
     window.title('Record')
-    window.iconphoto(True, tk.PhotoImage(file=f'{sys._MEIPASS}/images/stag.png'))
+    window.iconphoto(True, tk.PhotoImage(file=image))
     window.resizable(False, False)
 
     hours = [f"{hour:02}" for hour in range(0, 24, 1)]
@@ -149,13 +153,12 @@ def main():
         del_window.grab_set()
 
         with data_file('data.xlsx') as data:
-            columns = [cell.value for cell in data[1]]
-            table = ttk.Treeview(del_window, columns=columns, show='headings', selectmode='browse')
-            for col in columns:
+            table = ttk.Treeview(del_window, columns=list(vars.get().keys()), show='headings', selectmode='browse')
+            for col in table['columns']:
                 table.heading(col, text=col, anchor=tk.CENTER)
                 table.column(col, stretch=False, anchor=tk.CENTER, width=100)
-            for row in data.iter_rows(min_row=2):
-                table.insert(parent='', index='end', values=[cell.value for cell in row])
+            for row in data.iter_rows(min_row=2, values_only=True):
+                table.insert(parent='', index='end', values=row)
         table.grid(row=0, column=0)
 
         vsb = ttk.Scrollbar(del_window, orient="vertical", command=table.yview)
