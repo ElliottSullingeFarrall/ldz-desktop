@@ -48,6 +48,6 @@ def main():
             with Data(filename) as data:
                 for row in data.iter_rows(min_row=1 if idx == 0 else 2, values_only=True):
                     output.append(row)
-
+    exit
 if __name__ == '__main__':
     main()
