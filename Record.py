@@ -9,6 +9,8 @@ import openpyxl as xl
 import os
 import sys
 
+global window, fields
+
 class Config:
     def __init__(self, filename):
         self.filename = filename
@@ -60,7 +62,7 @@ class Data:
             self.wb = xl.Workbook()
             self.wb.security.lockStructure = True
             self.wb.active.protection.enable()
-            self.wb.active.append(list(fields.get().keys()))
+            self.wb.active.append(fields.labels)
             self.ws = self.wb.active
         return self.ws
 
