@@ -14,6 +14,7 @@ args_record = [
     "--distpath=",
     f"-i=images/{icons[platform.system()]}",
     f"--add-data=images{os.pathsep}images",
+    "--hidden-import=openpyxl",
     "--hidden-import=babel.numbers"
 ]
 args_sync = [
@@ -23,7 +24,8 @@ args_sync = [
     "--argv-emulation",
     "--distpath=",
     f"-i=images/{icons[platform.system()]}",
-    f"--add-data=images{os.pathsep}images"
+    f"--add-data=images{os.pathsep}images",
+    "--hidden-import=openpyxl"
 ]
 
 if platform.system() == 'Windows':
@@ -32,7 +34,7 @@ if platform.system() == 'Windows':
 elif platform.system() == 'Darwin':
     PyInstaller.__main__.run(args_record)
 else:
-    print(f'The {platform.system()} is not supported!')
+    print(f'The platform: {platform.system()} is not supported!')
 
 files = ["Record", "Sync", "Record.spec", "Sync.spec", "build"]
 for file in files:
