@@ -1,53 +1,42 @@
-import openpyxl as xl
+from tkinter import messagebox
+import pandas as pd
+import os
 import sys
-
-class Output:
-    def __init__(self, filename):
-        self.filename = filename
-
-    def __enter__(self):
-        try:
-            self.wb = xl.Workbook()
-            self.table = self.wb.active
-        except PermissionError:
-            raise Exception("Unable to load the output file. Please try again.")
-        return self.table
-
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        try:
-            self.wb.save(filename=self.filename)
-            self.wb.close()
-        except PermissionError:
-            raise Exception("Unable to save the output file. Please try again.")
 
 class Data:
     def __init__(self, filename):
         self.filename = filename
 
     def __enter__(self):
-        try:
-            self.wb = xl.Workbook()
-            self.table = self.wb.active
-        except PermissionError:
-            raise Exception(f"Unable to load the data file ({self.filename}). Please try again.")
-        return self.table
+        if os.path.exists(self.filename):
+            try:
+                self.df = pd.read_excel(self.filename, dtype=str, na_filter=False)
+            except PermissionError:
+                answer = messagebox.askretrycancel(message=f'Unable to load the file: {self.filename}. Please try again.')
+                if answer:
+                    self.__enter__()
+                else:
+                    exit
+        else:
+            self.df = pd.DataFrame()
+        return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         try:
-            self.wb.save(filename=self.filename)
-            self.wb.close()
+            self.df.to_excel(self.filename, index=False)
         except PermissionError:
-            raise Exception(f"Unable to save the data file ({self.filename}). Please try again.")
+            answer = messagebox.askretrycancel(message=f'Unable to save the file: {self.filename}. Please try again.')
+            if answer:
+                self.__exit__(exc_type, exc_val, exc_tb)
+            else:
+                exit
 
-def main():
-    files = sys.argv[1:]
-    files = ['test_data/1.xlsx', 'test_data/2.xlsx', 'test_data/3.xlsx']
-
-    with Output("output.xlsx") as output:
-        for idx, filename in enumerate(files):
-            with Data(filename) as data:
-                for row in data.iter_rows(min_row=1 if idx == 0 else 2, values_only=True):
-                    output.append(row)
-    exit
 if __name__ == '__main__':
-    main()
+    files = sys.argv[1:]
+
+    with Data('output.xlsx') as output:
+        for filename in files:
+            with Data(filename) as data:
+                output.df = pd.concat([output.df, data.df])
+                print(f'Synced file: {filename}')
+    exit
