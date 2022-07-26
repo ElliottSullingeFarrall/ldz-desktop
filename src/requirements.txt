@@ -1,0 +1,13 @@
+altgraph==0.17.2
+Babel==2.10.3
+future==0.18.2
+numpy==1.23.1
+pandas==1.4.3
+pefile==2022.5.30
+pyinstaller==5.2
+pyinstaller-hooks-contrib==2022.8
+python-dateutil==2.8.2
+pytz==2022.1
+pywin32-ctypes==0.2.0
+six==1.16.0
+tkcalendar==1.6.1
