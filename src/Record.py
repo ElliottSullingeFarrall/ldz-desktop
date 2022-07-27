@@ -9,7 +9,7 @@ import pandas as pd
 import os
 import sys
 
-def set_path():
+def executable_path():
     path = os.path.dirname(sys.argv[0])
     os.chdir(path)
     while 'Record.app' in path:
@@ -111,7 +111,7 @@ if __name__ == '__main__':
     window.iconphoto(True, tk.PhotoImage(file=resource_path('images/stag.png')))
     window.resizable(False, False)
 
-    os.chdir(os.path.dirname(sys.executable))
+    executable_path()
 
     with Config('config.xlsx') as config:
         add_fields_defs = config.df.loc[0]
