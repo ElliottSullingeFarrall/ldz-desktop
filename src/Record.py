@@ -6,23 +6,10 @@ from tkcalendar import DateEntry
 from datetime import datetime
 
 import pandas as pd
+import xlsxwriter
 import os
 import sys
-
-def executable_path():
-    path = os.path.dirname(sys.argv[0])
-    os.chdir(path)
-    while 'Record.app' in path:
-        path = os.path.dirname(path)
-        os.chdir(path)
-
-def resource_path(relative_path):
-    try:
-        # PyInstaller creates a temp folder and stores path in _MEIPASS
-        base_path = sys._MEIPASS
-    except Exception:
-        base_path = os.path.abspath(".")
-    return os.path.join(base_path, relative_path)
+from path_utils import set_app_path, resource_path
 
 class Config:
     def __init__(self, filename):
@@ -75,7 +62,11 @@ class Data:
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         try:
-            self.df.to_excel(self.filename, index=False)
+            writer = pd.ExcelWriter(self.filename, engine='xlsxwriter')
+            self.df.to_excel(writer, sheet_name='data', index=False)
+            ws = writer.sheets['data']
+            ws.protect()
+            writer.save()
         except PermissionError:
             answer = messagebox.askretrycancel(message='Unable to save the data file. Please try again.')
             if answer:
@@ -111,7 +102,7 @@ if __name__ == '__main__':
     window.iconphoto(True, tk.PhotoImage(file=resource_path('images/stag.png')))
     window.resizable(False, False)
 
-    executable_path()
+    set_app_path()
 
     with Config('config.xlsx') as config:
         add_fields_defs = config.df.loc[0]
