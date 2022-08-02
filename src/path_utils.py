@@ -5,8 +5,10 @@ def set_app_path():
     path = os.path.dirname(sys.argv[0])
     os.chdir(path)
     while '.app' in path:
+        app = path
         path = os.path.dirname(path)
         os.chdir(path)
+    return app
 
 def resource_path(relative_path):
     try:

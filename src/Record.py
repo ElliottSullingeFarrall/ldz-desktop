@@ -98,11 +98,9 @@ class Entries:
 
 if __name__ == '__main__':
     window = tk.Tk()
-    window.title(os.path.splitext(os.path.basename(sys.argv[0]))[0])
+    window.title(os.path.splitext(os.path.basename(set_app_path()))[0])
     window.iconphoto(True, tk.PhotoImage(file=resource_path('images/stag.png')))
     window.resizable(False, False)
-
-    set_app_path()
 
     with Config('config.xlsx') as config:
         add_fields_defs = config.df.loc[0]
