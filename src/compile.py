@@ -13,6 +13,7 @@ args_record = [
     "--argv-emulation",
     f"-i=src/images/{icons[platform.system()]}",
     f"--add-data=src/images/stag.png{os.pathsep}images",
+    f"--add-data=src/resources/{os.pathsep}resources",
     "--hidden-import=babel.numbers"
 ]
 args_sync = [

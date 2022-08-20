@@ -1,14 +1,15 @@
 import os
 import sys
 
-def set_app_path():
-    path = os.path.dirname(sys.argv[0])
+def get_app_name():
+    app = sys.argv[0]
+    path = os.path.dirname(app)
     os.chdir(path)
     while '.app' in path:
         app = path
-        path = os.path.dirname(path)
+        path = os.path.dirname(app)
         os.chdir(path)
-    return app
+    return os.path.splitext(os.path.basename(app))[0]
 
 def resource_path(relative_path):
     try:
