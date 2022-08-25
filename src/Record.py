@@ -178,9 +178,10 @@ class DAT():
         self.df = pd.read_csv(resource_path('resources/dat.csv'), dtype=str, na_filter=False)
 
 if __name__ == '__main__':
+    os.chdir(os.path.dirname(sys.argv[0]))
     logging.basicConfig(filename='error.log', filemode='w', level=logging.DEBUG)
+    logging.debug(f'name = {get_app_name()}')
     try:
-        os.chdir(os.path.dirname(sys.argv[0]))
         cfg = CFG()
         dat = DAT()
 
