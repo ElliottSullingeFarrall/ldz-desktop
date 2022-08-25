@@ -1,6 +1,5 @@
 import PyInstaller.__main__
 import os
-import shutil
 import platform
 
 icons = {"Windows" : "stag.ico", "Darwin" : "stag.icns"}
@@ -32,12 +31,4 @@ elif platform.system() == 'Darwin':
 else:
     print(f'The platform: {platform.system()} is not supported!')
 
-files = ["Record", "Sync", "Record.spec", "Sync.spec", "build"]
-for file in files:
-    if os.path.exists(file):
-        try:
-            os.remove(file)
-        except Exception:
-            shutil.rmtree(file)
-        print(f"{file} removed")
-print("Done!")
+print("Finished Compiling!")

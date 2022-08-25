@@ -16,6 +16,12 @@ class App(tk.Tk):
     def __init__(self, cfg):
         super().__init__()
 
+        self.df = pd.DataFrame(columns=['Date', 'Time In', 'Time Out', 'Time of Session'] + [col for col in cfg.df] + ['Number of Identical Queries', 'Room Full?'])
+        if cfg.df.empty:
+            self.add_fields_defs = []
+        else:
+            self.add_fields_defs = cfg.df.loc[0]
+
         self.title(get_app_name())
         self.iconphoto(True, tk.PhotoImage(file=resource_path('images/stag.png')))
         self.resizable(False, False)
@@ -33,21 +39,14 @@ class App(tk.Tk):
         menubar.add_cascade(label="Data", menu=datmenu)
         self.config(menu=menubar)
 
-        self.df = pd.DataFrame(columns=['Date', 'Time In', 'Time Out', 'Time of Session'] + [col for col in cfg.df] + ['Number of Identical Queries', 'Room Full?'])
-
-        if cfg.df.empty:
-            self.add_fields_defs = []
-        else:
-            self.add_fields_defs = cfg.df.loc[0]
-
-        self.date = tk.StringVar(value=f"{datetime.now():%d/%m/%Y}")
-        self.start_hour = tk.StringVar(value='12')
-        self.start_mint = tk.StringVar(value='00')
-        self.end_hour = tk.StringVar(value='12')
-        self.end_mint = tk.StringVar(value='00')
+        self.date       =  tk.StringVar(value=f"{datetime.now():%d/%m/%Y}")
+        self.start_hour =  tk.StringVar(value='12')
+        self.start_mint =  tk.StringVar(value='00')
+        self.end_hour   =  tk.StringVar(value='12')
+        self.end_mint   =  tk.StringVar(value='00')
         self.add_fields = [tk.StringVar(value=default) for default in self.add_fields_defs]
-        self.students = tk.IntVar(value=1)
-        self.full = tk.StringVar(value='No')
+        self.students   =  tk.IntVar(value=1)
+        self.full       =  tk.StringVar(value='No')
 
         self.date.trace_add('write', self.update_fields)
         self.start_hour.trace_add('write', self.update_fields)
@@ -101,15 +100,16 @@ class App(tk.Tk):
         self.full.set('No')
 
     def load_cfg(self):
-        path = filedialog.askopenfilename(title='Load Config', initialdir='/', filetypes=[('excel files', '*.xlsx')])
-        cfg.df = pd.read_excel(path, dtype=str, na_filter=False)
-        self.destroy()
-        self.__init__(cfg)
-        self.mainloop()
+        path = filedialog.askopenfilename(parent=self, title='Load Config', initialdir='/', filetypes=[('excel files', '*.xlsx')])
+        if path:
+            cfg.df = pd.read_excel(path, dtype=str, na_filter=False)
+            self.destroy()
+            self.__init__(cfg)
+            self.mainloop()
 
     def edit_dat(self):
         dat_window = tk.Toplevel(self)
-        dat_window.title('Data')
+        dat_window.title('View Data')
         dat_window.resizable(False, False)
         dat_window.attributes('-topmost', 'true')
         dat_window.grab_set()
@@ -128,7 +128,7 @@ class App(tk.Tk):
         table.configure(yscrollcommand=vsb.set)
 
         def del_selection(event):
-            confirmation = messagebox.askquestion(dat_window, message='Are you sure you would like to delete this entry?')
+            confirmation = messagebox.askquestion(parent=dat_window, title='Delete Data', message='Are you sure you would like to delete this entry?')
             if confirmation == 'no':
                 pass
             else:
@@ -138,28 +138,27 @@ class App(tk.Tk):
         table.bind("<<TreeviewSelect>>", del_selection)
 
     def import_dat(self):
-        answer = messagebox.askyesnocancel(title='Import Data', message='Would you like to clear the current data? This action cannot be undone!')
-        if answer:
-            path = filedialog.askopenfilename(title='Import Data', initialdir='/', filetypes=[('excel files', '*.xlsx')])
-            dat.df = dat.df.iloc[0:0]
-            dat.df = pd.concat([dat.df, pd.read_excel(path, dtype=str, na_filter=False)])
-        else:
-            path = filedialog.askopenfilename(title='Import Data', initialdir='/', filetypes=[('excel files', '*.xlsx')])
-            dat.df = pd.concat([dat.df, pd.read_excel(path, dtype=str, na_filter=False)])
+        path = filedialog.askopenfilename(parent=self, title='Import Data', initialdir='/', filetypes=[('excel files', '*.xlsx')])
+        if path:
+            answer = messagebox.askyesnocancel(parent=self, title='Import Data', message='Would you like to clear the existing data? This action cannot be undone!')
+            if answer:
+                dat.df = pd.read_excel(path, dtype=str, na_filter=False)
+            else:
+                dat.df = pd.concat([dat.df, pd.read_excel(path, dtype=str, na_filter=False)])
 
     def export_dat(self):
-        answer = messagebox.askyesnocancel(title='Export Data', message='Would you like to clear the current data? This action cannot be undone!')
-        if answer:
-            path = filedialog.asksaveasfile(title='Export Data', initialdir='/', filetypes=[('excel files', '*.xlsx')], defaultextension=('excel files', '*.xlsx'), mode='wb')
-            dat.df.to_excel(path, index=False)
-            dat.df = dat.df.iloc[0:0]
-        else:
-            path = filedialog.asksaveasfile(title='Export Data', initialdir='/', filetypes=[('excel files', '*.xlsx')], defaultextension=('excel files', '*.xlsx'), mode='wb')
-            dat.df.to_excel(path, index=False)
+        path = filedialog.asksaveasfile(parent=self, title='Export Data', initialdir='/', filetypes=[('excel files', '*.xlsx')], defaultextension=('excel files', '*.xlsx'), mode='wb')
+        if path:
+            answer = messagebox.askyesnocancel(parent=self, title='Export Data', message='Would you like to clear the existing data? This action cannot be undone!')
+            if answer:
+                dat.df.to_excel(path, index=False)
+                dat.df = pd.DataFrame(columns=['Date', 'Time In', 'Time Out', 'Time of Session'] + [col for col in cfg.df] + ['Number of Identical Queries', 'Room Full?'])
+            else:
+                dat.df.to_excel(path, index=False)
 
     def submit(self):
         if '' in tuple(self.df.loc[0]):
-            messagebox.showinfo(message='Please fill in all the fields.')
+            messagebox.showinfo(parent=self, message='Please fill in all the fields.')
         else:
             dat.df = pd.concat([dat.df, self.df])
             self.reset_fields()
@@ -171,7 +170,10 @@ class App(tk.Tk):
 
 class CFG():
     def __init__(self):
-        self.df = pd.read_csv(resource_path('resources/cfg.csv'), dtype=str, na_filter=False)
+        try:
+            self.df = pd.read_csv(resource_path('resources/cfg.csv'), dtype=str, na_filter=False)
+        except pd.errors.EmptyDataError:
+            self.df = pd.DataFrame()
 
 class DAT():
     def __init__(self):
@@ -179,6 +181,8 @@ class DAT():
 
 if __name__ == '__main__':
     os.chdir(os.path.dirname(sys.argv[0]))
+    if os.path.exists('error.log'):
+        os.remove('error.log')
     cfg = CFG()
     dat = DAT()
     try:
