@@ -179,13 +179,11 @@ class DAT():
 
 if __name__ == '__main__':
     os.chdir(os.path.dirname(sys.argv[0]))
-    logging.basicConfig(filename='error.log', filemode='w', level=logging.DEBUG)
-    logging.debug(f'name = {get_app_name()}')
+    cfg = CFG()
+    dat = DAT()
     try:
-        cfg = CFG()
-        dat = DAT()
-
         app = App(cfg)
         app.mainloop()
     except Exception as error:
+        logging.basicConfig(filename='error.log', filemode='w', level=logging.DEBUG)
         logging.error(error)
