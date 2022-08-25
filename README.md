@@ -12,19 +12,19 @@ Once you have entered all the required information into the fields, simply press
 
 ### Viewing & Deleting Data
 
-To view all the submitted the submitted data, press the **Delete...** button. You will now be able to see all the data that has been submitted in a table in a new window. Clicking a row of the table will delete that entry from the record sheet.
+To view all the submitted the submitted data, go to **Data\View/Edit Data**. You will now be able to see all the data that has been submitted in a table in a new window. Clicking a row of the table will delete that entry from the record sheet and close the window.
 
 ### Changing Field Options
 
-To change the available field options, go to **Config/Load Config...** in the menu bar. This will allow you to choose an appropriate config file that will alter the available field options.
+To change the available field options, go to **Config\Load Config...** in the menu bar. This will allow you to choose an appropriate config file that will alter the available field options.
 
 ### Importing Data
 
-To import data from an existing record sheet, go to **Data/Import Data...** in the menu bar. You will be asked if you want to clear any existing data and then you will be able to choose an excel file containging the record sheet that will then be appended to any existing data.
+To import data from an existing record sheet, go to **Data\Import Data...** in the menu bar. You will be asked if you want to clear any existing data and then you will be able to choose an excel file containging the record sheet that will then be appended to any existing data.
 
 ### Exporting Data
 
-To export data from an existing record sheet, go to **Data/Export Data...** in the menu bar. You will be asked if you want to clear any existing data flowwing the import and then you will be able to choose a location/file to export the current data to.
+To export data from an existing record sheet, go to **Data\Export Data...** in the menu bar. You will be asked if you want to clear any existing data flowwing the import and then you will be able to choose a location/file to export the current data to.
 
 ### Clearing Data
 
@@ -33,3 +33,7 @@ There is no dedicated button for clearing the record sheet. If you wish to do so
 ### Saving & Loading
 
 The record sheet and active config will all be saved internally when the app is closed nad reloaded automatically on launch. If the app is ever update or reinstalled, this information will not be retained. However, you can always import your old data and reload in the config file.
+
+# Troubleshooting
+
+In the event of any issues, please contact [me](elliott.sullinge-farrall@surrey.ac.uk) with the **error.log** file attached (if applicable).
