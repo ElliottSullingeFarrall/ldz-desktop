@@ -20,7 +20,7 @@ class App(tk.Tk):
         if cfg.df.empty:
             self.add_fields_defs = []
         else:
-            self.add_fields_defs = cfg.df.loc[0]
+            self.add_fields_defs = list(cfg.df.loc[0])
 
         self.title(get_app_name())
         self.iconphoto(True, tk.PhotoImage(file=resource_path('images/stag.png')))
