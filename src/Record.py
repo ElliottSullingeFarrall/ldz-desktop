@@ -100,12 +100,15 @@ class App(tk.Tk):
         self.full.set('No')
 
     def load_cfg(self):
-        path = filedialog.askopenfilename(parent=self, title='Load Config', initialdir='/', filetypes=[('excel files', '*.xlsx')])
-        if path:
-            cfg.df = pd.read_excel(path, dtype=str, na_filter=False)
-            self.destroy()
-            self.__init__(cfg)
-            self.mainloop()
+        answer = messagebox.askyesno(parent=self, title='Load Config', message='Loading a new config will clear all existing data. Are you sure you would like to proceed?')
+        if answer:
+            path = filedialog.askopenfilename(parent=self, title='Load Config', initialdir='/', filetypes=[('excel files', '*.xlsx')])
+            if path:
+                cfg.df = pd.read_excel(path, dtype=str, na_filter=False)
+                dat.df = pd.DataFrame(columns=['Date', 'Time In', 'Time Out', 'Time of Session'] + [col for col in cfg.df] + ['Number of Identical Queries', 'Room Full?'])
+                self.destroy()
+                self.__init__(cfg)
+                self.mainloop()
 
     def edit_dat(self):
         dat_window = tk.Toplevel(self)
@@ -128,8 +131,8 @@ class App(tk.Tk):
         table.configure(yscrollcommand=vsb.set)
 
         def del_selection(event):
-            confirmation = messagebox.askquestion(parent=dat_window, title='Delete Data', message='Are you sure you would like to delete this entry?')
-            if confirmation == 'no':
+            answer = messagebox.askquestion(parent=dat_window, title='Delete Data', message='Are you sure you would like to delete this entry?')
+            if answer == 'no':
                 pass
             else:
                 row_num = table.index(table.selection())
@@ -164,22 +167,29 @@ class App(tk.Tk):
             self.reset_fields()
 
     def on_close(self):
-        cfg.df.to_csv(resource_path('resources/cfg.csv'), index=False)
-        dat.df.to_csv(resource_path('resources/dat.csv'), index=False)
+        cfg.df.to_csv(os.path.join(user_dir, 'LDZ/cfg.csv'), index=False)
+        dat.df.to_csv(os.path.join(user_dir, 'LDZ/dat.csv'), index=False)
         self.destroy()
 
 class CFG():
     def __init__(self):
         try:
-            self.df = pd.read_csv(resource_path('resources/cfg.csv'), dtype=str, na_filter=False)
-        except pd.errors.EmptyDataError:
+            self.df = pd.read_csv(os.path.join(user_dir, 'LDZ/cfg.csv'), dtype=str, na_filter=False)
+        except FileNotFoundError:
             self.df = pd.DataFrame()
+        
 
 class DAT():
     def __init__(self):
-        self.df = pd.read_csv(resource_path('resources/dat.csv'), dtype=str, na_filter=False)
+        try:
+            self.df = pd.read_csv(os.path.join(user_dir, 'LDZ/dat.csv'), dtype=str, na_filter=False)
+        except FileNotFoundError:
+            self.df = pd.DataFrame(columns=['Date','Time In','Time Out','Time of Session','Number of Identical Queries','Room Full?'])
 
 if __name__ == '__main__':
+    user_dir = os.getenv('USERPROFILE')
+    os.makedirs(os.path.join(user_dir, 'LDZ'), exist_ok=True)
+
     os.chdir(os.path.dirname(sys.argv[0]))
     if os.path.exists('error.log'):
         os.remove('error.log')
