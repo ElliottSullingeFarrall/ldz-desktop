@@ -2,7 +2,7 @@
 
 Download the **Record** program (**.exe** for windows or **.app** for Mac OS) from the **dist** folder, along with the desired **.xlsx** file from the **configs** folder. Once downloaded, **Record** may be renamed if desired. 
 
-When the program is run, it will create (if it doesn't already exist) a folder called **_ldz** in the users home directory to store the the data and config that is currently being used.
+When the program is run, it will create (if it doesn't already exist) a folder called **_ldz** in the users home directory to store the the data and config that is currently being used. Please do NOT make any changes to this folder or the files inside. This will result in the program being unable to function and may result in the loss of data.
 
 # Usage
 
