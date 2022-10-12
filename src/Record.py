@@ -176,7 +176,7 @@ class CFG():
         try:
             self.df = pd.read_csv(os.path.join(user_dir, '_ldz/cfg.csv'), dtype=str, na_filter=False)
         except FileNotFoundError:
-            self.df = pd.DataFrame()       
+            self.df = pd.DataFrame()
 
 class DAT():
     def __init__(self):
@@ -192,10 +192,10 @@ if __name__ == '__main__':
     os.chdir(os.path.dirname(sys.argv[0]))
     if os.path.exists('error.log'):
         os.remove('error.log')
-        
-    cfg = CFG()
-    dat = DAT()
+
     try:
+        cfg = CFG()
+        dat = DAT()
         app = App(cfg)
         app.mainloop()
     except Exception as error:
