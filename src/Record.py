@@ -141,12 +141,12 @@ class App(tk.Tk):
         table.bind("<<TreeviewSelect>>", del_selection)
 
     def import_dat(self):
-        path = filedialog.askopenfilename(parent=self, title='Import Data', initialdir='/', filetypes=[('excel files', '*.xlsx')])
-        if path:
+        paths = filedialog.askopenfilenames(parent=self, title='Import Data', initialdir='/', filetypes=[('excel files', '*.xlsx')])
+        if paths:
             answer = messagebox.askyesnocancel(parent=self, title='Import Data', message='Would you like to clear the existing data? This action cannot be undone!')
             if answer:
-                dat.df = pd.read_excel(path, dtype=str, na_filter=False)
-            else:
+                dat.df = pd.DataFrame()
+            for path in paths:
                 dat.df = pd.concat([dat.df, pd.read_excel(path, dtype=str, na_filter=False)])
 
     def export_dat(self):
@@ -167,28 +167,27 @@ class App(tk.Tk):
             self.reset_fields()
 
     def on_close(self):
-        cfg.df.to_csv(os.path.join(user_dir, 'LDZ/cfg.csv'), index=False)
-        dat.df.to_csv(os.path.join(user_dir, 'LDZ/dat.csv'), index=False)
+        cfg.df.to_csv(os.path.join(user_dir, '.ldz/cfg.csv'), index=False)
+        dat.df.to_csv(os.path.join(user_dir, '.ldz/dat.csv'), index=False)
         self.destroy()
 
 class CFG():
     def __init__(self):
         try:
-            self.df = pd.read_csv(os.path.join(user_dir, 'LDZ/cfg.csv'), dtype=str, na_filter=False)
+            self.df = pd.read_csv(os.path.join(user_dir, '.ldz/cfg.csv'), dtype=str, na_filter=False)
         except FileNotFoundError:
-            self.df = pd.DataFrame()
-        
+            self.df = pd.DataFrame()       
 
 class DAT():
     def __init__(self):
         try:
-            self.df = pd.read_csv(os.path.join(user_dir, 'LDZ/dat.csv'), dtype=str, na_filter=False)
+            self.df = pd.read_csv(os.path.join(user_dir, '.ldz/dat.csv'), dtype=str, na_filter=False)
         except FileNotFoundError:
             self.df = pd.DataFrame(columns=['Date','Time In','Time Out','Time of Session','Number of Identical Queries','Room Full?'])
 
 if __name__ == '__main__':
     user_dir = os.getenv('USERPROFILE')
-    os.makedirs(os.path.join(user_dir, 'LDZ'), exist_ok=True)
+    os.makedirs(os.path.join(user_dir, '.ldz'), exist_ok=True)
 
     os.chdir(os.path.dirname(sys.argv[0]))
     if os.path.exists('error.log'):
