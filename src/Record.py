@@ -167,31 +167,32 @@ class App(tk.Tk):
             self.reset_fields()
 
     def on_close(self):
-        cfg.df.to_csv(os.path.join(user_dir, '.ldz/cfg.csv'), index=False)
-        dat.df.to_csv(os.path.join(user_dir, '.ldz/dat.csv'), index=False)
+        cfg.df.to_csv(os.path.join(user_dir, '_ldz/cfg.csv'), index=False)
+        dat.df.to_csv(os.path.join(user_dir, '_ldz/dat.csv'), index=False)
         self.destroy()
 
 class CFG():
     def __init__(self):
         try:
-            self.df = pd.read_csv(os.path.join(user_dir, '.ldz/cfg.csv'), dtype=str, na_filter=False)
+            self.df = pd.read_csv(os.path.join(user_dir, '_ldz/cfg.csv'), dtype=str, na_filter=False)
         except FileNotFoundError:
             self.df = pd.DataFrame()       
 
 class DAT():
     def __init__(self):
         try:
-            self.df = pd.read_csv(os.path.join(user_dir, '.ldz/dat.csv'), dtype=str, na_filter=False)
+            self.df = pd.read_csv(os.path.join(user_dir, '_ldz/dat.csv'), dtype=str, na_filter=False)
         except FileNotFoundError:
             self.df = pd.DataFrame(columns=['Date','Time In','Time Out','Time of Session','Number of Identical Queries','Room Full?'])
 
 if __name__ == '__main__':
-    user_dir = os.getenv('USERPROFILE')
-    os.makedirs(os.path.join(user_dir, '.ldz'), exist_ok=True)
+    user_dir = os.path.expanduser("~")
+    os.makedirs(os.path.join(user_dir, '_ldz'), exist_ok=True)
 
     os.chdir(os.path.dirname(sys.argv[0]))
     if os.path.exists('error.log'):
         os.remove('error.log')
+        
     cfg = CFG()
     dat = DAT()
     try:
