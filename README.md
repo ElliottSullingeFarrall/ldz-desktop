@@ -1,8 +1,8 @@
 # Installation
 
-Download the **Record** program (**.exe** for windows or **.app** for Mac OS) from the **dist** folder, along with the desired **config.xlsx** file from the **configs** folder. Note that **Record** and **config.xlsx** must be located in the same directory for the program to work. Once downloaded, **Record** may be renamed. 
+Download the **Record** program (**.exe** for windows or **.app** for Mac OS) from the **dist** folder, along with the desired **.xlsx** file from the **configs** folder. Once downloaded, **Record** may be renamed if desired. 
 
-When the program is run, it will create (if it doesn't already exist) a folder called **_ldz** to store the the data and config that is currently being used.
+When the program is run, it will create (if it doesn't already exist) a folder called **_ldz** in the users home directory to store the the data and config that is currently being used.
 
 # Usage
 
