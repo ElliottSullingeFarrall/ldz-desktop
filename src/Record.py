@@ -104,7 +104,10 @@ class App(tk.Tk):
         if answer:
             path = filedialog.askopenfilename(parent=self, title='Load Config', initialdir='/', filetypes=[('excel files', '*.xlsx')])
             if path:
-                cfg.df = pd.read_excel(path, dtype=str, na_filter=False)
+                try:
+                    cfg.df = pd.read_excel(path, dtype=str, na_filter=False)
+                except pd.errors.EmptyDataError:
+                    cfg.df = pd.DataFrame()
                 dat.df = pd.DataFrame(columns=['Date', 'Time In', 'Time Out', 'Time of Session'] + [col for col in cfg.df] + ['Number of Identical Queries', 'Room Full?'])
                 self.destroy()
                 self.__init__(cfg)
@@ -175,14 +178,14 @@ class CFG():
     def __init__(self):
         try:
             self.df = pd.read_csv(os.path.join(user_dir, '_ldz/cfg.csv'), dtype=str, na_filter=False)
-        except FileNotFoundError:
+        except (FileNotFoundError, pd.errors.EmptyDataError):
             self.df = pd.DataFrame()
 
 class DAT():
     def __init__(self):
         try:
             self.df = pd.read_csv(os.path.join(user_dir, '_ldz/dat.csv'), dtype=str, na_filter=False)
-        except FileNotFoundError:
+        except (FileNotFoundError, pd.errors.EmptyDataError):
             self.df = pd.DataFrame(columns=['Date','Time In','Time Out','Time of Session','Number of Identical Queries','Room Full?'])
 
 if __name__ == '__main__':
