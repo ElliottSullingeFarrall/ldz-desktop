@@ -5,13 +5,15 @@ import platform
 icons = {"Windows" : "stag.ico", "Darwin" : "stag.icns"}
 
 args_record = [
-    "src/Record.py",
+    "src/source.py",
     "--onefile",
     "--windowed",
     "--noconfirm",
     "--argv-emulation",
+    "--name=LDZ",
     f"-i=src/images/{icons[platform.system()]}",
     f"--add-data=src/images/stag.png{os.pathsep}images",
+    f"--add-data=src/cfg{os.pathsep}cfg",
     "--hidden-import=babel.numbers"
 ]
 
