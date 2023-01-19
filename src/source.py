@@ -18,6 +18,7 @@ from compiler import compile
 
 #TODO: Add 'Staff' field with options LDA, LDL, MASA, FY (tick boxes)
 #TODO: Switch 'Department' to 'School'
+#TODO: Update README
 
 # -------------------------------- UI Elements ------------------------------- #
 
