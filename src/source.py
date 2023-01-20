@@ -307,7 +307,7 @@ class ProfileSwitcher(tk.Tk):
             profile = profiles[profile_name]()
             profile.mainloop()
         table.bind("<<TreeviewSelect>>", select)
-        
+
 class ProfileMaster(tk.Tk):
     def __init__(self):
         super().__init__()
@@ -321,7 +321,7 @@ class ProfileMaster(tk.Tk):
         menubar = tk.Menu(self)
         profmenu = tk.Menu(menubar, tearoff=False)
         datamenu = tk.Menu(menubar, tearoff=False)
-        profmenu.add_command(label='Change Profile',    command=self.switch)
+        profmenu.add_command(label='Switch Profile',    command=self.switch)
         datamenu.add_command(label='View/Delete Data',  command=self.view)
         datamenu.add_separator()
         datamenu.add_command(label='Import Data...',    command=self.import_data)
