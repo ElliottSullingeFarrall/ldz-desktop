@@ -1,6 +1,6 @@
 # Installation
 
-Download the **LDZ** program (**.exe** for windows or **.app** for Mac OS) from the [Releases](https://github.com/ElliottSullingeFarrall/LDZ-Apps/releases/latest/download) page and save it somewhere accessible on your PC. Run the program and accept any of the required permissions.
+Download the **LDZ** program (**.exe** for windows or **.app** for Mac OS) from the [Releases](https://github.com/ElliottSullingeFarrall/LDZ-Apps/releases/latest) page and save it somewhere accessible on your PC. Run the program and accept any of the required permissions.
 
 # Usage
 
