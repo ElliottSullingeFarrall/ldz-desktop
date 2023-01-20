@@ -11,3 +11,10 @@ def resource_path(relative_path):
         base_path = os.path.abspath(".")
     os.chdir(wd)
     return os.path.join(base_path, relative_path)
+
+import tkinter as tk
+
+def gridx(self, *args, **kwargs):
+    self.grid(*args, **kwargs)
+    return self
+tk.Widget.gridx = gridx

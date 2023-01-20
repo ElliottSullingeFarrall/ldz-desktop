@@ -12,7 +12,7 @@ import os
 import sys
 import appdirs
 
-from path_utils import resource_path
+from utils import *
 
 from compiler import compile
 
@@ -31,8 +31,8 @@ class FieldDate():
 
         self.date.trace_add('write', lambda var, index, mode : self.update(profile))
 
-        ttk.Label(text=f'{self.name}:').grid(row=len(profile.fields), column=0, sticky='e')
-        DateEntry(textvariable=self, date_pattern='dd/mm/yyyy', selectmode='day', state='readonly').grid(row=len(profile.fields), column=1, sticky='we', columnspan=5)
+        ttk.Label(text=f'{self.name}:').gridx(row=len(profile.fields), column=0, sticky='e')
+        DateEntry(textvariable=self, date_pattern='dd/mm/yyyy', selectmode='day', state='readonly').gridx(row=len(profile.fields), column=1, sticky='we', columnspan=5)
 
         profile.fields.append(self)
 
@@ -58,9 +58,9 @@ class FieldTimes():
         self.mint2.trace_add('write', lambda var, index, mode : self.update(profile))
 
         frame = ttk.Frame(profile)
-        frame.grid(row=len(profile.fields), column=1, sticky='w', columnspan=5)
+        frame.gridx(row=len(profile.fields), column=1, sticky='w', columnspan=5)
 
-        ttk.Label(text=f'{self.label} ').grid(row=len(profile.fields), column=0, sticky='e')
+        ttk.Label(text=f'{self.label} ').gridx(row=len(profile.fields), column=0, sticky='e')
         ttk.Label(frame, text=f'{self.name1}:').pack(side=tk.LEFT)
         ttk.Spinbox(frame, textvariable=self.hour1, values=[f"{hour:02}" for hour in range(0, 24, 1)], state='readonly', wrap=True, width=3).pack(side=tk.LEFT)
         ttk.Spinbox(frame, textvariable=self.mint1, values=[f'{mint:02}' for mint in range(0, 60, 5)], state='readonly', wrap=True, width=3).pack(side=tk.LEFT)
@@ -92,10 +92,10 @@ class FieldNums():
         self.var1.trace_add('write', lambda var, index, mode : self.update(profile))
         self.var2.trace_add('write', lambda var, index, mode : self.update(profile))
 
-        ttk.Label(text=f'{self.name1}:').grid(row=len(profile.fields), column=0, sticky='e')
-        ttk.Spinbox(textvariable=self.var1, values=self.values1, state='readonly', width=4).grid(row=len(profile.fields), column=1, sticky='w')
-        ttk.Label(text=f'{self.name2}:').grid(row=len(profile.fields), column=2, sticky='e')
-        ttk.Spinbox(textvariable=self.var2, values=self.values2, state='readonly', width=4).grid(row=len(profile.fields), column=3, sticky='w', columnspan=3)
+        ttk.Label(text=f'{self.name1}:').gridx(row=len(profile.fields), column=0, sticky='e')
+        ttk.Spinbox(textvariable=self.var1, values=self.values1, state='readonly', width=4).gridx(row=len(profile.fields), column=1, sticky='w')
+        ttk.Label(text=f'{self.name2}:').gridx(row=len(profile.fields), column=2, sticky='e')
+        ttk.Spinbox(textvariable=self.var2, values=self.values2, state='readonly', width=4).gridx(row=len(profile.fields), column=3, sticky='w', columnspan=3)
 
         profile.fields.append(self)
 
@@ -115,8 +115,8 @@ class FieldText():
 
         self.var.trace_add('write', lambda var, index, mode : self.update(profile))
 
-        ttk.Label(text=f'{self.name}:').grid(row=len(profile.fields), column=0, sticky='e')
-        ttk.Entry(textvariable=self.var).grid(row=len(profile.fields), column=1, sticky='ew', columnspan=5)
+        ttk.Label(text=f'{self.name}:').gridx(row=len(profile.fields), column=0, sticky='e')
+        ttk.Entry(textvariable=self.var).gridx(row=len(profile.fields), column=1, sticky='ew', columnspan=5)
 
         profile.fields.append(self)
 
@@ -137,8 +137,8 @@ class FieldChoice():
 
         self.var.trace_add('write', lambda var, index, mode : self.update(profile))
 
-        ttk.Label(text=f'{self.name}:').grid(row=len(profile.fields), column=0, sticky='e')
-        ttk.Combobox(textvariable=self.var, values=self.values, state='readonly').grid(row=len(profile.fields), column=1, sticky='ew', columnspan=5)
+        ttk.Label(text=f'{self.name}:').gridx(row=len(profile.fields), column=0, sticky='e')
+        ttk.Combobox(textvariable=self.var, values=self.values, state='readonly').gridx(row=len(profile.fields), column=1, sticky='ew', columnspan=5)
 
         profile.fields.append(self)
 
@@ -163,12 +163,10 @@ class FieldChoCho():
         self.var1.trace_add('write', lambda var, index, mode : self.update1(profile))
         self.var2.trace_add('write', lambda var, index, mode : self.update2(profile))
 
-        ttk.Label(text=f'{self.name1}:').grid(row=len(profile.fields), column=0, sticky='e')
-        self.field1 = ttk.Combobox(textvariable=self.var1, values=self.values1, state='readonly', width=12)
-        self.field1.grid(row=len(profile.fields), column=1, sticky='w')
-        ttk.Label(text=f'{self.name2}:').grid(row=len(profile.fields), column=2, sticky='e')
-        self.field2 = ttk.Combobox(textvariable=self.var2, values=self.values2, state='readonly', width=10)
-        self.field2.grid(row=len(profile.fields), column=3, sticky='ew', columnspan=3)
+        ttk.Label(text=f'{self.name1}:').gridx(row=len(profile.fields), column=0, sticky='e')
+        self.field1 = ttk.Combobox(textvariable=self.var1, values=self.values1, state='readonly', width=12).gridx(row=len(profile.fields), column=1, sticky='w')
+        ttk.Label(text=f'{self.name2}:').gridx(row=len(profile.fields), column=2, sticky='e')
+        self.field2 = ttk.Combobox(textvariable=self.var2, values=self.values2, state='readonly', width=10).gridx(row=len(profile.fields), column=3, sticky='ew', columnspan=3)
 
         profile.fields.append(self)
 
@@ -206,12 +204,10 @@ class FieldChkCho():
         self.var1.trace_add('write', lambda var, index, mode : self.update1(profile))
         self.var2.trace_add('write', lambda var, index, mode : self.update2(profile))
 
-        ttk.Label(text=f'{self.name1}:').grid(row=len(profile.fields), column=0, sticky='e')
-        self.field1 = ttk.Checkbutton(variable=self.var1, offvalue='No', onvalue='Yes')
-        self.field1.grid(row=len(profile.fields), column=1, sticky='w')
-        ttk.Label(text=f'{self.name2}:').grid(row=len(profile.fields), column=2, sticky='e')
-        self.field2 = ttk.Combobox(textvariable=self.var2, values=self.values, state='readonly', width=10)
-        self.field2.grid(row=len(profile.fields), column=3, sticky='ew', columnspan=3)
+        ttk.Label(text=f'{self.name1}:').gridx(row=len(profile.fields), column=0, sticky='e')
+        self.field1 = ttk.Checkbutton(variable=self.var1, offvalue='No', onvalue='Yes').gridx(row=len(profile.fields), column=1, sticky='w')
+        ttk.Label(text=f'{self.name2}:').gridx(row=len(profile.fields), column=2, sticky='e')
+        self.field2 = ttk.Combobox(textvariable=self.var2, values=self.values, state='readonly', width=10).gridx(row=len(profile.fields), column=3, sticky='ew', columnspan=3)
 
         profile.fields.append(self)
 
@@ -248,12 +244,12 @@ class FieldNumChkChk():
         self.var2.trace_add('write', lambda var, index, mode : self.update(profile))
         self.var3.trace_add('write', lambda var, index, mode : self.update(profile))
 
-        ttk.Label(text=f'{self.name1}:').grid(row=len(profile.fields), column=0, sticky='e')
-        ttk.Spinbox(textvariable=self.var1, values=tuple(range(1,1000)), state='readonly', width=4).grid(row=len(profile.fields), column=1, sticky='w')
-        ttk.Label(text=f'{self.name2}:').grid(row=len(profile.fields), column=2, sticky='e')
-        ttk.Checkbutton(variable=self.var2, offvalue='No', onvalue='Yes').grid(row=len(profile.fields), column=3, sticky='w')
-        ttk.Label(text=f'{self.name3}:').grid(row=len(profile.fields), column=4, sticky='e')
-        ttk.Checkbutton(variable=self.var3, offvalue='No', onvalue='Yes').grid(row=len(profile.fields), column=5, sticky='w')
+        ttk.Label(text=f'{self.name1}:').gridx(row=len(profile.fields), column=0, sticky='e')
+        ttk.Spinbox(textvariable=self.var1, values=tuple(range(1,1000)), state='readonly', width=4).gridx(row=len(profile.fields), column=1, sticky='w')
+        ttk.Label(text=f'{self.name2}:').gridx(row=len(profile.fields), column=2, sticky='e')
+        ttk.Checkbutton(variable=self.var2, offvalue='No', onvalue='Yes').gridx(row=len(profile.fields), column=3, sticky='w')
+        ttk.Label(text=f'{self.name3}:').gridx(row=len(profile.fields), column=4, sticky='e')
+        ttk.Checkbutton(variable=self.var3, offvalue='No', onvalue='Yes').gridx(row=len(profile.fields), column=5, sticky='w')
 
         profile.fields.append(self)
 
@@ -271,7 +267,7 @@ class ActionSubmit():
     def __init__(self, profile):
         self.name = 'Submit'
 
-        ttk.Button(text=self.name, command=lambda : self.command(profile)).grid(row=profile.grid_size()[1], column=0, columnspan=5)
+        ttk.Button(text=self.name, command=lambda : self.command(profile)).gridx(row=profile.grid_size()[1], column=0, columnspan=5)
 
     def command(self, profile):
         if '' in profile.df_curr.values():
@@ -284,6 +280,34 @@ class ActionSubmit():
 
 # -------------------------------- Interfaces -------------------------------- #
 
+class ProfileSwitcher(tk.Tk):
+    def __init__(self):
+        super().__init__()
+
+        self.style = ttk.Style()
+        self.style.theme_use('clam')
+
+        self.title('Select Profile')
+        self.iconphoto(True, tk.PhotoImage(file=resource_path('images/stag.png')))
+        self.resizable(False, False)
+        self.geometry('250x100')
+
+        table = ttk.Treeview(self, columns='Profile', show='headings', selectmode='browse')
+        for col in table['columns']:
+            table.heading(col,  anchor=tk.CENTER, text=col)
+            table.column(col,   anchor=tk.CENTER, stretch=False, width=250)
+        for profile in profiles:
+            table.insert(parent='', index='end', values=(profile,))
+        table.bind('<Motion>', 'break')
+        table.pack(fill='both', expand='True')
+
+        def select(event):
+            profile_name = table.item(table.focus())['values'][0]
+            self.destroy()
+            profile = profiles[profile_name]()
+            profile.mainloop()
+        table.bind("<<TreeviewSelect>>", select)
+        
 class ProfileMaster(tk.Tk):
     def __init__(self):
         super().__init__()
@@ -335,10 +359,10 @@ class ProfileMaster(tk.Tk):
         for idx, row in self.df_save.iterrows():
             table.insert(parent='', index='end', values=tuple(row.values))
         table.bind('<Motion>', 'break')
-        table.grid(row=0, column=0)
+        table.gridx(row=0, column=0)
 
         vsb = ttk.Scrollbar(window, orient="vertical", command=table.yview)
-        vsb.grid(row=0, column=1, sticky='ns')
+        vsb.gridx(row=0, column=1, sticky='ns')
         table.configure(yscrollcommand=vsb.set)
 
         def delete(event):
@@ -377,34 +401,6 @@ class ProfileMaster(tk.Tk):
         self.destroy()
         profile = ProfileSwitcher()
         profile.mainloop()
-
-class ProfileSwitcher(tk.Tk):
-    def __init__(self):
-        super().__init__()
-
-        self.style = ttk.Style()
-        self.style.theme_use('clam')
-
-        self.title('Select Profile')
-        self.iconphoto(True, tk.PhotoImage(file=resource_path('images/stag.png')))
-        self.resizable(False, False)
-        self.geometry('250x100')
-
-        table = ttk.Treeview(self, columns='Profile', show='headings', selectmode='browse')
-        for col in table['columns']:
-            table.heading(col,  anchor=tk.CENTER, text=col)
-            table.column(col,   anchor=tk.CENTER, stretch=False, width=250)
-        for profile in profiles:
-            table.insert(parent='', index='end', values=(profile,))
-        table.bind('<Motion>', 'break')
-        table.pack(fill='both', expand='True')
-
-        def select(event):
-            profile_name = table.item(table.focus())['values'][0]
-            self.destroy()
-            profile = profiles[profile_name]()
-            profile.mainloop()
-        table.bind("<<TreeviewSelect>>", select)
 
 class ProfileMASA(ProfileMaster):
     def __init__(self):
