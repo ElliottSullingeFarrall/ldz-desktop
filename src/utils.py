@@ -1,7 +1,7 @@
 import os
 import sys
 
-def resource_path(relative_path):
+def resource_path(relative_path: str) -> str:
     wd = os.getcwd()
     os.chdir(os.path.dirname(sys.argv[0]))
     try:

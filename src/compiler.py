@@ -7,17 +7,16 @@ def compile():
     
     try:
         compiler.run([
-            'src/source.py',
-            '--onefile',
-            '--windowed',
-            '--noconfirm',
-            '--argv-emulation',
-            '--name=LDZ',
+            f'src/source.py',
+            f'--onefile',
+            f'--nowindowed',
+            f'--name=LDZ',
             f'-i=src/images/stag.{img_ext[platform.system()]}',
             f'--add-data=src/images/stag.png{os.pathsep}images',
-            '--hidden-import=babel.numbers'
+            f'--hidden-import=babel.numbers',
+            f'--noconfirm'
         ])
-        print('Finished Compiling!')
+        print('Done!')
     except KeyError:
         print(f'The platform: {platform.system()} is not supported!')
 
