@@ -1,5 +1,22 @@
+import tkinter as tk
+from tkinter import ttk
+from tkinter import messagebox
+from tkinter import filedialog
+from tkcalendar import DateEntry
+
+from datetime import datetime
+
+import pandas as pd
+
 import os
 import sys
+import appdirs
+
+# ---------------------------------------------------------------------------- #
+#                                  File Paths                                  #
+# ---------------------------------------------------------------------------- #
+
+DATA_DIR = appdirs.user_data_dir('LDZ', 'ElliottSF', roaming=True)
 
 def resource_path(relative_path: str) -> str:
     wd = os.getcwd()
@@ -12,9 +29,11 @@ def resource_path(relative_path: str) -> str:
     os.chdir(wd)
     return os.path.join(base_path, relative_path)
 
-import tkinter as tk
+# ---------------------------------------------------------------------------- #
+#                                  GUI Tweaks                                  #
+# ---------------------------------------------------------------------------- #
 
-def gridx(self, *args, **kwargs):
+def gridx(self: tk.Widget, *args, **kwargs) -> tk.Widget:
     self.grid(*args, **kwargs)
     return self
 tk.Widget.gridx = gridx

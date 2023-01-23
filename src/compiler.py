@@ -9,7 +9,7 @@ def compile():
         compiler.run([
             f'src/source.py',
             f'--onefile',
-            f'--nowindowed',
+            f'--windowed',
             f'--name=LDZ',
             f'-i=src/images/stag.{img_ext[platform.system()]}',
             f'--add-data=src/images/stag.png{os.pathsep}images',
