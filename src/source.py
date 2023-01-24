@@ -1,6 +1,7 @@
 from utils import *
 
 #TODO: Add 'Staff' field with options LDA, LDL, MASA, FY (tick boxes)
+#TODO: Find way to make long drop down items more readable
 #TODO: Uninstaller?
 
 # ---------------------------------------------------------------------------- #
@@ -46,7 +47,8 @@ class Profile(tk.Tk):
 
         self.title(f'LDZ - {self.name}')
         self.resizable(False, False)
-        self.protocol("WM_DELETE_WINDOW", lambda: [self.destroy(), app.destroy()])
+        # self.geometry('600x400')
+        self.protocol("WM_DELETE_WINDOW", lambda: [self.destroy(), self.app.destroy()])
 
         menubar: tk.Menu  = tk.Menu(self)
         profmenu: tk.Menu = tk.Menu(menubar, tearoff=False)
@@ -149,6 +151,7 @@ class Field():
             var.trace_add('write', self.update)
 
         self.row: int = len(self.profile.fields)
+        self.profile.grid_columnconfigure(self.row, weight=1)
         self.profile.fields.append(self)
 
     def update(self, variable: str = '', index: str = '', mode: str = '') -> None:
@@ -213,9 +216,15 @@ class Nums(Field):
         self.values = values
 
         ttk.Label(self.profile, text=f'{self.names[0]}:').gridx(row=self.row, column=0, sticky='e')
-        ttk.Spinbox(self.profile, textvariable=self.vars[0], values=self.values[0], state='readonly', width=4).gridx(row=self.row, column=1, sticky='w')
+        ttk.Spinbox(self.profile, textvariable=self.vars[0], values=self.values[0], validate='focusout', validatecommand=((self.profile.register(self.validate)), 0, '%P', '%W'), width=4).gridx(row=self.row, column=1, sticky='w')
         ttk.Label(self.profile, text=f'{self.names[1]}:').gridx(row=self.row, column=2, sticky='e')
-        ttk.Spinbox(self.profile, textvariable=self.vars[1], values=self.values[1], state='readonly', width=4).gridx(row=self.row, column=3, sticky='w', columnspan=3)
+        ttk.Spinbox(self.profile, textvariable=self.vars[1], values=self.values[1], validate='focusout', validatecommand=((self.profile.register(self.validate)), 1, '%P', '%W'), width=4).gridx(row=self.row, column=3, sticky='w', columnspan=3)
+
+    def validate(self, idx, P, W):
+        if P in self.values[int(idx)]:
+            pass
+        else:
+            self.profile.nametowidget(W).set(self.values[int(idx)][min(range(len(self.values[int(idx)])), key = lambda i : abs(float(self.values[int(idx)][i]) - float(P)))])
 
 class Text(Field):
     def __init__(self, profile: Profile, name: str = '') -> None:
@@ -229,8 +238,9 @@ class Choice(Field):
         super().__init__(profile, names=(name,), defaults=(default,))
         self.values = values
 
+        width = len(max(values, key=len))
         ttk.Label(self.profile, text=f'{self.names[0]}:').gridx(row=self.row, column=0, sticky='e')
-        ttk.Combobox(self.profile, textvariable=self.vars[0], values=self.values, state='readonly').gridx(row=self.row, column=1, sticky='ew', columnspan=5)
+        self.field0 = ttk.Combobox(self.profile, textvariable=self.vars[0], values=self.values, state='readonly', width=width).gridx(row=self.row, column=1, sticky='ew', columnspan=5)
 
 class ChoCho(Field):
     def __init__(self, profile: Profile, names: tuple[str] = ('', ''), default: str = '', off_value: str = '', on_value: str = '', values: tuple[list[str]] = ([''], [''])) -> None:
@@ -240,10 +250,11 @@ class ChoCho(Field):
         self.on_value = on_value
         self.values = values
 
+        width = (len(max(values[0], key=len)), len(max(values[1], key=len)))
         ttk.Label(self.profile, text=f'{self.names[0]}:').gridx(row=self.row, column=0, sticky='e')
-        self.field0 = ttk.Combobox(self.profile, textvariable=self.vars[0], values=self.values[0], state='readonly', width=12).gridx(row=self.row, column=1, sticky='w')
+        self.field0 = ttk.Combobox(self.profile, textvariable=self.vars[0], values=self.values[0], state='readonly', width=width[0]).gridx(row=self.row, column=1, sticky='w')
         ttk.Label(self.profile, text=f'{self.names[1]}:').gridx(row=self.row, column=2, sticky='e')
-        self.field1 = ttk.Combobox(self.profile, textvariable=self.vars[1], values=self.values[1], state='readonly', width=10).gridx(row=self.row, column=3, sticky='ew', columnspan=3)
+        self.field1 = ttk.Combobox(self.profile, textvariable=self.vars[1], values=self.values[1], state='readonly', width=width[1]).gridx(row=self.row, column=3, sticky='ew', columnspan=3)
 
     def update(self, variable: str = '', index: str = '', mode: str = '') -> None:
         self.profile.df_curr[self.names[0]] = self.vars[0].get()
@@ -264,10 +275,11 @@ class ChkCho(Field):
         self.on_value = on_value
         self.values = values
 
+        width = len(max(values, key=len))
         ttk.Label(self.profile, text=f'{self.names[0]}:').gridx(row=self.row, column=0, sticky='e')
         self.field0 = ttk.Checkbutton(self.profile, variable=self.vars[0], offvalue='No', onvalue='Yes').gridx(row=self.row, column=1, sticky='w')
         ttk.Label(self.profile, text=f'{self.names[1]}:').gridx(row=self.row, column=2, sticky='e')
-        self.field1 = ttk.Combobox(self.profile, textvariable=self.vars[1], values=self.values, state='readonly', width=10).gridx(row=self.row, column=3, sticky='ew', columnspan=3)
+        self.field1 = ttk.Combobox(self.profile, textvariable=self.vars[1], values=self.values, state='readonly', width=width).gridx(row=self.row, column=3, sticky='ew', columnspan=3)
 
     def update(self, variable: str = '', index: str = '', mode: str = '') -> None:
         self.profile.df_curr[self.names[0]] = self.vars[0].get()

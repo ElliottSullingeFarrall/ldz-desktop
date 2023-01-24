@@ -40,3 +40,21 @@ def gridx(self: tk.Widget, *args, **kwargs) -> tk.Widget:
     self.grid(*args, **kwargs)
     return self
 tk.Widget.gridx = gridx
+
+def combo_configure(event):
+    combo = event.widget
+    style = ttk.Style()
+
+    long = max(combo.cget('values'), key=len)
+
+    font = tk.font.nametofont(str(combo.cget('font')))
+    width = max(0,font.measure(long.strip() + '0') - combo.winfo_width())
+
+    style.configure('TCombobox', postoffset=(0,0,width,0))
+
+def combo_configure(event):
+    global fruit
+    font = tk.font.nametofont(str(event.widget.cget('font')))
+    width = font.measure(event.widget.cget('values')[0] + "0") - event.width
+    style = ttk.Style()
+    style.configure('TCombobox', postoffset=(0,0,width,0))
