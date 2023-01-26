@@ -653,13 +653,6 @@ class EmbdMASA(Profile):
             'Manor Park',
             'Off-Campus',
             'Kate Granger'], default = 'Stag Hill')
-        Choice(self,    name  =  'Type',                                    values =  [
-            'Department - synchronous taught',
-            'Department - synchronous Q+A',
-            'Department - asynchronous (panopto recording)',
-            'Discussion Forum',
-            'Professional Service',
-            'WPO'])
         ChkCho(self,    names = ('Online', 'Type'),                         values =  [
             'Department - synchronous taught',
             'Department - synchronous Q+A',
@@ -800,13 +793,6 @@ class EmbdASND(Profile):
             'Manor Park',
             'Off-Campus',
             'Kate Granger'], default = 'Stag Hill')
-        Choice(self,    name  =  'Type',                                    values =  [
-            'Department - synchronous taught',
-            'Department - synchronous Q+A',
-            'Department - asynchronous (panopto recording)',
-            'Discussion Forum',
-            'Professional Service',
-            'WPO'])
         ChkCho(self,    names = ('Online', 'Type'),                         values =  [
             'Department - synchronous taught',
             'Department - synchronous Q+A',
