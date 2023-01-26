@@ -5,10 +5,9 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
 from tkinter import filedialog
-from tkcalendar import DateEntry
+import tkcalendar as tkc
 
 from datetime import datetime
-
 import pandas as pd
 
 import os
@@ -41,20 +40,23 @@ def gridx(self: tk.Widget, *args, **kwargs) -> tk.Widget:
     return self
 tk.Widget.gridx = gridx
 
-def combo_configure(event):
+def gridx_rowconfigure(self: tk.Widget, *args, **kwargs) -> tk.Widget:
+    self.grid_rowconfigure(*args, **kwargs)
+    return self
+tk.Widget.gridx_rowconfigure = gridx_rowconfigure
+
+def gridx_columnconfigure(self: tk.Widget, *args, **kwargs) -> tk.Widget:
+    self.grid_columnconfigure(*args, **kwargs)
+    return self
+tk.Widget.gridx_columnconfigure = gridx_columnconfigure
+
+def expand_dropdown(event):
     combo = event.widget
-    style = ttk.Style()
+    style = ttk.Style(combo.master)
 
     long = max(combo.cget('values'), key=len)
 
     font = tk.font.nametofont(str(combo.cget('font')))
-    width = max(0,font.measure(long.strip() + '0') - combo.winfo_width())
+    width = max(0, font.measure(long.strip() + '0') - combo.winfo_width())
 
-    style.configure('TCombobox', postoffset=(0,0,width,0))
-
-def combo_configure(event):
-    global fruit
-    font = tk.font.nametofont(str(event.widget.cget('font')))
-    width = font.measure(event.widget.cget('values')[0] + "0") - event.width
-    style = ttk.Style()
     style.configure('TCombobox', postoffset=(0,0,width,0))

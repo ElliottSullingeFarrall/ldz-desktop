@@ -1,7 +1,5 @@
 from utils import *
 
-#TODO: Add 'Staff' field with options LDA, LDL, MASA, FY (tick boxes)
-#TODO: Find way to make long drop down items more readable
 #TODO: Uninstaller?
 
 # ---------------------------------------------------------------------------- #
@@ -16,17 +14,17 @@ class App(tk.Tk):
         self.style: ttk.Style = ttk.Style()
         self.style.theme_use('clam')
 
-        self.title('Select Profile')
+        self.title(f'Select Profile')
         self.iconphoto(True, tk.PhotoImage(file=resource_path('images/stag.png')))
         self.resizable(False, False)
-        self.geometry('250x100')
+        self.geometry('250x120')
 
         self.profiles: dict[str, Profile] = {profile.name : profile for profile in Profile.__subclasses__()}
 
         table: ttk.Treeview = ttk.Treeview(self, columns='Profile', show='headings', selectmode='browse')
         for col in table['columns']:
-            table.heading(col,  anchor=tk.CENTER, text=col)
-            table.column(col,   anchor=tk.CENTER, stretch=False, width=250)
+            table.heading(col,  anchor='center', text=col)
+            table.column(col,   anchor='center', stretch=False, width=250)
         for profile in self.profiles:
             table.insert(parent='', index='end', values=(profile,))
         table.bind('<Motion>', 'break')
@@ -45,9 +43,8 @@ class Profile(tk.Tk):
         self.name: str = '' if not hasattr(self, 'name') else self.name
         self.app: App = app
 
-        self.title(f'LDZ - {self.name}')
+        self.title(f'{self.name}')
         self.resizable(False, False)
-        # self.geometry('600x400')
         self.protocol("WM_DELETE_WINDOW", lambda: [self.destroy(), self.app.destroy()])
 
         menubar: tk.Menu  = tk.Menu(self)
@@ -90,21 +87,29 @@ class Profile(tk.Tk):
         window: tk.Toplevel = tk.Toplevel(self)
         window.title('View Data')
         window.resizable(False, False)
+        window.geometry(f'{self.winfo_width()}x{self.winfo_height()}')
         window.attributes('-topmost', 'true')
         window.grab_set()
 
+        window.grid_columnconfigure(0, weight=1)
+        window.grid_rowconfigure(0, weight=1)
+
         table: ttk.Treeview = ttk.Treeview(window, columns=tuple(self.df_save.columns), show='headings', selectmode='browse')
         for col in table['columns']:
-            table.heading(col, text=col, anchor=tk.CENTER)
-            table.column(col, stretch=False, anchor=tk.CENTER, width=100)
+            table.heading(col, text=col, anchor='center')
+            table.column(col, stretch=False, anchor='center', width=100)
         for _, row in self.df_save.iterrows():
             table.insert(parent='', index='end', values=tuple(row.values))
         table.bind('<Motion>', 'break')
-        table.gridx(row=0, column=0)
+        table.gridx(row=0, column=0, sticky='ns')
 
         vsb: ttk.Scrollbar = ttk.Scrollbar(window, orient="vertical", command=table.yview)
-        vsb.gridx(row=0, column=1, sticky='ns')
+        vsb.gridx(row=0, column=1, sticky='ns', rowspan=2)
         table.configure(yscrollcommand=vsb.set)
+
+        hsb: ttk.Scrollbar = ttk.Scrollbar(window, orient="horizontal", command=table.xview)
+        hsb.gridx(row=1, column=0, sticky='ew')
+        table.configure(xscrollcommand=hsb.set)
 
         def delete_data(event: tk.Event) -> None:
             answer: str = messagebox.askquestion(parent=window, title='Delete Data', message='Are you sure you would like to delete this entry?')
@@ -141,7 +146,7 @@ class Profile(tk.Tk):
 
 
 class Field():
-    def __init__(self, profile: Profile, names: tuple[str] = (''), defaults: tuple[str] = ('')) -> None:
+    def __init__(self, profile: Profile, names: tuple[str] = (), defaults: tuple[str] = ()) -> None:
         self.profile: Profile = profile
         self.names: tuple[str] = names
         self.defaults: tuple[str] = defaults
@@ -151,7 +156,6 @@ class Field():
             var.trace_add('write', self.update)
 
         self.row: int = len(self.profile.fields)
-        self.profile.grid_columnconfigure(self.row, weight=1)
         self.profile.fields.append(self)
 
     def update(self, variable: str = '', index: str = '', mode: str = '') -> None:
@@ -169,7 +173,7 @@ class Submit():
 
         self.row: int = len(self.profile.fields)
 
-        ttk.Button(profile, text=self.name, command=self.command, width=20).gridx(row=self.row, column=0, columnspan=5)
+        ttk.Button(profile, text=self.name, command=self.command).gridx(row=self.row, column=0, columnspan=4)
 
     def command(self) -> None:
         if '' in self.profile.df_curr.values():
@@ -189,58 +193,68 @@ class Date(Field):
         super().__init__(profile, names=(name,), defaults=(f'{datetime.now():%d/%m/%Y}',))
     
         ttk.Label(self.profile, text=f'{self.names[0]}:').gridx(row=self.row, column=0, sticky='e')
-        DateEntry(self.profile, textvariable=self.vars[0], date_pattern='dd/mm/yyyy', selectmode='day', state='readonly').gridx(row=self.row, column=1, sticky='we', columnspan=5)
+        tkc.DateEntry(self.profile, textvariable=self.vars[0], date_pattern='dd/mm/yyyy', selectmode='day', state='readonly').gridx(row=self.row, column=1, sticky='ew', columnspan=3)
 
 class Times(Field):
     def __init__(self, profile: Profile, names: tuple[str] = ('', ''), label: str = '') -> None:
-        super().__init__(profile, names=names, defaults=('12', '00', '12', '00'))
+        super().__init__(profile, names=names, defaults=(f'{datetime.now():%H}', f'{datetime.now():%M}', f'{datetime.now():%H}', f'{datetime.now():%M}'))
 
         frame = ttk.Frame(self.profile)
-        frame.gridx(row=self.row, column=1, sticky='w', columnspan=5)
+        frame.gridx(row=self.row, column=1, sticky='ew', columnspan=3)
+        frame.grid_columnconfigure(tuple(range(6)), weight=1)
 
         ttk.Label(self.profile, text=f'{label} ').gridx(row=self.row, column=0, sticky='e')
-        ttk.Label(frame, text=f'{self.names[0]}:').pack(side=tk.LEFT)
-        ttk.Spinbox(frame, textvariable=self.vars[0], values=[f"{hour:02}" for hour in range(0, 24, 1)], state='readonly', wrap=True, width=3).pack(side=tk.LEFT)
-        ttk.Spinbox(frame, textvariable=self.vars[1], values=[f'{mint:02}' for mint in range(0, 60, 5)], state='readonly', wrap=True, width=3).pack(side=tk.LEFT)
-        ttk.Label(frame, text=f'{self.names[1]}:').pack(side=tk.LEFT)
-        ttk.Spinbox(frame, textvariable=self.vars[2], values=[f"{hour:02}" for hour in range(0, 24, 1)], state='readonly', wrap=True, width=3).pack(side=tk.LEFT)
-        ttk.Spinbox(frame, textvariable=self.vars[3], values=[f'{mint:02}' for mint in range(0, 60, 5)], state='readonly', wrap=True, width=3).pack(side=tk.LEFT)
+        ttk.Label(frame, text=f'{self.names[0]}:').gridx(row=0, column=0)
+        ttk.Spinbox(frame, textvariable=self.vars[0], values=[f"{hour:02}" for hour in range(0, 24, 1)], state='readonly', wrap=True, width=3).gridx(row=0, column=1)
+        ttk.Spinbox(frame, textvariable=self.vars[1], values=[f'{mint:02}' for mint in range(0, 60, 5)], state='readonly', wrap=True, width=3).gridx(row=0, column=2)
+        ttk.Label(frame, text=f'{self.names[1]}:').gridx(row=0, column=3)
+        ttk.Spinbox(frame, textvariable=self.vars[2], values=[f"{hour:02}" for hour in range(0, 24, 1)], state='readonly', wrap=True, width=3).gridx(row=0, column=4)
+        ttk.Spinbox(frame, textvariable=self.vars[3], values=[f'{mint:02}' for mint in range(0, 60, 5)], state='readonly', wrap=True, width=3).gridx(row=0, column=5)
 
     def update(self, variable: str = '', index: str = '', mode: str = '') -> None:
         self.profile.df_curr[self.names[0]] = f'{datetime.strptime(f"{self.vars[0].get()}:{self.vars[1].get()}", "%H:%M"):%H:%M}'
         self.profile.df_curr[self.names[1]] = f'{datetime.strptime(f"{self.vars[2].get()}:{self.vars[3].get()}", "%H:%M"):%H:%M}'
 
 class Nums(Field):
-    def __init__(self, profile: Profile, names: tuple[str] = ('', ''), defaults: tuple[int] = (1, 1), values: tuple[list[int]] = (list(range(1, 1000)), list(range(1, 1000)))) -> None:
+    def __init__(self, profile: Profile, names: tuple[str] = ('', ''), defaults: tuple[int] = (1, 1), values: tuple[list[int]] = (list(range(1, 1000)), list(range(1, 1000))), label: str = '') -> None:
         super().__init__(profile, names=names, defaults=defaults)
         self.values = values
 
-        ttk.Label(self.profile, text=f'{self.names[0]}:').gridx(row=self.row, column=0, sticky='e')
-        ttk.Spinbox(self.profile, textvariable=self.vars[0], values=self.values[0], validate='focusout', validatecommand=((self.profile.register(self.validate)), 0, '%P', '%W'), width=4).gridx(row=self.row, column=1, sticky='w')
-        ttk.Label(self.profile, text=f'{self.names[1]}:').gridx(row=self.row, column=2, sticky='e')
-        ttk.Spinbox(self.profile, textvariable=self.vars[1], values=self.values[1], validate='focusout', validatecommand=((self.profile.register(self.validate)), 1, '%P', '%W'), width=4).gridx(row=self.row, column=3, sticky='w', columnspan=3)
+        frame = ttk.Frame(self.profile)
+        frame.gridx(row=self.row, column=1, sticky='ew', columnspan=3)
+        frame.grid_columnconfigure(tuple(range(4)), weight=1)
+
+        ttk.Label(self.profile, text=f'{label} ').gridx(row=self.row, column=0, sticky='e')
+        ttk.Label(frame, text=f'{self.names[0]}:').gridx(row=0, column=0, sticky='w')
+        ttk.Spinbox(frame, textvariable=self.vars[0], values=self.values[0], validate='focusout', validatecommand=((self.profile.register(self.validate)), 0, '%P', '%W'), width=4).gridx(row=0, column=1, sticky='w')
+        ttk.Label(frame, text=f'{self.names[1]}:').gridx(row=0, column=2, sticky='e')
+        ttk.Spinbox(frame, textvariable=self.vars[1], values=self.values[1], validate='focusout', validatecommand=((self.profile.register(self.validate)), 1, '%P', '%W'), width=4).gridx(row=0, column=3, sticky='e')
 
     def validate(self, idx, P, W):
         if P in self.values[int(idx)]:
-            pass
+            return True
         else:
-            self.profile.nametowidget(W).set(self.values[int(idx)][min(range(len(self.values[int(idx)])), key = lambda i : abs(float(self.values[int(idx)][i]) - float(P)))])
+            try:
+                self.profile.nametowidget(W).set(self.values[int(idx)][min(range(len(self.values[int(idx)])), key = lambda i : abs(float(self.values[int(idx)][i]) - float(P)))])
+            except ValueError:
+                self.profile.nametowidget(W).set(self.values[int(idx)][0])
+            return False
 
 class Text(Field):
     def __init__(self, profile: Profile, name: str = '') -> None:
         super().__init__(profile, names=(name,), defaults=('',))
 
         ttk.Label(self.profile, text=f'{self.names[0]}:').gridx(row=self.row, column=0, sticky='e')
-        ttk.Entry(self.profile, textvariable=self.vars[0]).gridx(row=self.row, column=1, sticky='ew', columnspan=5)
+        ttk.Entry(self.profile, textvariable=self.vars[0]).gridx(row=self.row, column=1, sticky='ew', columnspan=3)
 
 class Choice(Field):
     def __init__(self, profile: Profile, name: str = '', default: str = '', values: list[str] = ['']) -> None:
         super().__init__(profile, names=(name,), defaults=(default,))
         self.values = values
 
-        width = len(max(values, key=len))
         ttk.Label(self.profile, text=f'{self.names[0]}:').gridx(row=self.row, column=0, sticky='e')
-        self.field0 = ttk.Combobox(self.profile, textvariable=self.vars[0], values=self.values, state='readonly', width=width).gridx(row=self.row, column=1, sticky='ew', columnspan=5)
+        self.field0 = ttk.Combobox(self.profile, textvariable=self.vars[0], values=self.values, state='readonly').gridx(row=self.row, column=1, sticky='ew', columnspan=3)
+        self.field0.bind('<ButtonPress>', expand_dropdown)
 
 class ChoCho(Field):
     def __init__(self, profile: Profile, names: tuple[str] = ('', ''), default: str = '', off_value: str = '', on_value: str = '', values: tuple[list[str]] = ([''], [''])) -> None:
@@ -250,11 +264,12 @@ class ChoCho(Field):
         self.on_value = on_value
         self.values = values
 
-        width = (len(max(values[0], key=len)), len(max(values[1], key=len)))
         ttk.Label(self.profile, text=f'{self.names[0]}:').gridx(row=self.row, column=0, sticky='e')
-        self.field0 = ttk.Combobox(self.profile, textvariable=self.vars[0], values=self.values[0], state='readonly', width=width[0]).gridx(row=self.row, column=1, sticky='w')
+        self.field0 = ttk.Combobox(self.profile, textvariable=self.vars[0], values=self.values[0], state='readonly', width=10).gridx(row=self.row, column=1, sticky='w')
+        self.field0.bind('<ButtonPress>', expand_dropdown)
         ttk.Label(self.profile, text=f'{self.names[1]}:').gridx(row=self.row, column=2, sticky='e')
-        self.field1 = ttk.Combobox(self.profile, textvariable=self.vars[1], values=self.values[1], state='readonly', width=width[1]).gridx(row=self.row, column=3, sticky='ew', columnspan=3)
+        self.field1 = ttk.Combobox(self.profile, textvariable=self.vars[1], values=self.values[1], state='readonly', width=10).gridx(row=self.row, column=3)
+        self.field1.bind('<ButtonPress>', expand_dropdown)
 
     def update(self, variable: str = '', index: str = '', mode: str = '') -> None:
         self.profile.df_curr[self.names[0]] = self.vars[0].get()
@@ -268,38 +283,62 @@ class ChoCho(Field):
         self.profile.df_curr[self.names[1]] = self.vars[1].get()
 
 class ChkCho(Field):
-    def __init__(self, profile: Profile, names: tuple[str] = ('', ''), default: str = 'No', off_value: str = 'N/A', on_value: str = '', values: list[str] = ['']) -> None:
+    def __init__(self, profile: Profile, names: tuple[str] = ('', ''), default: str = 'No', off_value: str = 'N/A', on_value: str = '', values: list[str] = [''], link: bool = True) -> None:
         super().__init__(profile, names=names, defaults=(default, off_value))
         self.default = default
         self.off_value = off_value
         self.on_value = on_value
         self.values = values
+        self.link = link
 
-        width = len(max(values, key=len))
         ttk.Label(self.profile, text=f'{self.names[0]}:').gridx(row=self.row, column=0, sticky='e')
         self.field0 = ttk.Checkbutton(self.profile, variable=self.vars[0], offvalue='No', onvalue='Yes').gridx(row=self.row, column=1, sticky='w')
         ttk.Label(self.profile, text=f'{self.names[1]}:').gridx(row=self.row, column=2, sticky='e')
-        self.field1 = ttk.Combobox(self.profile, textvariable=self.vars[1], values=self.values, state='readonly', width=width).gridx(row=self.row, column=3, sticky='ew', columnspan=3)
+        self.field1 = ttk.Combobox(self.profile, textvariable=self.vars[1], values=self.values, state='readonly', width=10).gridx(row=self.row, column=3)
+        self.field1.bind('<ButtonPress>', expand_dropdown)
 
     def update(self, variable: str = '', index: str = '', mode: str = '') -> None:
-        self.profile.df_curr[self.names[0]] = self.vars[0].get()
-        if self.vars[0].get() == self.default:
-            self.field1['state']  = 'disabled'
-            self.vars[1].set(self.off_value)
+        if self.link:
+            self.profile.df_curr[self.names[0]] = self.vars[0].get()
+            if self.vars[0].get() == self.default:
+                self.field1['state']  = 'disabled'
+                self.vars[1].set(self.off_value)
+            else:
+                self.field1['state'] = 'readonly'
+                if self.vars[1].get() == self.off_value:
+                    self.vars[1].set(self.on_value)
+            self.profile.df_curr[self.names[1]] = self.vars[1].get()
         else:
-            self.field1['state'] = 'readonly'
-            if self.vars[1].get() == self.off_value:
-                self.vars[1].set(self.on_value)
-        self.profile.df_curr[self.names[1]] = self.vars[1].get()
+            super().update(variable, index, mode)
 
 class NumChk(Field):
     def __init__(self, profile: Profile, names: tuple[str] = ('', ''), defaults: tuple[int, str] = (1, 'No')):
         super().__init__(profile, names=names, defaults=defaults)
 
         ttk.Label(self.profile, text=f'{self.names[0]}:').gridx(row=self.row, column=0, sticky='e')
-        ttk.Spinbox(self.profile, textvariable=self.vars[0], values=tuple(range(1,1000)), state='readonly', width=4).gridx(row=self.row, column=1, sticky='w')
-        ttk.Label(self.profile, text=f'{self.names[1]}:').gridx(row=self.row, column=4, sticky='e')
-        ttk.Checkbutton(self.profile, variable=self.vars[1], offvalue='No', onvalue='Yes').gridx(row=self.row, column=5, sticky='w')
+        ttk.Spinbox(self.profile, textvariable=self.vars[0], values=tuple(range(1,1000)), state='readonly', width=10).gridx(row=self.row, column=1, sticky='w')
+        ttk.Label(self.profile, text=f'{self.names[1]}:').gridx(row=self.row, column=2, sticky='e')
+        ttk.Checkbutton(self.profile, variable=self.vars[1], offvalue='No', onvalue='Yes').gridx(row=self.row, column=3, sticky='w')
+
+class QuinChk(Field):
+    def __init__(self, profile: Profile, names: tuple[str] = ('', '', '', '', ''), defaults: tuple[str] = ('No', 'No', 'No', 'No', 'No'), label: str = ''):
+        super().__init__(profile, names=names, defaults=defaults)
+
+        frame = ttk.Frame(self.profile)
+        frame.gridx(row=self.row, column=1, sticky='ew', columnspan=3)
+        frame.grid_columnconfigure(tuple(range(5)), weight=1)
+
+        ttk.Label(self.profile, text=f'{label} ').gridx(row=self.row, column=0, sticky='e')
+        ttk.Label(frame, text=f'{self.names[0]}:', anchor='center').gridx(row=0, column=0, sticky='ew')
+        ttk.Checkbutton(frame, variable=self.vars[0], offvalue='No', onvalue='Yes').gridx(row=1, column=0)
+        ttk.Label(frame, text=f'{self.names[1]}:', anchor='center').gridx(row=0, column=1, sticky='ew')
+        ttk.Checkbutton(frame, variable=self.vars[1], offvalue='No', onvalue='Yes').gridx(row=1, column=1)
+        ttk.Label(frame, text=f'{self.names[2]}:', anchor='center').gridx(row=0, column=2, sticky='ew')
+        ttk.Checkbutton(frame, variable=self.vars[2], offvalue='No', onvalue='Yes').gridx(row=1, column=2)
+        ttk.Label(frame, text=f'{self.names[3]}:', anchor='center').gridx(row=0, column=3, sticky='ew')
+        ttk.Checkbutton(frame, variable=self.vars[3], offvalue='No', onvalue='Yes').gridx(row=1, column=3)
+        ttk.Label(frame, text=f'{self.names[4]}:', anchor='center').gridx(row=0, column=4, sticky='ew')
+        ttk.Checkbutton(frame, variable=self.vars[4], offvalue='No', onvalue='Yes').gridx(row=1, column=4)
 
 # ---------------------------------------------------------------------------- #
 #                            Custom Profile Classes                            #
@@ -521,14 +560,139 @@ class ASND(Profile):
             'Cancelled'], on_value = 'Attended')
         NumChk(self,    names = ('# Students', 'Project'))
 
-class Embd(Profile):
-    name = 'Embedded'
+class EmbdMASA(Profile):
+    name = 'Embedded (MASA)'
 
     def layout(self):
         Date(self,      name  =  'Date')
-        Nums(self,      names = ('Workshop Length', 'Preparation Time'),    values = ([
+        Nums(self,      names = ('Session', 'Preparation'),                 values = ([
             f'{0.25*i:.2f}' for i in range(1, 11)], [
-            f'{0.50*i:.2f}' for i in range(1, 11)]), defaults = ('0.25', '0.50'))
+            f'{0.50*i:.2f}' for i in range(1, 11)]), defaults = ('0.25', '0.50'), label = 'Time (Hours)')
+        Text(self,      name  =  'Workshop Name')
+        Text(self,      name  =  'Module')
+        Choice(self,    name  =  'Department',                              values =  [
+            'Unknown',
+            'Careers',
+            'Biosciences and Medicine',
+            'Business School',
+            'Centre for Environment and Sustainability',
+            'Chemical and Process Engineering',
+            'Chemistry',
+            'Civil and Environmental Engineering',
+            'Computer Science',
+            'Economics',
+            'Electrical and Electronic Engineering',
+            'Guildford School of Acting',
+            'Health Sciences',
+            'Higher Education',
+            'Hospitality and Tourism Management',
+            'Law',
+            'Literature and Languages',
+            'Mathematics',
+            'Mechanical Engineering Sciences',
+            'Music and Media',
+            'Physics',
+            'Politics',
+            'Psychology',
+            'Sociology',
+            'Technology Enhanced Learning',
+            'Veterinary Medicine'])
+        Choice(self,    name  =  'Topic 1',                                 values =  [
+            'Maths: Algebra',
+            'Maths: Calculus',
+            'Maths: Complex Numbers',
+            'Maths: Numeracy',
+            'Maths: Trigonometry',
+            'Maths: Vector Calculus',
+            'Maths: Other',
+            'Software: Excel',
+            'Software: LaTeX',
+            'Software: Matlab',
+            'Software: R',
+            'Software: SPSS',
+            'Software: Other',
+            'Statistics: Data Collection',
+            'Statistics: Data Presentation',
+            'Statistics: Statistical Testing',
+            'Statistics: Statistical Theory',
+            'Statistics: Other'])
+        Choice(self,    name  =  'Topic 2',                                 values =  [
+            'N/A',
+            'Maths: Algebra',
+            'Maths: Calculus',
+            'Maths: Complex Numbers',
+            'Maths: Numeracy',
+            'Maths: Trigonometry',
+            'Maths: Vector Calculus',
+            'Maths: Other',
+            'Software: Excel',
+            'Software: LaTeX',
+            'Software: Matlab',
+            'Software: R',
+            'Software: SPSS',
+            'Software: Other',
+            'Statistics: Data Collection',
+            'Statistics: Data Presentation',
+            'Statistics: Statistical Testing',
+            'Statistics: Statistical Theory',
+            'Statistics: Other'], default = 'N/A')
+        Choice(self,    name  =  'Level',                                   values =  [
+            'Pre-Entry (SISC)',
+            'Level 3 - Foundation',
+            'Level 4 - 1st year',
+            'Level 5 - 2nd year',
+            'Level 6 - 3rd to final year',
+            'Placement Year',
+            'Level 7 - Masters',
+            'Level 8 - PhD',
+            'Staff',
+            'Other',
+            'Not collected'])
+        Choice(self,    name  =  'Location',                                values =  [
+            'Stag Hill',
+            'Manor Park',
+            'Off-Campus',
+            'Kate Granger'], default = 'Stag Hill')
+        Choice(self,    name  =  'Type',                                    values =  [
+            'Department - synchronous taught',
+            'Department - synchronous Q+A',
+            'Department - asynchronous (panopto recording)',
+            'Discussion Forum',
+            'Professional Service',
+            'WPO'])
+        ChkCho(self,    names = ('Online', 'Type'),                         values =  [
+            'Department - synchronous taught',
+            'Department - synchronous Q+A',
+            'Department - asynchronous (panopto recording)',
+            'Discussion Forum',
+            'Professional Service',
+            'WPO'], off_value = '', link = False)
+        QuinChk(self,   names = ('LDA', 'LDL', 'MASA', 'FY', 'Acad'), label = 'Staff')
+        Choice(self,    name  =  'Contextualisation',                       values =  [
+            'None',
+            'Minimal',
+            'Significant',
+            'Full'
+        ])
+        Choice(self,    name  =  'Assessment Related',                      values =  [
+            'No',
+            'Partially',
+            'Directly',
+            'Project/Dissertation'
+        ])
+        ChkCho(self,    names = ('Resources', 'Applications'),              values =  [
+            'Not applicable to other workshops',
+            'Is applicable to other workshops'], on_value = 'Not applicable to other workshops')
+        Nums(self,      names = ('Expected', 'Arrived'), label = '# Students')
+
+class EmbdASND(Profile):
+    name = 'Embedded (AS&D)'
+
+    def layout(self):
+        Date(self,      name  =  'Date')
+        Nums(self,      names = ('Session', 'Preparation'),                 values = ([
+            f'{0.25*i:.2f}' for i in range(1, 11)], [
+            f'{0.50*i:.2f}' for i in range(1, 11)]), defaults = ('0.25', '0.50'), label = 'Time (Hours)')
         Text(self,      name  =  'Workshop Name')
         Text(self,      name  =  'Module')
         Choice(self,    name  =  'Department',                              values =  [
@@ -589,7 +753,7 @@ class Embd(Profile):
             'Learning journey: Transition between years/PTY/professional statements or applications',
             'Learning journey: Transition to university/UK academic setting'])
         Choice(self,    name  =  'Topic 2',                                 values =  [
-            'N/A'
+            'N/A',
             'Assessment: Annotated bibliography',
             'Assessment: Research proposal',
             'Assessment: Critical Article review',
@@ -643,6 +807,14 @@ class Embd(Profile):
             'Discussion Forum',
             'Professional Service',
             'WPO'])
+        ChkCho(self,    names = ('Online', 'Type'),                         values =  [
+            'Department - synchronous taught',
+            'Department - synchronous Q+A',
+            'Department - asynchronous (panopto recording)',
+            'Discussion Forum',
+            'Professional Service',
+            'WPO'], off_value = '', link = False)
+        QuinChk(self,   names = ('LDA', 'LDL', 'MASA', 'FY', 'Acad'), label = 'Staff')
         Choice(self,    name  =  'Contextualisation',                       values =  [
             'None',
             'Minimal',
@@ -652,12 +824,14 @@ class Embd(Profile):
         Choice(self,    name  =  'Assessment Related',                      values =  [
             'No',
             'Partially',
-            'Directly'
+            'Directly',
+            'Project/Dissertation'
         ])
         ChkCho(self,    names = ('Resources', 'Applications'),              values =  [
             'Not applicable to other workshops',
             'Is applicable to other workshops'], on_value = 'Not applicable to other workshops')
-        Nums(self,      names = ('Expected', 'Arrived'))
+        Nums(self,      names = ('Expected', 'Arrived'), label = '# Students')
+
 
 # ---------------------------------------------------------------------------- #
 #                                    Script                                    #

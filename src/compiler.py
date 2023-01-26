@@ -10,7 +10,7 @@ def compile():
             f'src/source.py',
             f'--onefile',
             f'--windowed',
-            f'--arv-emulation',
+            f'--argv-emulation',
             f'--name=LDZ',
             f'-i=src/images/stag.{IMG_EXT[platform.system()]}',
             f'--add-data=src/images/stag.png{os.pathsep}images',
