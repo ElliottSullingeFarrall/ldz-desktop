@@ -1,13 +1,23 @@
+'''Source code for LDZ app.
+'''
+
 from utils import *
 
-#TODO: Uninstaller?
-
 # ---------------------------------------------------------------------------- #
-#                                 Base Classes                                 #
+#                         Base Classes - DO NOT CHANGE                         #
 # ---------------------------------------------------------------------------- #
 
 class App(tk.Tk):
+    """Class for main app.
+
+    Attributes:
+        profile (Profile): Currently selected profile.
+        style (ttk.Style): Tkinter style for app.
+        profiles (dict[str, Profile]): Dictionary of created profiles with labels.
+    """    
     def __init__(self) -> None:
+        """Constructor for App class.
+        """        
         super().__init__()
         self.profile: Profile = None
 
@@ -31,6 +41,11 @@ class App(tk.Tk):
         table.pack(fill='both', expand='True')
 
         def select_profile(event: tk.Event):
+            """Initialise profile window based on selection in treeview.
+
+            Args:
+                event (tk.Event): Tkinter event.
+            """            
             profile_name: str = table.item(table.focus())['values'][0]
             self.withdraw()
             self.profile: Profile = self.profiles[profile_name](self)
@@ -38,7 +53,22 @@ class App(tk.Tk):
         table.bind("<<TreeviewSelect>>", select_profile)
 
 class Profile(tk.Tk):
+    """Class for template profile.
+
+    Attributes:
+        name (str): Profile name.
+        app (App): Main app window.
+        fields (list[Field]): List of field objects for current profile.
+        df_curr (dict[str, str]): Dictionary of data currently entered in fields.
+        df_save (pd.DataFrame): Dataframe of data saved for current profile.
+        filename (str): Path to csv file containing saved data for current profile.
+    """    
     def __init__(self, app) -> None:
+        """Constructor for Profile class.
+
+        Args:
+            app (_type_): Main app window.
+        """        
         super().__init__()
         self.name: str = '' if not hasattr(self, 'name') else self.name
         self.app: App = app
@@ -60,9 +90,13 @@ class Profile(tk.Tk):
         self.config(menu=menubar)
 
     def layout(self):
+        """Add custom widgets to window.
+        """        
         pass
 
     def mainloop(self) -> None:
+        """Add widgets to window and initialise dataframes.
+        """        
         self.fields: list[Field] = []
         self.df_curr: dict[str, str] = {}
 
@@ -81,9 +115,13 @@ class Profile(tk.Tk):
         super().mainloop()
 
     def save_data(self) -> None:
+        """Save data to csv file.
+        """        
         self.df_save.to_csv(self.filename, index=False)
 
     def view_data(self) -> None:
+        """Opens window to view data in treeview.
+        """        
         window: tk.Toplevel = tk.Toplevel(self)
         window.title('View Data')
         window.resizable(False, False)
@@ -112,6 +150,11 @@ class Profile(tk.Tk):
         table.configure(xscrollcommand=hsb.set)
 
         def delete_data(event: tk.Event) -> None:
+            """Delete data corresponding to slected row in treeview.
+
+            Args:
+                event (tk.Event): Tkinter event.
+            """            
             answer: str = messagebox.askquestion(parent=window, title='Delete Data', message='Are you sure you would like to delete this entry?')
             if answer == 'no':
                 pass
@@ -123,6 +166,8 @@ class Profile(tk.Tk):
         table.bind("<<TreeviewSelect>>", delete_data)
 
     def import_data(self) -> None:
+        """Initialise dialog for importing data from excel.
+        """        
         paths: tuple[str] = filedialog.askopenfilenames(parent=self, title='Import Data', initialdir='/', filetypes=[('excel files', '*.xlsx')])
         if paths:
             answer: Union[bool, None] = messagebox.askyesnocancel(parent=self, title='Import Data', message='Would you like to clear the existing data? This action cannot be undone!')
@@ -132,6 +177,8 @@ class Profile(tk.Tk):
                 self.df_save: pd.DataFrame = pd.concat([self.df_save] + [pd.read_excel(path, dtype=str, na_filter=False) for path in paths])
 
     def export_data(self) -> None:
+        """Initialise dialog for exporting data to xcel
+        """        
         path: str = filedialog.asksaveasfile(parent=self, title='Export Data', initialdir='/', filetypes=[('excel files', '*.xlsx')], defaultextension=('excel files', '*.xlsx'), mode='wb')
         if path:
             answer: Union[bool, None] = messagebox.askyesnocancel(parent=self, title='Export Data', message='Would you like to clear the existing data? This action cannot be undone!')
@@ -141,17 +188,34 @@ class Profile(tk.Tk):
                 self.df_save: pd.DataFrame = pd.DataFrame(columns=self.df_curr.keys())
 
     def switch_profile(self) -> None:
+        """Close window and open menu for switching profile.
+        """        
         self.destroy()
         self.app.deiconify()
 
 
 class Field():
-    def __init__(self, profile: Profile, names: tuple[str] = (), defaults: tuple[str] = ()) -> None:
-        self.profile: Profile = profile
-        self.names: tuple[str] = names
-        self.defaults: tuple[str] = defaults
+    """Class for template field.
 
-        self.vars: tuple[tk.StringVar] = [tk.StringVar(self.profile, value=default) for default in defaults]
+    Attributes:
+        profile (Profile): Profile containing field.
+        names (tuple[str, ...]): Names of fields.
+        defaults (tuple[str, ...]): Default values for fields.
+        vars (tuple[tk.StringVar, ...]): Tkinter variables for fields.
+        row (int): Current row number for the profile.
+    """    
+    def __init__(self, profile: Profile, names: tuple[str, ...] = (), defaults: tuple[str, ...] = ()) -> None:
+        """Constructor for Field class.
+        Args:
+            profile (Profile): Profile containing field.
+            names (tuple[str], optional): Names of fields. Defaults to ().
+            defaults (tuple[str], optional): Default values for fields. Defaults to ().
+        """        
+        self.profile: Profile = profile
+        self.names: tuple[str, ...] = names
+        self.defaults: tuple[str, ...] = defaults
+
+        self.vars: tuple[tk.StringVar, ...] = [tk.StringVar(self.profile, value=default) for default in defaults]
         for var in self.vars:
             var.trace_add('write', self.update)
 
@@ -159,15 +223,36 @@ class Field():
         self.profile.fields.append(self)
 
     def update(self, variable: str = '', index: str = '', mode: str = '') -> None:
+        """Update current data of profile with field entries.
+
+        Args:
+            variable (str, optional): Variable to be traced. Defaults to ''.
+            index (str, optional): Index of variable (if variable is a list). Defaults to ''.
+            mode (str, optional): Trace mode ('read', 'write', etc.). Defaults to ''.
+        """        
         for var, name in zip(self.vars, self.names):
-            self.profile.df_curr[name] = var.get()
+            self.profile.df_curr[name]: str = var.get()
 
     def reset(self) -> None:
+        """Reset fields to their default values.
+        """        
         for var, default in zip(self.vars, self.defaults):
             var.set(default)
 
 class Submit():
+    """Class for submit button.
+
+    Attributes:
+        profile (Profile): Profile containing field.
+        name (str): Label for button.
+        row (int): Current row number for the profile.
+    """    
     def __init__(self, profile: Profile) -> None:
+        """Constructor for Submit class.
+
+        Args:
+            profile (Profile): Profile containing submit button.
+        """        
         self.profile: Profile = profile
         self.name: str = 'Submit'
 
@@ -176,6 +261,8 @@ class Submit():
         ttk.Button(profile, text=self.name, command=self.command).gridx(row=self.row, column=0, columnspan=4)
 
     def command(self) -> None:
+        """Command to be executed on button press.
+        """        
         if '' in self.profile.df_curr.values():
             messagebox.showinfo(parent=self.profile, message='Please fill in all the fields.')
         else:
@@ -189,17 +276,37 @@ class Submit():
 # ---------------------------------------------------------------------------- #
 
 class Date(Field):
+    """Class for date entry field.
+    """  
     def __init__(self, profile: Profile, name: str = '') -> None:
+        """Constructor for Date class.
+
+        Args:
+            profile (Profile): Profile containing field.
+            name (str, optional): Name of field. Defaults to ''.
+        """        
         super().__init__(profile, names=(name,), defaults=(f'{datetime.now():%d/%m/%Y}',))
     
         ttk.Label(self.profile, text=f'{self.names[0]}:').gridx(row=self.row, column=0, sticky='e')
         tkc.DateEntry(self.profile, textvariable=self.vars[0], date_pattern='dd/mm/yyyy', selectmode='day', state='readonly').gridx(row=self.row, column=1, sticky='ew', columnspan=3)
 
 class Times(Field):
-    def __init__(self, profile: Profile, names: tuple[str] = ('', ''), label: str = '') -> None:
+    """Class for dual time entry field.
+
+    Attributes:
+        frame (ttk.Frame): Frame containing widgets.
+    """  
+    def __init__(self, profile: Profile, names: tuple[str, str] = ('', ''), label: str = '') -> None:
+        """Constructor for Times class.
+
+        Args:
+            profile (Profile): Profile containing field.
+            names (tuple[str, str], optional): Names of fields. Defaults to ('', '').
+            label (str, optional): Label for row. Defaults to ''.
+        """        
         super().__init__(profile, names=names, defaults=(f'{datetime.now():%H}', f'{datetime.now():%M}', f'{datetime.now():%H}', f'{datetime.now():%M}'))
 
-        frame = ttk.Frame(self.profile)
+        frame: ttk.Frame = ttk.Frame(self.profile)
         frame.gridx(row=self.row, column=1, sticky='ew', columnspan=3)
         frame.grid_columnconfigure(tuple(range(6)), weight=1)
 
@@ -212,15 +319,37 @@ class Times(Field):
         ttk.Spinbox(frame, textvariable=self.vars[3], values=[f'{mint:02}' for mint in range(0, 60, 5)], state='readonly', wrap=True, width=3).gridx(row=0, column=5)
 
     def update(self, variable: str = '', index: str = '', mode: str = '') -> None:
-        self.profile.df_curr[self.names[0]] = f'{datetime.strptime(f"{self.vars[0].get()}:{self.vars[1].get()}", "%H:%M"):%H:%M}'
-        self.profile.df_curr[self.names[1]] = f'{datetime.strptime(f"{self.vars[2].get()}:{self.vars[3].get()}", "%H:%M"):%H:%M}'
+        """Update current data of profile with field entries.
+
+        Args:
+            variable (str, optional): Variable to be traced. Defaults to ''.
+            index (str, optional): Index of variable (if variable is a list). Defaults to ''.
+            mode (str, optional): Trace mode ('read', 'write', etc.). Defaults to ''.
+        """        
+        self.profile.df_curr[self.names[0]]: str = f'{datetime.strptime(f"{self.vars[0].get()}:{self.vars[1].get()}", "%H:%M"):%H:%M}'
+        self.profile.df_curr[self.names[1]]: str = f'{datetime.strptime(f"{self.vars[2].get()}:{self.vars[3].get()}", "%H:%M"):%H:%M}'
 
 class Nums(Field):
-    def __init__(self, profile: Profile, names: tuple[str] = ('', ''), defaults: tuple[int] = (1, 1), values: tuple[list[int]] = (list(range(1, 1000)), list(range(1, 1000))), label: str = '') -> None:
-        super().__init__(profile, names=names, defaults=defaults)
-        self.values = values
+    """Class for dual number entry field.
 
-        frame = ttk.Frame(self.profile)
+    Attributes:
+        frame (ttk.Frame): Frame conaining widgets.
+        values (tupe[list[int], list[int]]): Possible values for fields.
+    """  
+    def __init__(self, profile: Profile, names: tuple[str, str] = ('', ''), defaults: tuple[int, int] = (1, 1), values: tuple[list[int], list[int]] = (list(range(1, 1000)), list(range(1, 1000))), label: str = '') -> None:
+        """Constructor for Nums class.
+
+        Args:
+            profile (Profile): Profile containing field.
+            names (tuple[str, str], optional): Names of fields. Defaults to ('', '').
+            defaults (tuple[int, int], optional): Default values for fields. Defaults to (1, 1).
+            values (tuple[list[int], list[int]], optional): Possible values for fields. Defaults to (list(range(1, 1000)), list(range(1, 1000))).
+            label (str, optional): Label for row. Defaults to ''.
+        """        
+        super().__init__(profile, names=names, defaults=defaults)
+        self.values: tuple[list[int], list[int]] = values
+
+        frame: ttk.Frame = ttk.Frame(self.profile)
         frame.gridx(row=self.row, column=1, sticky='ew', columnspan=3)
         frame.grid_columnconfigure(tuple(range(4)), weight=1)
 
@@ -230,7 +359,17 @@ class Nums(Field):
         ttk.Label(frame, text=f'{self.names[1]}:').gridx(row=0, column=2, sticky='e')
         ttk.Spinbox(frame, textvariable=self.vars[1], values=self.values[1], validate='focusout', validatecommand=((self.profile.register(self.validate)), 1, '%P', '%W'), width=4).gridx(row=0, column=3, sticky='e')
 
-    def validate(self, idx, P, W):
+    def validate(self, idx: str, P: int, W: str) -> bool:
+        """Validate user entry for field.
+
+        Args:
+            idx (str): Index of field.
+            P (int): Attempted entry.
+            W (str): Name of widget.
+
+        Returns:
+            bool: Result of validation.
+        """           
         if P in self.values[int(idx)]:
             return True
         else:
@@ -241,70 +380,148 @@ class Nums(Field):
             return False
 
 class Text(Field):
+    """Class for text entry field.
+    """  
     def __init__(self, profile: Profile, name: str = '') -> None:
+        """Constructor for Text class.
+
+        Args:
+            profile (Profile): Profile containing field.
+            name (str, optional): Name of field. Defaults to ''.
+        """        
         super().__init__(profile, names=(name,), defaults=('',))
 
         ttk.Label(self.profile, text=f'{self.names[0]}:').gridx(row=self.row, column=0, sticky='e')
         ttk.Entry(self.profile, textvariable=self.vars[0]).gridx(row=self.row, column=1, sticky='ew', columnspan=3)
 
 class Choice(Field):
+    """Class for template field.
+
+    Attributes:
+        values (list[str]): Possible values for field.
+        field0 (ttk.Combobox): Widget for dropdown entry.
+    """  
     def __init__(self, profile: Profile, name: str = '', default: str = '', values: list[str] = ['']) -> None:
+        """Constructor for Choice class.
+
+        Args:
+            profile (Profile): Profile containing field.
+            name (str, optional): Name of field. Defaults to ''.
+            default (str, optional): Default value for field. Defaults to ''.
+            values (list[str], optional): Possible values for field. Defaults to [''].
+        """        
         super().__init__(profile, names=(name,), defaults=(default,))
-        self.values = values
+        self.values: list[str] = values
 
         ttk.Label(self.profile, text=f'{self.names[0]}:').gridx(row=self.row, column=0, sticky='e')
-        self.field0 = ttk.Combobox(self.profile, textvariable=self.vars[0], values=self.values, state='readonly').gridx(row=self.row, column=1, sticky='ew', columnspan=3)
+        self.field0: ttk.Combobox = ttk.Combobox(self.profile, textvariable=self.vars[0], values=self.values, state='readonly').gridx(row=self.row, column=1, sticky='ew', columnspan=3)
         self.field0.bind('<ButtonPress>', expand_dropdown)
 
 class ChoCho(Field):
-    def __init__(self, profile: Profile, names: tuple[str] = ('', ''), default: str = '', off_value: str = '', on_value: str = '', values: tuple[list[str]] = ([''], [''])) -> None:
+    """Class for dual dropdown entry field with linking.
+
+    Attributes:
+        default (str): Default value for first field.
+        off_value (str): Default value for second field.
+        on_value (str): Value to lock second field to if first field is not at its default.
+        values (tuple[list[str], list[str]]): Possible values for fields.
+        field0 (ttk.Combobox): First widget for dropdown entry.
+        field1 (ttk.Combobox): Second widget for dropdown entry.
+    """  
+    def __init__(self, profile: Profile, names: tuple[str, str] = ('', ''), default: str = '', off_value: str = '', on_value: str = '', values: tuple[list[str], list[str]] = ([''], [''])) -> None:
+        """Constructor for ChoCho class.
+
+        Args:
+            profile (Profile): Profile containing field.
+            names (tuple[str, str], optional): Names of fields. Defaults to ('', '').
+            default (str, optional): Default value for first field. Defaults to ''.
+            off_value (str, optional): Default value for second field. Defaults to ''.
+            on_value (str, optional): Value to lock second field to if first field is not at its default. Defaults to ''.
+            values (tuple[list[str], list[str]], optional): Possible values for fields. Defaults to ([''], ['']).
+        """        
         super().__init__(profile, names=names, defaults=(default, off_value))
-        self.default = default
-        self.off_value = off_value
-        self.on_value = on_value
-        self.values = values
+        self.default: str = default
+        self.off_value: str = off_value
+        self.on_value: str = on_value
+        self.values: tuple[list[str], list[str]] = values
 
         ttk.Label(self.profile, text=f'{self.names[0]}:').gridx(row=self.row, column=0, sticky='e')
-        self.field0 = ttk.Combobox(self.profile, textvariable=self.vars[0], values=self.values[0], state='readonly', width=10).gridx(row=self.row, column=1, sticky='w')
+        self.field0: ttk.Combobox = ttk.Combobox(self.profile, textvariable=self.vars[0], values=self.values[0], state='readonly', width=10).gridx(row=self.row, column=1, sticky='w')
         self.field0.bind('<ButtonPress>', expand_dropdown)
         ttk.Label(self.profile, text=f'{self.names[1]}:').gridx(row=self.row, column=2, sticky='e')
-        self.field1 = ttk.Combobox(self.profile, textvariable=self.vars[1], values=self.values[1], state='readonly', width=10).gridx(row=self.row, column=3)
+        self.field1: ttk.Combobox = ttk.Combobox(self.profile, textvariable=self.vars[1], values=self.values[1], state='readonly', width=10).gridx(row=self.row, column=3)
         self.field1.bind('<ButtonPress>', expand_dropdown)
 
     def update(self, variable: str = '', index: str = '', mode: str = '') -> None:
-        self.profile.df_curr[self.names[0]] = self.vars[0].get()
+        """Update current data of profile with field entries.
+
+        Args:
+            variable (str, optional): Variable to be traced. Defaults to ''.
+            index (str, optional): Index of variable (if variable is a list). Defaults to ''.
+            mode (str, optional): Trace mode ('read', 'write', etc.). Defaults to ''.
+        """         
+        self.profile.df_curr[self.names[0]]: str = self.vars[0].get()
         if self.vars[0].get() == self.default:
-            self.field1['state']  = 'readonly'
+            self.field1['state']: str  = 'readonly'
             if self.vars[1].get() == self.on_value:
                 self.vars[1].set(self.off_value)
         else:
-            self.field1['state'] = 'disabled'
+            self.field1['state']: str = 'disabled'
             self.vars[1].set(self.on_value)
-        self.profile.df_curr[self.names[1]] = self.vars[1].get()
+        self.profile.df_curr[self.names[1]]: str = self.vars[1].get()
 
 class ChkCho(Field):
-    def __init__(self, profile: Profile, names: tuple[str] = ('', ''), default: str = 'No', off_value: str = 'N/A', on_value: str = '', values: list[str] = [''], link: bool = True) -> None:
+    """Class for dual ticbox/dropdown entry field with linking.
+
+    Attributes:
+        default (str): Default value for first field.
+        off_value (str): Value to lock second field to if first field is at its default.
+        on_value (str): Default value for second field.
+        values (list[str]): _description_.
+        link (bool): If False, overriding of update method will be disabled.
+        field0 (ttk.Combobox): First widget for tickbox entry.
+        field1 (ttk.Combobox): Second widget for dropdown entry.
+    """  
+    def __init__(self, profile: Profile, names: tuple[str, str] = ('', ''), default: str = 'No', off_value: str = 'N/A', on_value: str = '', values: list[str] = [''], link: bool = True) -> None:
+        """Constructor for ChkCho class.
+
+        Args:
+            profile (Profile): Profile containing field.
+            names (tuple[str, str], optional): Names of fields.. Defaults to ('', '').
+            default (str, optional): Default value for first field. Defaults to 'No'.
+            off_value (str, optional): Value to lock second field to if first field is at its default. Defaults to 'N/A'.
+            on_value (str, optional): Default value for second field. Defaults to ''.
+            values (list[str], optional): _description_. Defaults to [''].
+            link (bool, optional): If False, overriding of update method will be disabled. Defaults to True.
+        """        
         super().__init__(profile, names=names, defaults=(default, off_value))
-        self.default = default
-        self.off_value = off_value
-        self.on_value = on_value
-        self.values = values
-        self.link = link
+        self.default: str = default
+        self.off_value: str = off_value
+        self.on_value: str = on_value
+        self.values: list[str] = values
+        self.link: bool = link
 
         ttk.Label(self.profile, text=f'{self.names[0]}:').gridx(row=self.row, column=0, sticky='e')
-        self.field0 = ttk.Checkbutton(self.profile, variable=self.vars[0], offvalue='No', onvalue='Yes').gridx(row=self.row, column=1, sticky='w')
+        self.field0: ttk.Checkbutton = ttk.Checkbutton(self.profile, variable=self.vars[0], offvalue='No', onvalue='Yes').gridx(row=self.row, column=1, sticky='w')
         ttk.Label(self.profile, text=f'{self.names[1]}:').gridx(row=self.row, column=2, sticky='e')
-        self.field1 = ttk.Combobox(self.profile, textvariable=self.vars[1], values=self.values, state='readonly', width=10).gridx(row=self.row, column=3)
+        self.field1: ttk.Combobox = ttk.Combobox(self.profile, textvariable=self.vars[1], values=self.values, state='readonly', width=10).gridx(row=self.row, column=3)
         self.field1.bind('<ButtonPress>', expand_dropdown)
 
     def update(self, variable: str = '', index: str = '', mode: str = '') -> None:
+        """Update current data of profile with field entries.
+
+        Args:
+            variable (str, optional): Variable to be traced. Defaults to ''.
+            index (str, optional): Index of variable (if variable is a list). Defaults to ''.
+            mode (str, optional): Trace mode ('read', 'write', etc.). Defaults to ''.
+        """   
         if self.link:
             self.profile.df_curr[self.names[0]] = self.vars[0].get()
             if self.vars[0].get() == self.default:
-                self.field1['state']  = 'disabled'
+                self.field1['state']: str  = 'disabled'
                 self.vars[1].set(self.off_value)
             else:
-                self.field1['state'] = 'readonly'
+                self.field1['state']: str = 'readonly'
                 if self.vars[1].get() == self.off_value:
                     self.vars[1].set(self.on_value)
             self.profile.df_curr[self.names[1]] = self.vars[1].get()
@@ -312,7 +529,16 @@ class ChkCho(Field):
             super().update(variable, index, mode)
 
 class NumChk(Field):
-    def __init__(self, profile: Profile, names: tuple[str] = ('', ''), defaults: tuple[int, str] = (1, 'No')):
+    """Class for dual number/tickbox entry field.
+    """  
+    def __init__(self, profile: Profile, names: tuple[str, str] = ('', ''), defaults: tuple[int, str] = (1, 'No')):
+        """Constructor for NumChk class.
+
+        Args:
+            profile (Profile): Profile containing field.
+            names (tuple[str, str], optional): Names of fields. Defaults to ('', '').
+            defaults (tuple[int, str], optional): Default values for fields. Defaults to (1, 'No').
+        """        
         super().__init__(profile, names=names, defaults=defaults)
 
         ttk.Label(self.profile, text=f'{self.names[0]}:').gridx(row=self.row, column=0, sticky='e')
@@ -321,10 +547,23 @@ class NumChk(Field):
         ttk.Checkbutton(self.profile, variable=self.vars[1], offvalue='No', onvalue='Yes').gridx(row=self.row, column=3, sticky='w')
 
 class QuinChk(Field):
-    def __init__(self, profile: Profile, names: tuple[str] = ('', '', '', '', ''), defaults: tuple[str] = ('No', 'No', 'No', 'No', 'No'), label: str = ''):
+    """Class for dual drop down entry field with linking.
+
+    Attributes:
+        frame (ttk.Frame): Frame containing widgets.
+    """  
+    def __init__(self, profile: Profile, names: tuple[str, str, str, str] = ('', '', '', '', ''), defaults: tuple[str, str, str, str] = ('No', 'No', 'No', 'No', 'No'), label: str = ''):
+        """Constructor for QuinChk class.
+
+        Args:
+            profile (Profile): Profile containing field.
+            names (tuple[str, str, str, str], optional): Names of fields. Defaults to ('', '', '', '', '').
+            defaults (tuple[str, str, str, str], optional): Default vlaues for fields. Defaults to ('No', 'No', 'No', 'No', 'No').
+            label (str, optional): Label for row. Defaults to ''.
+        """        
         super().__init__(profile, names=names, defaults=defaults)
 
-        frame = ttk.Frame(self.profile)
+        frame: ttk.Frame = ttk.Frame(self.profile)
         frame.gridx(row=self.row, column=1, sticky='ew', columnspan=3)
         frame.grid_columnconfigure(tuple(range(5)), weight=1)
 
@@ -345,9 +584,16 @@ class QuinChk(Field):
 # ---------------------------------------------------------------------------- #
 
 class MASA(Profile):
+    """Class for MASA profile.
+
+    Attributes:
+        name (str): Profile name.
+    """  
     name = 'MASA'
 
     def layout(self) -> None:
+        """Add custom widgets to window.
+        """   
         Date(self,      name  =  'Date'),
         Times(self,     names = ('In', 'Out'), label = 'Time'),
         Choice(self,    name  =  'Department',              values =  [
@@ -442,9 +688,16 @@ class MASA(Profile):
         NumChk(self,    names = ('# Students', 'Project'))
 
 class ASND(Profile):
+    """Class for AS&D profile.
+
+    Attributes:
+        name (str): Profile name.
+    """  
     name = 'AS&D'
 
     def layout(self):
+        """Add custom widgets to window.
+        """   
         Date(self,      name  =  'Date')
         Times(self,     names = ('In', 'Out'), label = 'Time')
         Choice(self,    name  =  'Department',              values = [
@@ -561,9 +814,16 @@ class ASND(Profile):
         NumChk(self,    names = ('# Students', 'Project'))
 
 class EmbdMASA(Profile):
+    """Class for MASA (Embedded) profile.
+
+    Attributes:
+        name (str): Profile name.
+    """  
     name = 'Embedded (MASA)'
 
     def layout(self):
+        """Add custom widgets to window.
+        """   
         Date(self,      name  =  'Date')
         Nums(self,      names = ('Session', 'Preparation'),                 values = ([
             f'{0.25*i:.2f}' for i in range(1, 11)], [
@@ -679,9 +939,16 @@ class EmbdMASA(Profile):
         Nums(self,      names = ('Expected', 'Arrived'), label = '# Students')
 
 class EmbdASND(Profile):
+    """Class for AS&D (Embedded) profile.
+
+    Attributes:
+        name (str): Profile name.
+    """  
     name = 'Embedded (AS&D)'
 
     def layout(self):
+        """Add custom widgets to window.
+        """     
         Date(self,      name  =  'Date')
         Nums(self,      names = ('Session', 'Preparation'),                 values = ([
             f'{0.25*i:.2f}' for i in range(1, 11)], [
@@ -818,15 +1085,13 @@ class EmbdASND(Profile):
             'Is applicable to other workshops'], on_value = 'Not applicable to other workshops')
         Nums(self,      names = ('Expected', 'Arrived'), label = '# Students')
 
-
 # ---------------------------------------------------------------------------- #
-#                                    Script                                    #
+#                            Script - DO NOT CHANGE                            #
 # ---------------------------------------------------------------------------- #
 
-FILE_EXT = os.path.splitext(sys.argv[0])[1]
+FILE_EXT : str = os.path.splitext(sys.argv[0])[1]
 
 if __name__ == '__main__':
-    if FILE_EXT == '.py':
-        DATA_DIR = os.getcwd()
-    os.makedirs(DATA_DIR, exist_ok=True); os.chdir(DATA_DIR)
-    App().mainloop()
+    if FILE_EXT != '.py':
+        os.makedirs(DATA_DIR, exist_ok=True); os.chdir(DATA_DIR)
+        App().mainloop()

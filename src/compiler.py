@@ -1,10 +1,17 @@
+"""Module for compiling app.
+"""
+
+from __future__ import annotations
+
 import PyInstaller.__main__ as compiler
 import os
 import platform
 
-IMG_EXT = {'Windows' : 'ico', 'Darwin' : 'icns'}
+IMG_EXT: dict[str, str]  = {'Windows' : 'ico', 'Darwin' : 'icns'}
 
 def compile():
+    """Compiles app.
+    """    
     try:
         compiler.run([
             f'src/source.py',
