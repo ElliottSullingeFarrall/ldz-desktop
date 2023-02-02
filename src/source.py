@@ -1,6 +1,8 @@
 '''Source code for LDZ app.
 '''
 
+from __future__ import annotations
+
 from utils import *
 
 # ---------------------------------------------------------------------------- #
