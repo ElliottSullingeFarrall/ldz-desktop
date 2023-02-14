@@ -7,7 +7,7 @@ import PyInstaller.__main__ as compiler
 import os
 import platform
 
-IMG_EXT: dict[str, str]  = {'Windows' : 'ico', 'Darwin' : 'icns'}
+IMG_EXT: dict[str, str]  = {'Windows' : 'ico', 'Darwin' : 'icns', 'Linux' : 'ico'}
 
 def compile():
     """Compiles app.
