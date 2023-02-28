@@ -1094,6 +1094,5 @@ class EmbdASND(Profile):
 FILE_EXT : str = os.path.splitext(sys.argv[0])[1]
 
 if __name__ == '__main__':
-    if FILE_EXT != '.py':
-        os.makedirs(DATA_DIR, exist_ok=True); os.chdir(DATA_DIR)
-        App().mainloop()
+    os.makedirs(DATA_DIR, exist_ok=True); os.chdir(DATA_DIR)
+    App().mainloop()
