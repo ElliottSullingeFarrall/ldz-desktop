@@ -760,7 +760,7 @@ class ASND(Profile):
             'Learning journey: Transition between years/PTY/professional statements or applications',
             'Learning journey: Transition to university/UK academic setting'])
         Choice(self,    name  =  'Query 2',                 values =  [
-            'N/A'
+            'N/A',
             'Assessment: Annotated bibliography',
             'Assessment: Research proposal',
             'Assessment: Critical Article review',
