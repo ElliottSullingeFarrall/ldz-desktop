@@ -189,6 +189,10 @@ class Profile(tk.Tk):
             if answer:
                 self.df_save: pd.DataFrame = pd.DataFrame(columns=self.df_curr.keys())
 
+    def destroy(self) -> None:
+        self.save_data()
+        super().destroy()
+
     def switch_profile(self) -> None:
         """Close window and open menu for switching profile.
         """        
