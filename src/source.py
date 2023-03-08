@@ -179,7 +179,7 @@ class Profile(tk.Tk):
                 self.df_save: pd.DataFrame = pd.concat([self.df_save] + [pd.read_excel(path, dtype=str, na_filter=False) for path in paths])
 
     def export_data(self) -> None:
-        """Initialise dialog for exporting data to xcel
+        """Initialise dialog for exporting data to excel
         """        
         path: str = filedialog.asksaveasfile(parent=self, title='Export Data', initialdir='/', filetypes=[('excel files', '*.xlsx')], defaultextension=('excel files', '*.xlsx'), mode='wb')
         if path:
@@ -190,6 +190,8 @@ class Profile(tk.Tk):
                 self.df_save: pd.DataFrame = pd.DataFrame(columns=self.df_curr.keys())
 
     def destroy(self) -> None:
+        """Saves current data and closes window.
+        """  
         self.save_data()
         super().destroy()
 
