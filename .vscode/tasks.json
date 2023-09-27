@@ -1,0 +1,97 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Create Virtual Enviroment",
+            "type": "shell",
+            "windows": {
+                "command": "python -m venv .venv"
+            },
+            "osx": {
+                "command": "python3 -m venv .venv"
+            },
+            "linux": {
+                "command": "python3 -m venv .venv"
+            },
+            "dependsOn": ""
+        },
+        {
+            "label": "Create Requirements File",
+            "type": "shell",
+            "windows": {
+                "command": "${command:python.interpreterPath} -m pip freeze > ${file}"
+            },
+            "osx": {
+                "command": "${command:python.interpreterPath} -m pip3 freeze > '${file}'"
+            },
+            "linux": {
+                "command": "${command:python.interpreterPath} -m pip3 freeze > '${file}'"
+            },
+            "dependsOn": ""
+        },
+        {
+            "label": "Create Virtual Enviroment from Requirements File",
+            "type": "shell",
+            "linux": {
+                "command": "virtualenv venv && venv/bin/pip install -r '${file}'"
+            },
+            "dependsOn": ""
+        },
+        {
+            "label": "Install Module from Selection",
+            "type": "shell",
+            "windows": {
+                "command": "${command:python.interpreterPath} -m pip install ${selectedText}"
+            },
+            "osx": {
+                "command": "${command:python.interpreterPath} -m pip3 install ${selectedText}"
+            },
+            "linux": {
+                "command": "${command:python.interpreterPath} -m pip3 install ${selectedText}"
+            },
+            "dependsOn": ""
+        },
+        {
+            "label": "Uninstall Module from Selection",
+            "type": "shell",
+            "windows": {
+                "command": "${command:python.interpreterPath} -m pip uninstall ${selectedText} -y"
+            },
+            "osx": {
+                "command": "${command:python.interpreterPath} -m pip3 uninstall ${selectedText} -y"
+            },
+            "linux": {
+                "command": "${command:python.interpreterPath} -m pip3 uninstall ${selectedText} -y"
+            },
+            "dependsOn": ""
+        },
+        {
+            "label": "Install Module from File",
+            "type": "shell",
+            "windows": {
+                "command": "${command:python.interpreterPath} -m pip install -r ${file}"
+            },
+            "osx": {
+                "command": "${command:python.interpreterPath} -m pip3 install -r ${file}"
+            },
+            "linux": {
+                "command": "pip install -r ${file}"
+            },
+            "dependsOn": ""
+        },
+        {
+            "label": "Uninstall Module from File",
+            "type": "shell",
+            "windows": {
+                "command": "${command:python.interpreterPath} -m pip uninstall -r ${file} -y"
+            },
+            "osx": {
+                "command": "${command:python.interpreterPath} -m pip3 uninstall -r '${file}' -y"
+            },
+            "linux": {
+                "command": "${command:python.interpreterPath} -m pip3 uninstall -r '${file}' -y"
+            },
+            "dependsOn": ""
+        }
+    ]
+}
