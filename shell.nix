@@ -1,19 +1,20 @@
-{ pkgs ? import <nixpkgs> { } }:
+{ pkgs ? import <nixpkgs> {} }:
 
-let
-  pythonEnv = pkgs.python3Full.withPackages(ps: with ps; [ 
-    virtualenv
-    pip
-  ]);
-in
-with pkgs;
-mkShell {
-  packages = [
-    pythonEnv
+pkgs.mkShell {
+  nativeBuildInputs = [
+    (pkgs.python3Full.withPackages(ps: with ps; [ 
+      virtualenv
+      pip
+    ]))
+    pkgs.stdenv
   ];
+  LD_LIBRARY_PATH = "${pkgs.stdenv.cc.cc.lib}/lib";
+  # shellHook = ''
+  #   export LD_LIBRARY_PATH=${pkgs.lib.makeLibraryPath [
+  #     pkgs.stdenv.cc.cc
+  #   ]}
+  # '';
   shellHook = ''
-    export LD_LIBRARY_PATH=${pkgs.lib.makeLibraryPath [
-      pkgs.stdenv.cc.cc
-    ]}
+    venv/bin/python /home/elliott/Git/LDZ-Apps/src/source.py
   '';
 }
