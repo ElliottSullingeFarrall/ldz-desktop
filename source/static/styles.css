@@ -1,0 +1,193 @@
+/* --------------------------------- Colours -------------------------------- */
+:root {
+	--text1: #f4f4f4;
+	--text2: #818181;
+	--text3: #111111;
+	--button_inactive: #007bff;
+	--button_active: #0056b3;
+	--topnav: #333333;
+}
+
+/* --------------------------------- Common --------------------------------- */
+body {
+	margin: 0;
+	background-color: var(--text1);
+	padding: 0;
+	text-align: center;
+	font-family: Arial, sans-serif;
+}
+
+h1 {
+	margin-top: 20px;
+	color: var(--text3);
+}
+
+/* ---------------------------------- Login --------------------------------- */
+form {
+	margin: 0 auto;
+	border-radius: 5px;
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+	background-color: var(--text1);
+	padding: 20px;
+	width: 300px;
+	text-align: left;
+}
+
+label {
+	display: block;
+	margin-bottom: 5px;
+}
+
+input[type="text"],
+input[type="password"] {
+	margin-bottom: 10px;
+	border: 1px solid var(--text3);
+	border-radius: 5px;
+	padding: 10px;
+	width: 95%;
+}
+
+input[type="submit"] {
+	border: none;
+	border-radius: 5px;
+	background-color: var(--button_inactive);
+	cursor: pointer;
+	padding: 10px 20px;
+	color: var(--text1);
+}
+
+input[type="submit"]:hover {
+	background-color: var(--button_active);
+}
+
+.error {
+	margin-top: 10px;
+	color: red;
+}
+
+/* ------------------------------- Top NavBar ------------------------------- */
+.topnav {
+	background-color: var(--topnav);
+	overflow: hidden;
+}
+
+.topnav a {
+	display: block;
+	float: left;
+	padding: 14px 16px;
+	text-align: left;
+	color: var(--text2);
+	font-size: 17px;
+}
+
+.topnav a:hover {
+	background-color: var(--text1);
+	cursor: pointer;
+	color: var(--text6);
+}
+
+/* -------------------------------- User Menu ------------------------------- */
+.usernav {
+	position: fixed;
+	right: 0;
+	transition: 0.5s;
+	z-index: 1;
+	background-color: var(--topnav);
+	padding: 0 16px;
+	height: 0px;
+	overflow: hidden;
+}
+
+.usernav a {
+	display: block;
+	transition: 0.3s;
+	padding: 14px 16px 0 0;
+	text-align: left;
+	text-decoration: none;
+	color: var(--text2);
+	font-size: 17px;
+}
+
+.usernav a:hover {
+	cursor: pointer;
+	color: var(--text1);
+}
+
+/* ------------------------------- Side NavBar ------------------------------ */
+.sidenav {
+	position: fixed;
+	top: 0;
+	left: 0;
+	transition: 0.5s;
+	z-index: 1;
+	background-color: var(--text3);
+	padding-top: 60px;
+	width: 0;
+	height: 100%;
+	overflow-x: hidden;
+}
+
+.sidenav a {
+	display: block;
+	transition: 0.3s;
+	padding: 8px 8px 8px 32px;
+	text-decoration: none;
+	color: var(--text2);
+	font-size: 25px;
+}
+
+.sidenav a:hover {
+	color: var(--text1);
+}
+
+.sidenav .closebtn {
+	position: absolute;
+	top: 0;
+	right: 25px;
+	margin-left: 50px;
+	font-size: 36px;
+}
+
+.sidenav .sep {
+	display: flex;
+	position: relative;
+	padding: 5px;
+	color: var(--text2);
+	font-size: 10px;
+}
+
+.sidenav .sep::before,
+.sidenav .sep::after {
+	align-self: center;
+	background-color: var(--text2);
+	height: 1px;
+	content: "";
+}
+
+.sidenav .sep::before {
+	margin-right: 5px;
+	width: 10px;
+}
+
+.sidenav .sep::after {
+	margin-left: 5px;
+	width: 100%;
+}
+
+/* ------------------------------ Main Content ------------------------------ */
+/* Style page content - use this if you want to push the page content to the right when you open the side navigation */
+#main {
+	transition: margin-left .5s;
+	padding: 20px;
+}
+
+/* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
+@media screen and (max-height: 450px) {
+	.sidenav {
+		padding-top: 15px;
+	}
+
+	.sidenav a {
+		font-size: 18px;
+	}
+}

@@ -1,5 +1,14 @@
 {
     "code-runner.executorMap": {
         "python": "$pythonPath $fullFileName"
-    }
+    },
+    "cSpell.words": [
+        "closebtn",
+        "MASA",
+        "sidenav",
+        "SQLALCHEMY",
+        "topnav",
+        "usernav",
+        "werkzeug"
+    ]
 }

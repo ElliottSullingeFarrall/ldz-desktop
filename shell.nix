@@ -15,6 +15,6 @@ pkgs.mkShell {
   #   ]}
   # '';
   shellHook = ''
-    venv/bin/python /home/elliott/Git/LDZ-Apps/src/source.py
+    .venv/bin/python /home/elliott/Git/LDZ-Apps/src/main.py
   '';
 }

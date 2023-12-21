@@ -25,7 +25,7 @@
                 "command": "${command:python.interpreterPath} -m pip3 freeze > '${file}'"
             },
             "linux": {
-                "command": "${command:python.interpreterPath} -m pip3 freeze > '${file}'"
+                "command": "${command:python.interpreterPath} -m pip freeze > '${file}'"
             },
             "dependsOn": ""
         },
@@ -47,7 +47,7 @@
                 "command": "${command:python.interpreterPath} -m pip3 install ${selectedText}"
             },
             "linux": {
-                "command": "${command:python.interpreterPath} -m pip3 install ${selectedText}"
+                "command": "${command:python.interpreterPath} -m pip install ${selectedText}"
             },
             "dependsOn": ""
         },
@@ -61,7 +61,7 @@
                 "command": "${command:python.interpreterPath} -m pip3 uninstall ${selectedText} -y"
             },
             "linux": {
-                "command": "${command:python.interpreterPath} -m pip3 uninstall ${selectedText} -y"
+                "command": "${command:python.interpreterPath} -m pip uninstall ${selectedText} -y"
             },
             "dependsOn": ""
         },
@@ -89,7 +89,15 @@
                 "command": "${command:python.interpreterPath} -m pip3 uninstall -r '${file}' -y"
             },
             "linux": {
-                "command": "${command:python.interpreterPath} -m pip3 uninstall -r '${file}' -y"
+                "command": "${command:python.interpreterPath} -m pip uninstall -r '${file}' -y"
+            },
+            "dependsOn": ""
+        },
+        {
+            "label": "Run Flask App",
+            "type": "shell",
+            "linux": {
+                "command": "${command:python.interpreterPath} -m flask run -p 4000"
             },
             "dependsOn": ""
         }

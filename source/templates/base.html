@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>LDZ</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="topnav">
+        <a onclick="openNav()">&#9776;</a>
+        <a style="float:right; width:65px" onclick="toggleUser()">{{ username }} &#8964;</a>
+    </div>
+    <div style="width:65px" id="usernav" class="usernav">
+        <a href="{{ url_for('login')}}">logout</a>
+    </div>
+    <div id="sidenav" class="sidenav">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a><br>
+        <div class="sep">Regular</div>
+        <a href="#">MASA</a>
+        <a href="#">AS&D</a>
+        <div class="sep">Embedded</div>
+        <a href="#">MASA</a>
+        <a href="#">AS&D</a>
+    </div>
+    
+    <!-- Add all page content inside this div if you want the side nav to push page content to the right (not used if you only want the sidenav to sit on top of the page -->
+    <div id="main">
+        {% block main %}{% endblock %}
+    </div>
+
+    <script>
+        function openNav() {
+          document.getElementById("sidenav").style.width = "250px";
+        }
+        function closeNav() {
+          document.getElementById("sidenav").style.width = "0";
+        }
+        function toggleUser() {
+            var usernav = document.getElementById("usernav");
+            if (usernav.style.height == "0px") {
+                usernav.style.height = "50px";
+            } else {
+                usernav.style.height = "0px"
+            }
+        }
+    </script>
+</body>
+</html>

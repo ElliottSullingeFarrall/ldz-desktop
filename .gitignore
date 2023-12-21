@@ -1,7 +1,4 @@
-.DS_Store
+.venv
 
-__pycache__
-
-build/
-*.spec
-*.csv
+*.pyc
+__pycache__/
