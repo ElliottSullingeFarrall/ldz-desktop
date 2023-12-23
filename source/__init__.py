@@ -1,48 +1,65 @@
 from flask import Flask, render_template, request, redirect, url_for, session
-import csv
+import pandas as pd
 
 app = Flask(__name__)
-
-# Secret key for session management (should be kept secret in a real application)
 app.secret_key = 'your_secret_key'
 
-# Read user data from the CSV file
-def read_user_data():
-    user_data = {}
-    with open('data/users.csv', mode='r') as file:
-        csv_reader = csv.DictReader(file)
-        for row in csv_reader:
-            user_data[row['username']] = row['password']
-    return user_data
+# ---------------------------------- Classes --------------------------------- #
 
-users = read_user_data()  # Initialize the users dictionary from the CSV file
+class Users:
+    def __init__(self):
+        self.path = 'data/users.csv'
+    def __enter__(self):
+        self.data = pd.read_csv(self.path)
+        return self.data
+    def __exit__(self, exception_type, exception_value, exception_traceback):
+        del self
 
-# Define a route for the login page
+# ----------------------------------- Pages ---------------------------------- #
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
 
-        if username in users and users[username] == password:
-            # Authentication successful, store the username in the session
-            session['username'] = username
-            return redirect(url_for('home'))
-        else:
-            # Authentication failed, display an error message
-            return render_template('login.html', error='Invalid credentials')
+        with Users() as users:
+            user = users.loc[users.username == username].to_dict('records')[0]
+            if password == user['password']:
+                # Authentication successful, store the username in the session
+                session['username'] = user['username']
+                session['admin'] = bool(user['admin'])
+                return redirect(url_for('home'))
+            else:
+                # Authentication failed, display an error message
+                return render_template('login.html', error='Invalid credentials')
 
     return render_template('login.html', error=None)
 
-
-# Define a route for a homepage
-@app.route('/home')
+@app.route('/home', methods=['GET', 'POST'])
 def home():
-    # Replace 'user1' with the actual username of the logged-in user
-    # username = session['username']
-    username = 'user1' # testing purposes
-    return render_template('home.html', username=username)
+    # Testing
+    session['username'] = 'admin'
+    session['admin'] = True
+    return render_template('home.html', username=session['username'], admin=session['admin'])
 
+@app.route('/masa_reg', methods=['GET', 'POST'])
+def masa_reg():
+    return render_template('masa_reg.html', username=session['username'], admin=session['admin'])
+
+@app.route('/masa_emb', methods=['GET', 'POST'])
+def masa_emb():
+    return render_template('masa_emb.html', username=session['username'], admin=session['admin'])
+
+@app.route('/asnd_reg', methods=['GET', 'POST'])
+def asnd_reg():
+    return render_template('asnd_reg.html', username=session['username'], admin=session['admin'])
+
+@app.route('/asnd_emb', methods=['GET', 'POST'])
+def asnd_emb():
+    return render_template('asnd_emb.html', username=session['username'], admin=session['admin'])
+
+# ----------------------------------- Main ----------------------------------- #
 
 if __name__ == '__main__':
     app.run()

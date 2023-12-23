@@ -1,4 +1,3 @@
-username,password
-user1,password1
-user2,password2
-user3,password3
+username,password,admin
+user,user,0
+admin,admin,1

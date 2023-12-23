@@ -94,14 +94,17 @@ input[type="submit"]:hover {
 	z-index: 1;
 	background-color: var(--topnav);
 	padding: 0 16px;
-	height: 0px;
+	max-height: 0px;
 	overflow: hidden;
+}
+.usernav-show {
+	max-height: 200px;
 }
 
 .usernav a {
 	display: block;
 	transition: 0.3s;
-	padding: 14px 16px 0 0;
+	padding: 5px 16px 10px 0;
 	text-align: left;
 	text-decoration: none;
 	color: var(--text2);
