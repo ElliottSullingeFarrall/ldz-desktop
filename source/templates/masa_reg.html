@@ -1,5 +1,24 @@
 {% extends "base.html" %}
 
 {% block main %}
-...MASA (Regular)...
+<h2>MASA (Regular)</h2>
+<form method="POST" action="/masa_reg">
+    <div class="datetime">
+        <label for="date">Date:</label>
+        <label for="start_time">Start Time:</label>
+        <label for="end_time">End Time:</label>
+
+        <input type="date" id="date" name="date" required>
+        <input type="time" id="start_time" name="start time" required>
+        <input type="time" id="end_time" name="end time" required>
+    </div><br>
+    <input type="submit" value="Submit">
+</form>
+{% if error %}
+    <p class="error">{{ error }}</p>
+{% endif %}
+
+<script>
+    document.getElementById('date').valueAsDate = new Date();
+</script>
 {% endblock %}

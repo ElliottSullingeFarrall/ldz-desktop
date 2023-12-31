@@ -39,25 +39,25 @@ def login():
 @app.route('/home', methods=['GET', 'POST'])
 def home():
     # Testing
-    session['username'] = 'admin'
-    session['admin'] = True
+    # session['username'] = 'admin'
+    # session['admin'] = True
     return render_template('home.html', username=session['username'], admin=session['admin'])
 
 @app.route('/masa_reg', methods=['GET', 'POST'])
 def masa_reg():
-    return render_template('masa_reg.html', username=session['username'], admin=session['admin'])
+    return render_template('masa_reg.html', error=None, username=session['username'], admin=session['admin'])
 
 @app.route('/masa_emb', methods=['GET', 'POST'])
 def masa_emb():
-    return render_template('masa_emb.html', username=session['username'], admin=session['admin'])
+    return render_template('masa_emb.html', error=None, username=session['username'], admin=session['admin'])
 
 @app.route('/asnd_reg', methods=['GET', 'POST'])
 def asnd_reg():
-    return render_template('asnd_reg.html', username=session['username'], admin=session['admin'])
+    return render_template('asnd_reg.html', error=None, username=session['username'], admin=session['admin'])
 
 @app.route('/asnd_emb', methods=['GET', 'POST'])
 def asnd_emb():
-    return render_template('asnd_emb.html', username=session['username'], admin=session['admin'])
+    return render_template('asnd_emb.html', error=None, username=session['username'], admin=session['admin'])
 
 # ----------------------------------- Main ----------------------------------- #
 

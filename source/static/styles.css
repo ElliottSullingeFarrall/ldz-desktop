@@ -29,7 +29,7 @@ form {
 	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 	background-color: var(--text1);
 	padding: 20px;
-	width: 300px;
+	width: 400px;
 	text-align: left;
 }
 
@@ -193,4 +193,11 @@ input[type="submit"]:hover {
 	.sidenav a {
 		font-size: 18px;
 	}
+}
+
+/* ---------------------------- Appointment Form ---------------------------- */
+.datetime {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-gap: 5px 20px;
 }
