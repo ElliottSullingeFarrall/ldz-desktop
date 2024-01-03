@@ -38,13 +38,26 @@ label {
 	margin-bottom: 5px;
 }
 
-input[type="text"],
-input[type="password"] {
+input {
 	margin-bottom: 10px;
 	border: 1px solid var(--text3);
 	border-radius: 5px;
 	padding: 10px;
 	width: 95%;
+}
+
+input[type="button"] {
+	border: none;
+	border-radius: 5px;
+	background-color: var(--text2);
+	cursor: pointer;
+	padding: 10px 20px;
+	color: var(--text1);
+	width: 100px;
+}
+
+input[type="button"]:hover {
+	background-color: var(--text3);
 }
 
 input[type="submit"] {
@@ -54,6 +67,7 @@ input[type="submit"] {
 	cursor: pointer;
 	padding: 10px 20px;
 	color: var(--text1);
+	width: 100px;
 }
 
 input[type="submit"]:hover {
@@ -68,7 +82,7 @@ input[type="submit"]:hover {
 /* ------------------------------- Top NavBar ------------------------------- */
 .topnav {
 	background-color: var(--topnav);
-	overflow: hidden;
+	overflow-y: hidden;
 }
 
 .topnav a {
@@ -196,8 +210,40 @@ input[type="submit"]:hover {
 }
 
 /* ---------------------------- Appointment Form ---------------------------- */
-.datetime {
+.wrapper1 {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-gap: 5px 20px;
+	width: 95%
+}
+
+.wrapper2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 5px 20px;
+	width: 95%
+}
+
+.wrapper3 {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     grid-gap: 5px 20px;
+	width: 95%
 }
+
+/* ------------------------------ Data Editing ------------------------------ */
+table {
+	width: 100%;
+	border-collapse: collapse;
+}
+  
+th, td {
+	padding: 10px;
+	text-align: left;
+	border-bottom: 1px solid var(--text2);
+}
+
+td:hover {
+	cursor: pointer;
+}
+  

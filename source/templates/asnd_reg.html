@@ -1,5 +1,147 @@
 {% extends "base.html" %}
 
 {% block main %}
-...AS&D (Regular)...
+<h2>AS&D (Regular)</h2>
+<form method="POST" action="/asnd_reg">
+    <div class="wrapper3">
+        <label for="date">Date:</label>
+        <label for="start_time">Start Time:</label>
+        <label for="end_time">End Time:</label>
+
+        <input type="date" id="date" name="date" required>
+        <input type="time" id="start_time" name="start_time" required>
+        <input type="time" id="end_time" name="end_time" required>
+    </div>
+
+    <div class="wrapper2">
+        <label for="department">Department:</label>
+        <label for="level">Level:</label>
+
+        <input id='department' name='department' list="departments" required>
+        <input id='level' name='level' list="levels" required>
+        <datalist id="departments">
+            <option value="Unknown">
+            <option value="Careers">
+            <option value="Biosciences and Medicine">
+            <option value="Business School">
+            <option value="Centre for Environment and Sustainability">
+            <option value="Chemical and Process Engineering">
+            <option value="Chemistry">
+            <option value="Civil and Environmental Engineering">
+            <option value="Computer Science">
+            <option value="Economics">
+            <option value="Electrical and Electronic Engineering">
+            <option value="Guildford School of Acting">
+            <option value="Health Sciences">
+            <option value="Higher Education">
+            <option value="Hospitality and Tourism Management">
+            <option value="Law">
+            <option value="Literature and Languages">
+            <option value="Mathematics">
+            <option value="Mechanical Engineering Sciences">
+            <option value="Music and Media">
+            <option value="Physics">
+            <option value="Politics">
+            <option value="Psychology">
+            <option value="Sociology">
+            <option value="Technology Enhanced Learning">
+            <option value="Veterinary Medicine">
+        </datalist>
+        <datalist id="levels">
+            <option value="Pre-Entry (SISC)">
+            <option value="Level 3 - Foundation">
+            <option value="Level 4 - 1st year">
+            <option value="Level 5 - 2nd year">
+            <option value="Level 6 - 3rd to final year">
+            <option value="Placement Year">
+            <option value="Level 7 - Masters">
+            <option value="Level 8 - PhD">
+            <option value="Staff">
+            <option value="Other">
+            <option value="Not collected">
+        </datalist>
+    </div>
+
+    <div class="wrapper2">
+        <label for="query1">Query 1:</label>
+        <label for="query2">Query 2:</label>
+
+        <input id='query1' name='query1' list="queries1" required>
+        <input id='query2' name='query2' list="queries2" required>
+        <datalist id="queries1">
+            <option value="Assessment: Annotated bibliography">
+            <option value="Assessment: Research proposal">
+            <option value="Assessment: Critical Article review">
+            <option value="Assessment: Presentations, Posters and digital assessment (videos etc.)">
+            <option value="Assessment: Reflective writing">
+            <option value="Assessment: Writing (reports, essays, etc.), incl. structure, paraphrasing, linking, clarity, concision, citation)">
+            <option value="Assessment: Writing a literature review">
+            <option value="Assessment process/task: Assignment planning">
+            <option value="Assessment process/task: Choosing topic/finding focus (dissertations)">
+            <option value="Assessment process/task: Interpreting criteria">
+            <option value="Assessment process/task: Interpreting feedback">
+            <option value="Assessment process/task: Interpreting Turnitin reports">
+            <option value="Assessment process/task: Literature surveys and systematic reviews">
+            <option value="Assessment process/task: Referencing">
+            <option value="Assessment process/task: Search strategies/identifying literature">
+            <option value="Assessment process/task: Sourcing and selecting evidence">
+            <option value="Academic Skills: Academic integrity referral">
+            <option value="Academic Skills: Group or teamworking, peer-based learning">
+            <option value="Academic Skills: Planning and organising time">
+            <option value="Academic Skills: Reading and note-making strategies">
+            <option value="Academic Skills: Using referencing software">
+            <option value="Academic Skills: Research design / methods/ology">
+            <option value="Academic Skills: Revision and exam strategies">
+            <option value="Critical thinking: Analysis/Writing (synthesis, evaluation, argument, position, voice)">
+            <option value="Critical thinking: Evaluating information/engaging with literature">
+            <option value="Critical thinking: Using evaluative judgement (making sense, making meaning)">
+            <option value="Learning journey: Service introduction for new students">
+            <option value="Learning journey: Transition between years/PTY/professional statements or applications">
+            <option value="Learning journey: Transition to university/UK academic setting">
+        </datalist>
+        <datalist id="queries1">
+            <option value="N/A">
+            <option value="Assessment: Annotated bibliography">
+            <option value="Assessment: Research proposal">
+            <option value="Assessment: Critical Article review">
+            <option value="Assessment: Presentations, Posters and digital assessment (videos etc.)">
+            <option value="Assessment: Reflective writing">
+            <option value="Assessment: Writing (reports, essays, etc.), incl. structure, paraphrasing, linking, clarity, concision, citation)">
+            <option value="Assessment: Writing a literature review">
+            <option value="Assessment process/task: Assignment planning">
+            <option value="Assessment process/task: Choosing topic/finding focus (dissertations)">
+            <option value="Assessment process/task: Interpreting criteria">
+            <option value="Assessment process/task: Interpreting feedback">
+            <option value="Assessment process/task: Interpreting Turnitin reports">
+            <option value="Assessment process/task: Literature surveys and systematic reviews">
+            <option value="Assessment process/task: Referencing">
+            <option value="Assessment process/task: Search strategies/identifying literature">
+            <option value="Assessment process/task: Sourcing and selecting evidence">
+            <option value="Academic Skills: Academic integrity referral">
+            <option value="Academic Skills: Group or teamworking, peer-based learning">
+            <option value="Academic Skills: Planning and organising time">
+            <option value="Academic Skills: Reading and note-making strategies">
+            <option value="Academic Skills: Using referencing software">
+            <option value="Academic Skills: Research design / methods/ology">
+            <option value="Academic Skills: Revision and exam strategies">
+            <option value="Critical thinking: Analysis/Writing (synthesis, evaluation, argument, position, voice)">
+            <option value="Critical thinking: Evaluating information/engaging with literature">
+            <option value="Critical thinking: Using evaluative judgement (making sense, making meaning)">
+            <option value="Learning journey: Service introduction for new students">
+            <option value="Learning journey: Transition between years/PTY/professional statements or applications">
+            <option value="Learning journey: Transition to university/UK academic setting">
+        </datalist>
+    </div>
+
+    <input type="submit" value="Submit">
+    <a href="{{ url_for('edit') }}">
+    <input type="button" value="Edit" onclick="window.location='/edit';">
+    </a>
+</form>
+
+
+<script>
+    document.getElementById('date').valueAsDate = new Date();
+    document.getElementById('query2').value = 'N/A';
+</script>
 {% endblock %}

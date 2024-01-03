@@ -3,8 +3,10 @@
         "python": "$pythonPath $fullFileName"
     },
     "cSpell.words": [
+        "appts",
         "asnd",
         "closebtn",
+        "iloc",
         "MASA",
         "sidenav",
         "SQLALCHEMY",

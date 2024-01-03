@@ -8,12 +8,13 @@
 <body>
     <div class="topnav">
         <a onclick="openNav()">&#9776;</a>
-        <a style="float:right; width:70px" onclick="toggleUser()">{{ username }} &#8964;</a>
+        <a style="float:right; width:70px" onclick="toggleUser()">{{ session['username'] }} &#8964;</a>
     </div>
     <div style="width:70px" id="usernav" class="usernav">
-        {% if admin %}
-            <a>test</a>
+        {% if session['admin'] %}
+            <a>admin</a>
         {% endif %}
+        <a>settings</a>
         <a href="{{ url_for('login') }}">logout</a>
     </div>
     <div id="sidenav" class="sidenav">
