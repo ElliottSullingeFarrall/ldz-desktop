@@ -18,8 +18,15 @@ class Users:
     def __exit__(self, exception_type, exception_value, exception_traceback):
         del self
 
-    def get_user(self, username):
-        return self.data.loc[self.data.username == username].to_dict('records')[0]
+    def login(self, username, password):
+        user = self.data.loc[self.data.username == username].to_dict('records')[0]
+        if password == user['password']:
+            session['username'] = user['username']
+            session['admin'] = bool(user['admin'])
+            error = None
+        else:
+            error = 'Invalid credentials'
+        return error
 
 class Appts:
     def __init__(self, username, type):
@@ -44,22 +51,16 @@ class Appts:
         self.data = self.data.drop(idx)
 
 # ----------------------------------- Pages ---------------------------------- #
+        
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
-
         with Users() as users:
-            user = users.get_user(username)
-            if password == user['password']:
-                # Authentication successful, store the username in the session
-                session['username'] = user['username']
-                session['admin'] = bool(user['admin'])
+            error = users.login(request.form['username'], request.form['password'])
+            if not error:
                 return redirect(url_for('home'))
             else:
-                # Authentication failed, display an error message
-                return render_template('login.html', error='Invalid credentials')
+                return render_template('login.html', error=error)
 
     return render_template('login.html', error=None)
 
@@ -83,6 +84,8 @@ def masa_reg():
                     'query 2' : request.form['query2']
                 }
             appts.submit(row)
+        return redirect(url_for('masa_reg'))
+    
     return render_template('masa_reg.html')
 
 @app.route('/masa_emb', methods=['GET', 'POST'])
@@ -100,6 +103,8 @@ def masa_emb():
                     'query 2' : request.form['query2']
                 }
             appts.submit(row)
+        return redirect(url_for('masa_emb'))
+    
     return render_template('masa_emb.html')
 
 @app.route('/asnd_reg', methods=['GET', 'POST'])
@@ -136,7 +141,28 @@ def asnd_emb():
                     'query 2' : request.form['query2']
                 }
             appts.submit(row)
+        return redirect(url_for('asnd_emb'))
+    
     return render_template('asnd_emb.html')
+
+@app.route('/<type>', methods=['GET', 'POST'])
+def appts(type):
+    session['type'] = type
+    if request.method == 'POST':
+        with Appts(session['username'], session['type']) as appts:
+            row = {
+                    'date' : request.form['date'],
+                    'start time' : request.form['start_time'],
+                    'end time' : request.form['end_time'],
+                    'department' : request.form['department'],
+                    'level' : request.form['level'],
+                    'query 1' : request.form['query1'],
+                    'query 2' : request.form['query2']
+                }
+            appts.submit(row)
+        return redirect(url_for('appts', type=session['type']))
+    
+    return render_template(session['type'] + '.html')
 
 @app.route('/edit')
 @app.route('/edit/<idx>')
