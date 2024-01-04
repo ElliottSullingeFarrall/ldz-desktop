@@ -9,11 +9,15 @@
     <div class="topnav">
         <a onclick="openNav()">&#9776;</a>
         <a style="float:right; width:70px" onclick="toggleUser()">{{ session['username'] }} &#8964;</a>
-    </div>
-    <div style="width:70px" id="usernav" class="usernav">
         {% if session['admin'] %}
-            <a>admin</a>
+        <a style="float:right; width:70px" onclick="toggleAdmin()">admin &#8964;</a>
         {% endif %}
+    </div>
+    <div style="width:70px" id="adminnav" class="menunav">
+        <a href="">test1</a>
+        <a href="">test2</a>
+    </div>
+    <div style="width:70px" id="usernav" class="menunav">
         <a href="{{ url_for('settings') }}">settings</a>
         <a href="{{ url_for('login') }}">logout</a>
     </div>
@@ -40,8 +44,11 @@
         function closeNav() {
             document.getElementById("sidenav").style.width = "0";
         }
+        function toggleAdmin() {
+            document.getElementById("adminnav").classList.toggle("menunav-show");
+        }
         function toggleUser() {
-            document.getElementById("usernav").classList.toggle("usernav-show");
+            document.getElementById("usernav").classList.toggle("menunav-show");
         }
     </script>
 </body>

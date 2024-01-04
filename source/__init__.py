@@ -87,6 +87,7 @@ def index():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     session.clear()
+    
     if request.method == 'POST':
         with Users() as users:
             error = users.login(request.form)
@@ -105,6 +106,8 @@ def home():
 
 @app.route('/settings', methods=['GET', 'POST'])
 def settings():
+    session['type'] = None
+
     if request.method == 'POST':
         with Users() as users:
             error = users.password_change(request.form)

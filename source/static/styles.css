@@ -103,7 +103,7 @@ input[type="submit"]:hover {
 }
 
 /* -------------------------------- User Menu ------------------------------- */
-.usernav {
+.menunav {
 	position: fixed;
 	right: 0;
 	transition: 0.5s;
@@ -113,11 +113,11 @@ input[type="submit"]:hover {
 	max-height: 0px;
 	overflow: hidden;
 }
-.usernav-show {
+.menunav-show {
 	max-height: 200px;
 }
 
-.usernav a {
+.menunav a {
 	display: block;
 	transition: 0.3s;
 	padding: 5px 16px 10px 0;
@@ -127,7 +127,7 @@ input[type="submit"]:hover {
 	font-size: 17px;
 }
 
-.usernav a:hover {
+.menunav a:hover {
 	cursor: pointer;
 	color: var(--text1);
 }
