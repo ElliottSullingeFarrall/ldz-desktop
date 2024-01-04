@@ -1,7 +1,13 @@
 from flask import Flask, render_template, request, redirect, url_for, session
-import pandas as pd
-import os.path as path
 from pathlib import Path
+from pandas import DataFrame, read_csv, concat
+
+import logging
+logging.basicConfig(
+    filename='app.log',
+    encoding='utf-8',
+    level=logging.DEBUG
+)
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
@@ -10,57 +16,80 @@ app.secret_key = 'your_secret_key'
 
 class Users:
     def __init__(self):
-        self.path = Path('data')
-        self.file = Path('users.csv')
+        self.path = Path('data') / Path('users.csv')
     def __enter__(self):
-        self.data = pd.read_csv(self.path / self.file, index_col=False)
+        self.data = read_csv(self.path, index_col=False)
         return self
     def __exit__(self, exception_type, exception_value, exception_traceback):
+        self.data.to_csv(self.path, index=False)
         del self
 
-    def login(self, username, password):
+    def login(self, form):
         # Check for user in database
-        user = self.data.loc[self.data.username == username].to_dict('records')
-        if len(user) == 1:
-            user = user[0]
-        else:
+        try:
+            idx = self.data.index[self.data.username == form['username']][0]
+        except IndexError:
             return 'User not found!'
+        user = self.data.iloc[idx]
         
         # Check user password and login
-        if password == user['password']:
-            session['username'] = user['username']
-            session['admin'] = bool(user['admin'])
+        if form['password'] == user['password']:
+            user.pop('password')
+            session.update(user.to_dict())
         else:
             return 'Password invalid!'
+    def password_change(self, form):
+        # Check for user in database
+        try:
+            idx = self.data.index[self.data.username == session['username']][0]
+        except IndexError:
+            return 'User not found!'
+        user = self.data.iloc[idx]
+
+        # Check old password
+        if form['password_old'] == user['password']:
+            pass
+        else:
+            return 'Password invalid!'
+        
+        # Check passwords match and change
+        if form['password_new'] == form['password_check']:
+            self.data.at[idx, 'password'] = form['password_new']
+        else:
+            return 'Passwords do not match!'
 
 class Appts:
     def __init__(self, type):
         self.type = type
-        self.path = Path('data') / Path(session['username'])
-        self.file = Path(self.type + '.csv')
+        self.path = Path('data') / Path(session['username']) / Path(self.type + '.csv')
     def __enter__(self):
-        if path.exists(self.path / self.file):
-            self.data = pd.read_csv(self.path / self.file, index_col=False)
+        if self.path.exists():
+            self.data = read_csv(self.path, index_col=False)
         else:
-            self.path.mkdir(parents=True, exist_ok=True)
-            self.data = pd.DataFrame()
+            self.path.parent.mkdir(parents=True, exist_ok=True)
+            self.data = DataFrame()
         return self
     def __exit__(self, exception_type, exception_value, exception_traceback):
-        self.data.to_csv(self.path / self.file, index=False)
+        self.data.to_csv(self.path, index=False)
         del self
 
     def submit(self, row):
-        self.data = pd.concat([pd.DataFrame(row, index=[0]), self.data], ignore_index=True)
+        self.data = concat([DataFrame(row, index=[0]), self.data], ignore_index=True)
     def remove(self, idx):
         self.data = self.data.drop(idx)
 
 # ----------------------------------- Pages ---------------------------------- #
         
+@app.route('/')
+def index():
+    return redirect(url_for('login'))
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    session.clear()
     if request.method == 'POST':
         with Users() as users:
-            error = users.login(request.form['username'], request.form['password'])
+            error = users.login(request.form)
             if not error:
                 return redirect(url_for('home'))
             else:
@@ -74,9 +103,17 @@ def home():
 
     return render_template('home.html')
 
-@app.route('/settings')
+@app.route('/settings', methods=['GET', 'POST'])
 def settings():
-    pass
+    if request.method == 'POST':
+        with Users() as users:
+            error = users.password_change(request.form)
+            if not error:
+                return redirect(url_for('home'))
+            else:
+                return render_template('settings.html', error=error)
+
+    return render_template('settings.html', error=None)
 
 @app.route('/appts/<type>', methods=['GET', 'POST'])
 def appts(type):

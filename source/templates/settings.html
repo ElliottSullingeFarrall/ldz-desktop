@@ -1,0 +1,20 @@
+{% extends "_base.html" %}
+
+{% block main %}
+<h1>Change Password</h1>
+<form method="POST" action="/settings">
+    <label for="password_old">Old Password:</label>
+    <input type="password" id="password_old" name="password_old" required><br>
+
+    <label for="password_new">New Password:</label>
+    <input type="password" id="password_new" name="password_new" required><br>
+
+    <label for="password_check">Confirm Password:</label>
+    <input type="password" id="password_check" name="password_check" required><br>
+
+    <input type="submit" value="Change">
+</form>
+{% if error %}
+    <p class="error">{{ error }}</p>
+{% endif %}
+{% endblock %}
