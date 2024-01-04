@@ -1,0 +1,235 @@
+{% extends "base.html" %}
+
+{% block main %}
+<h2>MASA (Embedded)</h2>
+<form method="POST" action="{{ url_for('appts', type=session['type']) }}">
+    <div class="wrapper1">
+        <label for="date">Date:</label>
+
+        <input type="date" id="date" name="Date" required>
+    </div>
+
+    <div class="wrapper2">
+        <label for="session time">Session Time:</label>
+        <label for="preparation time">Preparation Time:</label>
+
+        <input type="number" id="session time" name="Session Time" min="0" step="0.25" required>
+        <input type="number" id="preparation time" name="Preparation Time" min="0" step="0.25" required>
+    </div>
+
+    <div class="wrapper1">
+        <label for="workshop name">Workshop Name:</label>
+
+        <input type="text" id="workshop name" name="Workshop Name" required>
+    </div>
+
+    <div class="wrapper1">
+        <label for="module">Module:</label>
+
+        <input type="text" id="module" name="Module" required>
+    </div>
+
+    <div class="wrapper2">
+        <label for="department">Department:</label>
+        <label for="level">Level:</label>
+
+        <select id='department' name='Department' required>
+            <option style="display:none" disabled selected value></option>
+            <option value="Unknown">Unknown</option>
+            <option value="Careers">Careers</option>
+            <option value="Biosciences and Medicine">Biosciences and Medicine</option>
+            <option value="Business School">Business School</option>
+            <option value="Centre for Environment and Sustainability">Centre for Environment and Sustainability</option>
+            <option value="Chemical and Process Engineering">Chemical and Process Engineering</option>
+            <option value="Chemistry">Chemistry</option>
+            <option value="Civil and Environmental Engineering">Civil and Environmental Engineering</option>
+            <option value="Computer Science">Computer Science</option>
+            <option value="Economics">Economics</option>
+            <option value="Electrical and Electronic Engineering">Electrical and Electronic Engineering</option>
+            <option value="Guildford School of Acting">Guildford School of Acting</option>
+            <option value="Health Sciences">Health Sciences</option>
+            <option value="Higher Education">Higher Education</option>
+            <option value="Hospitality and Tourism Management">Hospitality and Tourism Management</option>
+            <option value="Law">Law</option>
+            <option value="Literature and Languages">Literature and Languages</option>
+            <option value="Mathematics">Mathematics</option>
+            <option value="Mechanical Engineering Sciences">Mechanical Engineering Sciences</option>
+            <option value="Music and Media">Music and Media</option>
+            <option value="Physics">Physics</option>
+            <option value="Politics">Politics</option>
+            <option value="Psychology">Psychology</option>
+            <option value="Sociology">Sociology</option>
+            <option value="Technology Enhanced Learning">Technology Enhanced Learning</option>
+            <option value="Veterinary Medicine">Veterinary Medicine</option>
+        </select>
+        <select id='level' name='Level' required>
+            <option style="display:none" disabled selected value></option>
+            <option value="Pre-Entry (SISC)">Pre-Entry (SISC)</option>
+            <option value="Level 3 - Foundation">Level 3 - Foundation</option>
+            <option value="Level 4 - 1st year">Level 4 - 1st year</option>
+            <option value="Level 5 - 2nd year">Level 5 - 2nd year</option>
+            <option value="Level 6 - 3rd to final year">Level 6 - 3rd to final year</option>
+            <option value="Placement Year">Placement Year</option>
+            <option value="Level 7 - Masters">Level 7 - Masters</option>
+            <option value="Level 8 - PhD">Level 8 - PhD</option>
+            <option value="Staff">Staff</option>
+            <option value="Other">Other</option>
+            <option value="Not collected">Not collected</option>
+        </select>
+    </div>
+
+    <div class="wrapper2">
+        <label for="query 1">Query 1:</label>
+        <label for="query 2">Query 2:</label>
+
+        <select id='query 1' name='Query 1' required>
+            <option style="display:none" disabled selected value></option>
+            <optgroup label="Maths">
+                <option value="Maths: Algebra">Maths: Algebra</option>
+                <option value="Maths: Calculus">Maths: Calculus</option>
+                <option value="Maths: Complex Numbers">Maths: Complex Numbers</option>
+                <option value="Maths: Numeracy">Maths: Numeracy</option>
+                <option value="Maths: Trigonometry">Maths: Trigonometry</option>
+                <option value="Maths: Vector Calculus">Maths: Vector Calculus</option>
+                <option value="Maths: Other">Maths: Other</option>
+            </optgroup>
+            <optgroup label="Software">
+                <option value="Software: Excel">Software: Excel</option>
+                <option value="Software: LaTeX">Software: LaTeX</option>
+                <option value="Software: Matlab">Software: Matlab</option>
+                <option value="Software: R">Software: R</option>
+                <option value="Software: SPSS">Software: SPSS</option>
+                <option value="Software: Other">Software: Other</option>
+            </optgroup>
+            <optgroup label="Statistics">
+                <option value="Statistics: Data Collection">Statistics: Data Collection</option>
+                <option value="Statistics: Data Presentation">Statistics: Data Presentation</option>
+                <option value="Statistics: Statistical Testing">Statistics: Statistical Testing</option>
+                <option value="Statistics: Statistical Theory">Statistics: Statistical Theory</option>
+                <option value="Statistics: Other">Statistics: Other</option>
+            </optgroup>
+        </select>
+        <select id='query 2' name='Query 2' required>
+            <option value="N/A">N/A</option>
+            <optgroup label="Maths">
+                <option value="Maths: Algebra">Maths: Algebra</option>
+                <option value="Maths: Calculus">Maths: Calculus</option>
+                <option value="Maths: Complex Numbers">Maths: Complex Numbers</option>
+                <option value="Maths: Numeracy">Maths: Numeracy</option>
+                <option value="Maths: Trigonometry">Maths: Trigonometry</option>
+                <option value="Maths: Vector Calculus">Maths: Vector Calculus</option>
+                <option value="Maths: Other">Maths: Other</option>
+            </optgroup>
+            <optgroup label="Software">
+                <option value="Software: Excel">Software: Excel</option>
+                <option value="Software: LaTeX">Software: LaTeX</option>
+                <option value="Software: Matlab">Software: Matlab</option>
+                <option value="Software: R">Software: R</option>
+                <option value="Software: SPSS">Software: SPSS</option>
+                <option value="Software: Other">Software: Other</option>
+            </optgroup>
+            <optgroup label="Statistics">
+                <option value="Statistics: Data Collection">Statistics: Data Collection</option>
+                <option value="Statistics: Data Presentation">Statistics: Data Presentation</option>
+                <option value="Statistics: Statistical Testing">Statistics: Statistical Testing</option>
+                <option value="Statistics: Statistical Theory">Statistics: Statistical Theory</option>
+                <option value="Statistics: Other">Statistics: Other</option>
+            </optgroup>
+        </select>
+    </div>
+
+    <div class="wrapper2">
+        <label for="format">Format:</label>
+        <label for="location">Location:</label>
+
+        <select id='format' name='Format' required>
+            <option style="display:none" disabled selected value></option>
+            <option value="In Person">In Person</option>
+            <option value="Online">Online</option>
+        </select>
+        <select id='location' name='Location' required>
+            <option style="display:none" disabled selected value></option>
+            <option value="Stag Hill">Stag Hill</option>
+            <option value="Manor Park">Manor Park</option>
+            <option value="Off-Campus">Off-Campus</option>
+            <option value="Kate Granger">Kate Granger</option>
+        </select>
+    </div>
+
+    <a>Staff:</a>
+    <div class="wrapper5">
+        <label for="lda" style="text-align: center">LDA</label>
+        <label for="ldl" style="text-align: center">LDL</label>
+        <label for="masa" style="text-align: center">MASA</label>
+        <label for="fy" style="text-align: center">FY</label>
+        <label for="acad" style="text-align: center">Acad</label>
+
+        <input type="checkbox" id='lda' name='LDA'>
+        <input type="checkbox" id='ldl' name='LDL'>
+        <input type="checkbox" id='masa' name='MASA'>
+        <input type="checkbox" id='fy' name='FY'>
+        <input type="checkbox" id='acad' name='Acad'>
+    </div>
+
+    <div class="wrapper3">
+        <label for="type">Type:</label>
+        <label for="contextualisation">Contextualisation:</label>
+        <label for="assessment">Assessment:</label>
+
+        <select id='type' name='Type' required>
+            <option style="display:none" disabled selected value></option>
+            <option value="Department - synchronous taught">Department - synchronous taught</option>
+            <option value="Department - synchronous Q+A">Department - synchronous Q+A</option>
+            <option value="Department - asynchronous (panopto recording)">Department - asynchronous (panopto recording)</option>
+            <option value="Discussion Forum">Discussion Forum</option>
+            <option value="Professional Service">Professional Service</option>
+            <option value="WPO">WPO</option>
+        </select>
+        <select id='contextualisation' name='Contextualisation' required>
+            <option style="display:none" disabled selected value></option>
+            <option value="None">None</option>
+            <option value="Minimal">Minimal</option>
+            <option value="Significant">Significant</option>
+            <option value="Full">Full</option>
+        </select>
+        <select id='assessment' name='Assessment' required>
+            <option style="display:none" disabled selected value></option>
+            <option value="No">No</option>
+            <option value="Partially">Partially</option>
+            <option value="Directly">Directly</option>
+            <option value="Project/Dissertation">Project/Dissertation</option>
+        </select>
+    </div>
+
+    <div class="wrapper1">
+        <label for="resources">Resources:</label>
+
+        <select id='resources' name='Resources' required>
+            <option value="N/A">N/A</option>
+            <option value="Not applicable to other workshops">Not applicable to other workshops</option>
+            <option value="Is applicable to other workshops">Is applicable to other workshops</option>
+        </select>
+    </div>
+
+    <div class="wrapper2">
+        <label for="students expected">Students Expected:</label>
+        <label for="students arrived">Students Arrived:</label>
+
+        <input type="number" id="students expected" name="Students Expected" min="0" required>
+        <input type="number" id="students arrived" name="Students Arrived" min="0" required>
+    </div>
+
+    <a>
+    <input type="submit" value="Submit">
+    </a>
+
+    <a href="{{ url_for('edit') }}">
+    <input type="button" value="Edit" onclick="window.location='/edit';">
+    </a>
+</form>
+
+
+<script>
+    document.getElementById('date').valueAsDate = new Date();
+</script>
+{% endblock %}

@@ -19,20 +19,24 @@ class Users:
         del self
 
     def login(self, username, password):
-        user = self.data.loc[self.data.username == username].to_dict('records')[0]
+        # Check for user in database
+        user = self.data.loc[self.data.username == username].to_dict('records')
+        if len(user) == 1:
+            user = user[0]
+        else:
+            return 'User not found!'
+        
+        # Check user password and login
         if password == user['password']:
             session['username'] = user['username']
             session['admin'] = bool(user['admin'])
-            error = None
         else:
-            error = 'Invalid credentials'
-        return error
+            return 'Password invalid!'
 
 class Appts:
-    def __init__(self, username, type):
-        self.username = username
+    def __init__(self, type):
         self.type = type
-        self.path = Path('data') / Path(self.username)
+        self.path = Path('data') / Path(session['username'])
         self.file = Path(self.type + '.csv')
     def __enter__(self):
         if path.exists(self.path / self.file):
@@ -64,110 +68,31 @@ def login():
 
     return render_template('login.html', error=None)
 
-@app.route('/home', methods=['GET', 'POST'])
+@app.route('/home')
 def home():
     session['type'] = None
+
     return render_template('home.html')
 
-@app.route('/masa_reg', methods=['GET', 'POST'])
-def masa_reg():
-    session['type'] = 'masa_reg'
-    if request.method == 'POST':
-        with Appts(session['username'], session['type']) as appts:
-            row = {
-                    'date' : request.form['date'],
-                    'start time' : request.form['start_time'],
-                    'end time' : request.form['end_time'],
-                    'department' : request.form['department'],
-                    'level' : request.form['level'],
-                    'query 1' : request.form['query1'],
-                    'query 2' : request.form['query2']
-                }
-            appts.submit(row)
-        return redirect(url_for('masa_reg'))
-    
-    return render_template('masa_reg.html')
+@app.route('/settings')
+def settings():
+    pass
 
-@app.route('/masa_emb', methods=['GET', 'POST'])
-def masa_emb():
-    session['type'] = 'masa_emb'
-    if request.method == 'POST':
-        with Appts(session['username'], session['type']) as appts:
-            row = {
-                    'date' : request.form['date'],
-                    'start time' : request.form['start_time'],
-                    'end time' : request.form['end_time'],
-                    'department' : request.form['department'],
-                    'level' : request.form['level'],
-                    'query 1' : request.form['query1'],
-                    'query 2' : request.form['query2']
-                }
-            appts.submit(row)
-        return redirect(url_for('masa_emb'))
-    
-    return render_template('masa_emb.html')
-
-@app.route('/asnd_reg', methods=['GET', 'POST'])
-def asnd_reg():
-    session['type'] = 'asnd_reg'
-    if request.method == 'POST':
-        with Appts(session['username'], session['type']) as appts:
-            row = {
-                    'date' : request.form['date'],
-                    'start time' : request.form['start_time'],
-                    'end time' : request.form['end_time'],
-                    'department' : request.form['department'],
-                    'level' : request.form['level'],
-                    'query 1' : request.form['query1'],
-                    'query 2' : request.form['query2']
-                }
-            appts.submit(row)
-        return redirect(url_for('asnd_reg'))
-
-    return render_template('asnd_reg.html')
-
-@app.route('/asnd_emb', methods=['GET', 'POST'])
-def asnd_emb():
-    session['type'] = 'asnd_emb'
-    if request.method == 'POST':
-        with Appts(session['username'], session['type']) as appts:
-            row = {
-                    'date' : request.form['date'],
-                    'start time' : request.form['start_time'],
-                    'end time' : request.form['end_time'],
-                    'department' : request.form['department'],
-                    'level' : request.form['level'],
-                    'query 1' : request.form['query1'],
-                    'query 2' : request.form['query2']
-                }
-            appts.submit(row)
-        return redirect(url_for('asnd_emb'))
-    
-    return render_template('asnd_emb.html')
-
-@app.route('/<type>', methods=['GET', 'POST'])
+@app.route('/appts/<type>', methods=['GET', 'POST'])
 def appts(type):
     session['type'] = type
+
     if request.method == 'POST':
-        with Appts(session['username'], session['type']) as appts:
-            row = {
-                    'date' : request.form['date'],
-                    'start time' : request.form['start_time'],
-                    'end time' : request.form['end_time'],
-                    'department' : request.form['department'],
-                    'level' : request.form['level'],
-                    'query 1' : request.form['query1'],
-                    'query 2' : request.form['query2']
-                }
-            appts.submit(row)
+        with Appts(session['type']) as appts:
+            appts.submit(request.form)
         return redirect(url_for('appts', type=session['type']))
     
-    return render_template(session['type'] + '.html')
+    return render_template(str(Path('appts') / Path(session['type'] + '.html')))
 
 @app.route('/edit')
 @app.route('/edit/<idx>')
 def edit(idx=None):
-    with Appts(session['username'], session['type']) as appts:
+    with Appts(session['type']) as appts:
         if idx:
             appts.remove(int(idx))
         return render_template('edit.html', headers=appts.data.columns, table=appts.data.values)

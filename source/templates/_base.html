@@ -14,7 +14,7 @@
         {% if session['admin'] %}
             <a>admin</a>
         {% endif %}
-        <a>settings</a>
+        <a href="{{ url_for('settings') }}">settings</a>
         <a href="{{ url_for('login') }}">logout</a>
     </div>
     <div id="sidenav" class="sidenav">
