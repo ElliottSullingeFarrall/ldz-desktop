@@ -11,13 +11,13 @@
     </thead>
     <tbody>
         {% for row in table %}
-        <tr class="row" onclick="edit(this)">
+        <tr onclick="edit(this)">
             {% for entry in row %}
             <td>{{ entry }}</td>
             {% endfor %}
         </tr>
         {% endfor %}
-        <tr class="row" onclick="add()"">
+        <tr onclick="add()">
             <td colspan="100%">+</td>
         </tr>
     </tbody>

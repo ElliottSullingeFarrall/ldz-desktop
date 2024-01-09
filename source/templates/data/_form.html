@@ -1,0 +1,19 @@
+{% extends "_base.html" %}
+
+{% block main %}
+<h1>{{ type|upper }} ({{ category|capitalize }})</h1>
+<form method="POST" action="{{ url_for('main.data', category=category, type=type) }}">
+    {% block form %}{% endblock %}
+    <a>
+        <input type="submit" value="Submit">
+        </a>
+        
+        <a href="{{ url_for('main.edit', category=category, type=type) }}">
+        <input type="button" value="Edit">
+        </a>
+</form>
+
+<script>
+    document.getElementById('date').valueAsDate = new Date();
+</script>
+{% endblock %}

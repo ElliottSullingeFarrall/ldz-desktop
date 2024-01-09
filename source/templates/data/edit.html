@@ -11,7 +11,7 @@
     </thead>
     <tbody>
         {% for row in table %}
-        <tr class="row" onclick="remove(this)">
+        <tr onclick="remove(this)">
         {% for entry in row %}
         <td>{{ entry }}</td>
         {% endfor %}
@@ -23,7 +23,7 @@
 <script>
     function remove(row) {
         idx = (row.rowIndex - 1);
-        url = "{{ url_for('main.edit', type=type) }}";
+        url = "{{ url_for('main.edit', category=category, type=type) }}";
         window.location.replace(url + "/" + idx);
     }
 </script>

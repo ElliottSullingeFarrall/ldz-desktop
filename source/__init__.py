@@ -1,6 +1,6 @@
-from flask import Flask, Blueprint, current_app, redirect, url_for, render_template, request
+from flask import Flask, Blueprint, current_app, flash, redirect, url_for, render_template, request
 from flask_sqlalchemy import SQLAlchemy
-from flask_login import UserMixin, LoginManager, login_user, login_required, current_user
+from flask_login import UserMixin, LoginManager, login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from functools import wraps
@@ -23,9 +23,10 @@ def admin_required(f):
 # ---------------------------------- Classes --------------------------------- #
 
 class Data:
-    def __init__(self, type):
+    def __init__(self, category, type):
+        self.category = category
         self.type = type
-        self.path = Path('data') / Path(current_user.username) / Path(*type).with_suffix('.csv')
+        self.path = Path('data') / Path(current_user.username) / Path(category) / Path(type).with_suffix('.csv')
     def __enter__(self):
         if self.path.exists():
             try:
@@ -60,6 +61,10 @@ class User(UserMixin, db.Model):
             return
         else:
             return 'Invalid login!'
+        
+    @classmethod
+    def logout(cls):
+        logout_user()
     
     @classmethod
     def change_password(cls, form):
@@ -127,6 +132,12 @@ def create_app():
 
     app.config['SECRET_KEY'] = 'secret-key-goes-here'
     app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{app.root_path}/../data/users.sqlite'
+
+    @app.context_processor
+    def global_vars():
+        categories = [dir for dir in Path('source/templates/data').iterdir() if dir.is_dir()]
+        options = {str(category.name) : [str(path.stem) for path in category.iterdir()] for category in categories}
+        return {'options' : options}
 
     db.init_app(app)
 

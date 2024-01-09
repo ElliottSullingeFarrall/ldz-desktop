@@ -17,10 +17,10 @@ def add():
         error = User.add(request.form)
         if not error:
             return redirect(url_for('user.view'))
-    else:
-        error = None
+        else:
+            flash(error)
 
-    return render_template('user/add.html', error=error)
+    return render_template('user/add.html')
 
 @user.route('/user/edit/<idx>', methods=['GET', 'POST'])
 @login_required
@@ -30,14 +30,14 @@ def edit(idx):
         error = User.reset_password(int(idx), request.form)
         if not error:
             return redirect(url_for('user.view'))
-    else:
-        error = None
+        else:
+            flash(error)
 
     user = User.get(int(idx))
     if user.username == current_user.username:
         return redirect(url_for('user.view'))
             
-    return render_template('user/edit.html', idx=idx, error=error)
+    return render_template('user/edit.html', idx=idx)
 
 @user.route('/user/remove/<idx>')
 @login_required

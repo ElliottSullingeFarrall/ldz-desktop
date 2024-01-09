@@ -16,30 +16,26 @@ def settings():
         error = User.change_password(request.form)
         if not error:
             return redirect(url_for('main.home'))
-    else:
-        error = None
+        else:
+            flash(error)
 
-    return render_template('settings.html', error=error)
+    return render_template('settings.html')
 
-@main.route('/data/<type>', methods=['GET', 'POST'])
+@main.route('/data/<category>/<type>', methods=['GET', 'POST'])
 @login_required
-def data(type):
-    type = eval(type)
-
+def data(category, type):
     if request.method == 'POST':
-        with Data(type) as data:
+        with Data(category, type) as data:
             data.add(request.form)
-        return redirect(url_for('main.data', type=type))
+        return redirect(url_for('main.data', category=category, type=type))
     
-    return render_template(str(Path('data') / Path(*type).with_suffix('.html')))
+    return render_template(f'data/{category}/{type}.html', category=category, type=type)
 
-@main.route('/edit/<type>')
-@main.route('/edit/<type>/<idx>')
+@main.route('/edit/<category>/<type>')
+@main.route('/edit/<category>/<type>/<idx>')
 @login_required
-def edit(type, idx=None):
-    type = eval(type)
-
-    with Data(type) as data:
+def edit(category, type, idx=None):
+    with Data(category, type) as data:
         if idx:
             data.remove(int(idx))
-        return render_template('data/edit.html', headers=data.df.columns, table=data.df.values)
+        return render_template('data/edit.html', category=category, type=type, headers=data.df.columns, table=data.df.values)

@@ -27,12 +27,12 @@
     <div id="side" class="side">
         <a href="javascript:void(0)" class="sidebtn" onclick="closeSide()">&times;</a><br>
         <a href="{{ url_for('main.home') }}">Home</a>
-        <div class="sep">Regular</div>
-        <a href="{{ url_for('main.data', type=('regular', 'masa')) }}">MASA</a>
-        <a href="{{ url_for('main.data', type=('regular', 'asnd')) }}">AS&D</a>
-        <div class="sep">Embedded</div>
-        <a href="{{ url_for('main.data', type=('embedded', 'masa')) }}">MASA</a>
-        <a href="{{ url_for('main.data', type=('embedded', 'asnd')) }}">AS&D</a>
+        {% for category in options %}
+            <div class="sep">{{ category|capitalize }}</div>
+                {% for type in options[category] %}
+                <a href="{{ url_for('main.data', category=category, type=type) }}">{{ type|upper }}</a>
+                {% endfor %}
+        {% endfor %}
     </div>
     
     <div id="main">

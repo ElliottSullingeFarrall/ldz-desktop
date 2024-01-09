@@ -15,6 +15,6 @@ pkgs.mkShell {
   #   ]}
   # '';
   shellHook = ''
-    .venv/bin/python /home/elliott/Git/LDZ-Apps/src/main.py
+    .venv/bin/python -m flask run -p 4000
   '';
 }
