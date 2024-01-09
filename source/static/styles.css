@@ -5,7 +5,7 @@
 	--text3: #111111;
 	--button_inactive: #007bff;
 	--button_active: #0056b3;
-	--topnav: #333333;
+	--top: #333333;
 }
 
 /* --------------------------------- Common --------------------------------- */
@@ -15,6 +15,11 @@ body {
 	padding: 0;
 	text-align: center;
 	font-family: Arial, sans-serif;
+	-ms-overflow-style: none;
+  	scrollbar-width: none;
+}
+body::-webkit-scrollbar {
+	display: none;
 }
 
 h1 {
@@ -82,58 +87,69 @@ input[type="submit"]:hover {
 }
 
 /* ------------------------------- Top NavBar ------------------------------- */
-.topnav {
-	background-color: var(--topnav);
-	overflow-y: hidden;
-}
-
-.topnav a {
-	display: block;
-	float: left;
-	padding: 14px 16px;
-	text-align: left;
-	color: var(--text2);
-	font-size: 17px;
-}
-
-.topnav a:hover {
-	background-color: var(--text1);
-	cursor: pointer;
-	color: var(--text6);
-}
-
-/* -------------------------------- User Menu ------------------------------- */
-.menunav {
+.top {
 	position: fixed;
-	right: 0;
-	transition: 0.5s;
-	z-index: 1;
-	background-color: var(--topnav);
-	padding: 0 16px;
-	max-height: 0px;
+	width: 100%;
+	background-color: var(--top);
+}
+
+.top a {
+	float: left;
+	font-size: 16px;
+	color: var(--text2);
+	text-align: center;
+	padding: 14px 16px;
+	text-decoration: none;
+}
+
+.menu {
+	float: right;
 	overflow: hidden;
 }
-.menunav-show {
-	max-height: 200px;
-}
 
-.menunav a {
-	display: block;
-	transition: 0.3s;
-	padding: 5px 16px 10px 0;
-	text-align: left;
-	text-decoration: none;
+.menu .menubtn {
+	font-size: 16px;
+	border: none;
 	color: var(--text2);
-	font-size: 17px;
+	padding: 14px 16px;
+	background-color: inherit;
+	width: 100px;
 }
 
-.menunav a:hover {
+.top a:hover,
+.menu:hover .menubtn {
+	background-color: var(--text1);
 	cursor: pointer;
-	color: var(--text1);
+}
+
+.menu-content {
+	display: none;
+	position: absolute;
+	background-color: var(--top);
+	width: 100px;
+	box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+	z-index: 1;
+}
+
+.menu-content a {
+	float: none;
+	color: var(--text2);
+	padding: 12px 16px;
+	text-decoration: none;
+	display: block;
+	text-align: left;
+}
+
+.menu-content a:hover {
+	background-color: var(--text1);
+}
+
+.menu:hover .menu-content {
+	display: block;
 }
 
 /* ------------------------------- Side NavBar ------------------------------ */
-.sidenav {
+.side {
 	position: fixed;
 	top: 0;
 	left: 0;
@@ -146,7 +162,7 @@ input[type="submit"]:hover {
 	overflow-x: hidden;
 }
 
-.sidenav a {
+.side a {
 	display: block;
 	transition: 0.3s;
 	padding: 8px 8px 8px 32px;
@@ -155,11 +171,11 @@ input[type="submit"]:hover {
 	font-size: 25px;
 }
 
-.sidenav a:hover {
+.side a:hover {
 	color: var(--text1);
 }
 
-.sidenav .closebtn {
+.side .sidebtn {
 	position: absolute;
 	top: 0;
 	right: 25px;
@@ -167,7 +183,7 @@ input[type="submit"]:hover {
 	font-size: 36px;
 }
 
-.sidenav .sep {
+.side .sep {
 	display: flex;
 	position: relative;
 	padding: 5px;
@@ -175,20 +191,20 @@ input[type="submit"]:hover {
 	font-size: 10px;
 }
 
-.sidenav .sep::before,
-.sidenav .sep::after {
+.side .sep::before,
+.side .sep::after {
 	align-self: center;
 	background-color: var(--text2);
 	height: 1px;
 	content: "";
 }
 
-.sidenav .sep::before {
+.side .sep::before {
 	margin-right: 5px;
 	width: 10px;
 }
 
-.sidenav .sep::after {
+.side .sep::after {
 	margin-left: 5px;
 	width: 100%;
 }
@@ -200,50 +216,50 @@ input[type="submit"]:hover {
 	padding: 20px;
 }
 
-/* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
+/* On smaller screens, where height is less than 450px, change the style of the side (less padding and a smaller font size) */
 @media screen and (max-height: 450px) {
-	.sidenav {
+	.side {
 		padding-top: 15px;
 	}
 
-	.sidenav a {
+	.side a {
 		font-size: 18px;
 	}
 }
 
 /* ---------------------------- Appointment Form ---------------------------- */
 .wrapper1 {
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-gap: 5px 20px;
+	display: grid;
+	grid-template-columns: 1fr;
+	grid-gap: 5px 20px;
 	width: 95%
 }
 
 .wrapper2 {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-gap: 5px 20px;
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	grid-gap: 5px 20px;
 	width: 95%
 }
 
 .wrapper3 {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-gap: 5px 20px;
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr;
+	grid-gap: 5px 20px;
 	width: 95%
 }
 
 .wrapper4 {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-    grid-gap: 5px 20px;
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr 1fr;
+	grid-gap: 5px 20px;
 	width: 95%
 }
 
 .wrapper5 {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-    grid-gap: 5px 20px;
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+	grid-gap: 5px 20px;
 	width: 95%
 }
 
@@ -252,14 +268,15 @@ table {
 	width: 100%;
 	border-collapse: collapse;
 }
-  
-th, td {
+
+th,
+td {
 	padding: 10px;
 	text-align: left;
 	border-bottom: 1px solid var(--text2);
 }
 
-td:hover {
+.row:hover {
 	cursor: pointer;
+	background-color: var(--text2);
 }
-  

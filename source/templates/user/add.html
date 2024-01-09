@@ -1,0 +1,20 @@
+{% extends "_base.html" %}
+
+{% block main %}
+<h1>Add User</h1>
+<form method="POST" action="/user/add">
+    <label for="username">Username:</label>
+    <input type="text" id="username" name="username" required><br>
+
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password" required><br>
+
+    <label for="admin">Admin:</label>
+    <input type="checkbox" id="admin" name="admin"><br>
+
+    <input type="submit" value="Add">
+</form>
+{% if error %}
+    <p class="error">{{ error }}</p>
+{% endif %}
+{% endblock %}

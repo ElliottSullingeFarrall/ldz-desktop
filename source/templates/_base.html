@@ -6,49 +6,46 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-    <div class="topnav">
-        <a onclick="openNav()">&#9776;</a>
-        <a style="float:right; width:70px" onclick="toggleUser()">{{ session['username'] }} &#8964;</a>
-        {% if session['admin'] %}
-        <a style="float:right; width:70px" onclick="toggleAdmin()">admin &#8964;</a>
+    <div class="top">
+        <a onclick="openSide()">&#9776;</a>
+        <div class="menu">
+            <button class="menubtn">{{ current_user.username }} &#8964;</button>
+            <div class="menu-content">
+                <a href="{{ url_for('main.settings') }}">settings</a>
+                <a href="{{ url_for('auth.login') }}">logout</a>
+            </div>
+        </div>
+        {% if current_user.admin %}
+        <div class="menu">
+            <button class="menubtn">admin &#8964;</button>
+            <div class="menu-content">
+                <a href="{{ url_for('user.view') }}">users</a>
+            </div>
+        </div>
         {% endif %}
     </div>
-    <div style="width:70px" id="adminnav" class="menunav">
-        <a href="">test1</a>
-        <a href="">test2</a>
-    </div>
-    <div style="width:70px" id="usernav" class="menunav">
-        <a href="{{ url_for('settings') }}">settings</a>
-        <a href="{{ url_for('login') }}">logout</a>
-    </div>
-    <div id="sidenav" class="sidenav">
-        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a><br>
-        <a href="{{ url_for('home') }}">Home</a>
+    <div id="side" class="side">
+        <a href="javascript:void(0)" class="sidebtn" onclick="closeSide()">&times;</a><br>
+        <a href="{{ url_for('main.home') }}">Home</a>
         <div class="sep">Regular</div>
-        <a href="{{ url_for('appts', type='masa_reg') }}">MASA</a>
-        <a href="{{ url_for('appts', type='asnd_reg') }}">AS&D</a>
+        <a href="{{ url_for('main.data', type=('regular', 'masa')) }}">MASA</a>
+        <a href="{{ url_for('main.data', type=('regular', 'asnd')) }}">AS&D</a>
         <div class="sep">Embedded</div>
-        <a href="{{ url_for('appts', type='masa_emb') }}">MASA</a>
-        <a href="{{ url_for('appts', type='asnd_emb') }}">AS&D</a>
+        <a href="{{ url_for('main.data', type=('embedded', 'masa')) }}">MASA</a>
+        <a href="{{ url_for('main.data', type=('embedded', 'asnd')) }}">AS&D</a>
     </div>
     
-    <!-- Add all page content inside this div if you want the side nav to push page content to the right (not used if you only want the sidenav to sit on top of the page -->
     <div id="main">
+        <br><br>
         {% block main %}{% endblock %}
     </div>
 
     <script>
-        function openNav() {
-            document.getElementById("sidenav").style.width = "200px";
+        function openSide() {
+            document.getElementById("side").style.width = "200px";
         }
-        function closeNav() {
-            document.getElementById("sidenav").style.width = "0";
-        }
-        function toggleAdmin() {
-            document.getElementById("adminnav").classList.toggle("menunav-show");
-        }
-        function toggleUser() {
-            document.getElementById("usernav").classList.toggle("menunav-show");
+        function closeSide() {
+            document.getElementById("side").style.width = "0";
         }
     </script>
 </body>

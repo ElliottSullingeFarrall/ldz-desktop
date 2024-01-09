@@ -1,143 +1,164 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, Blueprint, current_app, redirect, url_for, render_template, request
+from flask_sqlalchemy import SQLAlchemy
+from flask_login import UserMixin, LoginManager, login_user, login_required, current_user
+from werkzeug.security import generate_password_hash, check_password_hash
+
+from functools import wraps
 from pathlib import Path
-from pandas import DataFrame, read_csv, concat
+from pandas import DataFrame, read_sql, read_csv, concat
+from pandas.errors import EmptyDataError
 
-import logging
-logging.basicConfig(
-    filename='app.log',
-    encoding='utf-8',
-    level=logging.DEBUG
-)
+db = SQLAlchemy()
 
-app = Flask(__name__)
-app.secret_key = 'your_secret_key'
+# -------------------------------- Decorators -------------------------------- #
+
+def admin_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if not current_user.admin:
+            return 
+        return f(*args, **kwargs)
+    return decorated_function
 
 # ---------------------------------- Classes --------------------------------- #
 
-class Users:
-    def __init__(self):
-        self.path = Path('data') / Path('users.csv')
+class Data:
+    def __init__(self, type):
+        self.type = type
+        self.path = Path('data') / Path(current_user.username) / Path(*type).with_suffix('.csv')
     def __enter__(self):
-        self.data = read_csv(self.path, index_col=False)
+        if self.path.exists():
+            try:
+                self.df = read_csv(self.path, index_col=False)
+            except EmptyDataError:
+                self.df = DataFrame()
+        else:
+            self.path.parent.mkdir(parents=True, exist_ok=True)
+            self.df = DataFrame()
         return self
     def __exit__(self, exception_type, exception_value, exception_traceback):
-        self.data.to_csv(self.path, index=False)
+        self.df.to_csv(self.path, index=False)
         del self
 
-    def login(self, form):
-        # Check for user in database
-        try:
-            idx = self.data.index[self.data.username == form['username']][0]
-        except IndexError:
-            return 'User not found!'
-        user = self.data.iloc[idx]
-        
-        # Check user password and login
-        if form['password'] == user['password']:
-            user.pop('password')
-            session.update(user.to_dict())
-        else:
-            return 'Password invalid!'
-    def password_change(self, form):
-        # Check for user in database
-        try:
-            idx = self.data.index[self.data.username == session['username']][0]
-        except IndexError:
-            return 'User not found!'
-        user = self.data.iloc[idx]
+    def add(self, row):
+        self.df = concat([DataFrame(row, index=[0]), self.df], ignore_index=True)
+    def remove(self, idx):
+        self.df = self.df.drop(idx)
 
-        # Check old password
-        if form['password_old'] == user['password']:
-            pass
+class User(UserMixin, db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(100), nullable=False, unique=True)
+    password = db.Column(db.String(100), nullable=False)
+    admin = db.Column(db.Boolean, nullable=False, default=False)
+
+    @classmethod
+    def login(cls, form):
+        user = cls.query.filter_by(username=form['username']).first()
+
+        if user and check_password_hash(user.password, form['password']):
+            login_user(user)
+            return
         else:
-            return 'Password invalid!'
+            return 'Invalid login!'
+    
+    @classmethod
+    def change_password(cls, form):
+        user = cls.query.filter_by(username=current_user.username).first()
+
+        if form['password_new'] != form['password_check']:
+            return 'Passwords do not match!'
+        if not check_password_hash(user.password, form['password_old']):
+            return 'Invalid password!'
         
-        # Check passwords match and change
+        user.password = generate_password_hash(form['password_new'])
+        db.session.commit()
+        return
+    
+    @classmethod
+    def get(cls, idx):
+        table = read_sql(cls.query.statement, db.engine)
+        user = cls.query.filter_by(username=table.at[idx, 'username']).first()
+        return user
+    
+    @classmethod
+    def view(cls):
+        table = read_sql(cls.query.statement, db.engine)
+
+        table.pop('id')
+        table.pop('password')
+        return table
+    
+    @classmethod
+    def add(cls, form):
+        user = cls.query.filter_by(username=form['username']).first()
+
+        if not user:
+            user = cls(username=form['username'], password=generate_password_hash(form['password']), admin=bool(form.get('admin')))
+            db.session.add(user)
+            db.session.commit()
+            return
+        else:
+            return 'User already exists!'
+
+    @classmethod
+    def remove(cls, idx):
+        table = read_sql(cls.query.statement, db.engine)
+        user = cls.query.filter_by(username=table.at[idx, 'username']).first()
+
+        db.session.delete(user)
+        db.session.commit()
+
+    @classmethod
+    def reset_password(cls, idx, form):
+        table = read_sql(User.query.statement, db.engine)
+        user = cls.query.filter_by(username=table.at[idx, 'username']).first()
+
         if form['password_new'] == form['password_check']:
-            self.data.at[idx, 'password'] = form['password_new']
+            user.password = generate_password_hash(form['password_new'])
+            db.session.commit()
+            return
         else:
             return 'Passwords do not match!'
 
-class Appts:
-    def __init__(self, type):
-        self.type = type
-        self.path = Path('data') / Path(session['username']) / Path(self.type + '.csv')
-    def __enter__(self):
-        if self.path.exists():
-            self.data = read_csv(self.path, index_col=False)
-        else:
-            self.path.parent.mkdir(parents=True, exist_ok=True)
-            self.data = DataFrame()
-        return self
-    def __exit__(self, exception_type, exception_value, exception_traceback):
-        self.data.to_csv(self.path, index=False)
-        del self
+# --------------------------------- Flask App -------------------------------- #
 
-    def submit(self, row):
-        self.data = concat([DataFrame(row, index=[0]), self.data], ignore_index=True)
-    def remove(self, idx):
-        self.data = self.data.drop(idx)
+def create_app():
+    app = Flask(__name__)
 
-# ----------------------------------- Pages ---------------------------------- #
-        
-@app.route('/')
-def index():
-    return redirect(url_for('login'))
+    app.config['SECRET_KEY'] = 'secret-key-goes-here'
+    app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{app.root_path}/../data/users.sqlite'
 
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    session.clear()
-    
-    if request.method == 'POST':
-        with Users() as users:
-            error = users.login(request.form)
-            if not error:
-                return redirect(url_for('home'))
-            else:
-                return render_template('login.html', error=error)
+    db.init_app(app)
 
-    return render_template('login.html', error=None)
+    login_manager = LoginManager()
+    login_manager.login_view = 'auth.login'
+    login_manager.init_app(app)
 
-@app.route('/home')
-def home():
-    session['type'] = None
+    @login_manager.user_loader
+    def load_user(user_id):
+        return User.query.get(int(user_id))
 
-    return render_template('home.html')
+    with app.app_context():
+        db.create_all()
 
-@app.route('/settings', methods=['GET', 'POST'])
-def settings():
-    session['type'] = None
+        if not User.query.count():
+            default = User(username='default', password=generate_password_hash('default'), admin=True)
+            db.session.add(default)
+            db.session.commit()
 
-    if request.method == 'POST':
-        with Users() as users:
-            error = users.password_change(request.form)
-            if not error:
-                return redirect(url_for('home'))
-            else:
-                return render_template('settings.html', error=error)
+    from .auth import auth as auth_blueprint
+    app.register_blueprint(auth_blueprint)
 
-    return render_template('settings.html', error=None)
+    from .main import main as main_blueprint
+    app.register_blueprint(main_blueprint)
 
-@app.route('/appts/<type>', methods=['GET', 'POST'])
-def appts(type):
-    session['type'] = type
+    from .user import user as user_blueprint
+    app.register_blueprint(user_blueprint)
 
-    if request.method == 'POST':
-        with Appts(session['type']) as appts:
-            appts.submit(request.form)
-        return redirect(url_for('appts', type=session['type']))
-    
-    return render_template(str(Path('appts') / Path(session['type'] + '.html')))
+    return app
 
-@app.route('/edit')
-@app.route('/edit/<idx>')
-def edit(idx=None):
-    with Appts(session['type']) as appts:
-        if idx:
-            appts.remove(int(idx))
-        return render_template('edit.html', headers=appts.data.columns, table=appts.data.values)
-
-# ----------------------------------- Main ----------------------------------- #
+# ---------------------------------- Script ---------------------------------- #
 
 if __name__ == '__main__':
+    app = create_app()
     app.run()

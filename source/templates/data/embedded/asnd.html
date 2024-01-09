@@ -2,7 +2,7 @@
 
 {% block main %}
 <h2>AS&D (Embedded)</h2>
-<form method="POST" action="{{ url_for('appts', type=session['type']) }}">
+<form method="POST" action="{{ url_for('main.data', type=('embedded', 'asnd')) }}">
     <div class="wrapper1">
         <label for="date">Date:</label>
 
@@ -233,7 +233,7 @@
     <input type="submit" value="Submit">
     </a>
 
-    <a href="{{ url_for('edit') }}">
+    <a href="{{ url_for('main.edit', type=('embedded', 'asnd')) }}">
     <input type="button" value="Edit" onclick="window.location='/edit';">
     </a>
 </form>
