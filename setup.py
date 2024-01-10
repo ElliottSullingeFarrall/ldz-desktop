@@ -11,7 +11,7 @@ setup(
         'tkcalendar==1.6.1',
         'pandas==2.1.0',
         'openpyxl==3.1.2',
-        'platformdirs==4.0.0'
+        'platformdirs==3.11.0'
     ],
     python_requires='==3.10.12',
     scripts=[
