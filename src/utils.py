@@ -18,13 +18,13 @@ import openpyxl
 
 import os
 import sys
-import appdirs
+import platformdirs
 
 # ---------------------------------------------------------------------------- #
 #                                  File Paths                                  #
 # ---------------------------------------------------------------------------- #
 
-DATA_DIR: str = appdirs.user_data_dir('LDZ', 'ElliottSF', roaming=True)
+DATA_DIR: str = platformdirs.user_data_dir('LDZ', 'ElliottSF', roaming=True)
 
 def resource_path(relative_path: str) -> str:
     """Converts directory path to allow access in compiled app.
