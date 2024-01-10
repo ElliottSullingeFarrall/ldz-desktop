@@ -8,9 +8,6 @@ setup(
     version='1.3',
     author='ElliottSF',
     packages=find_packages(),
-    install_requires=[
-        'tk'
-    ],
     scripts=[
         'src/source.py',
         'src/utils.py'
