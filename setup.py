@@ -8,7 +8,6 @@ setup(
     version='1.3',
     author='ElliottSF',
     install_requires=[
-        'tkcalendar',
         'pandas',
         'openpyxl'
         'appdirs'
