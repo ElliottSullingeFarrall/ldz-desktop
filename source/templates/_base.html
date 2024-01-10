@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>LDZ</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    {% for style in styles %}
+    <link rel="stylesheet" href="{{ url_for('static', filename=style) }}">
+    {% endfor %}
 </head>
 <body>
     <div class="top">

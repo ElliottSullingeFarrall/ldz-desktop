@@ -135,9 +135,12 @@ def create_app():
 
     @app.context_processor
     def global_vars():
+        styles = [str(file.name) for file in Path('source/static').iterdir()]
+
         categories = [dir for dir in Path('source/templates/data').iterdir() if dir.is_dir()]
         options = {str(category.name) : [str(path.stem) for path in category.iterdir()] for category in categories}
-        return {'options' : options}
+
+        return {'styles' : styles, 'options' : options}
 
     db.init_app(app)
 

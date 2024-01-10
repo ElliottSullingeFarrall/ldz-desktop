@@ -5,7 +5,7 @@
     <thead>
         <tr>
         {% for header in headers %}
-        <th>{{  header  }}</th>
+        <th>{{ header }}</th>
         {% endfor %}
         </tr>
     </thead>
@@ -22,9 +22,9 @@
 
 <script>
     function remove(row) {
-        idx = (row.rowIndex - 1);
-        url = "{{ url_for('main.edit', category=category, type=type) }}";
-        window.location.replace(url + "/" + idx);
+        idx = row.rowIndex - 1;
+        url = "{{ url_for('main.edit', category=category, type=type) }}/" + idx;
+        window.location.replace(url);
     }
 </script>
 {% endblock %}

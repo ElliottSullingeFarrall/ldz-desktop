@@ -1,0 +1,138 @@
+body {
+	margin: 0;
+	background-color: var(--text1);
+	padding: 0;
+	text-align: center;
+	font-family: Arial, sans-serif;
+	-ms-overflow-style: none;
+  	scrollbar-width: none;
+}
+body::-webkit-scrollbar {
+	display: none;
+}
+
+h1 {
+	margin-top: 20px;
+	color: var(--text3);
+}
+
+ul {
+	list-style-type: none;
+	margin-top: 10px;
+	color: red;
+}
+
+table {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+th,
+td {
+	padding: 10px;
+	text-align: left;
+	border-bottom: 1px solid var(--text2);
+}
+
+tbody tr:hover {
+	cursor: pointer;
+	background-color: var(--text2);
+}
+
+form {
+	margin: 0 auto;
+	border-radius: 5px;
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+	background-color: var(--text1);
+	padding: 20px;
+	width: 400px;
+	text-align: left;
+}
+
+label {
+	display: block;
+	margin-bottom: 5px;
+}
+
+input,
+select {
+	background-color: #ffffff;
+	margin-bottom: 10px;
+	border: 1px solid var(--text3);
+	border-radius: 5px;
+	padding: 10px;
+	width: 95%;
+}
+
+input[type="button"],
+input[type="submit"] {
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	padding: 10px 20px;
+	color: var(--text1);
+	width: 100px;
+}
+
+input[type="button"] {
+	background-color: var(--text2);
+}
+
+input[type="button"]:hover {
+	background-color: var(--text3);
+}
+
+input[type="submit"] {
+	background-color: var(--button_inactive);
+}
+
+input[type="submit"]:hover {
+	background-color: var(--button_active);
+}
+/* ---------------------------- Appointment Form ---------------------------- */
+
+.wrapper1 {
+	display: grid;
+	grid-template-columns: 1fr;
+	grid-gap: 5px 20px;
+	width: 95%
+}
+
+.wrapper2 {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	grid-gap: 5px 20px;
+	width: 95%
+}
+
+.wrapper3 {
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr;
+	grid-gap: 5px 20px;
+	width: 95%
+}
+
+.wrapper4 {
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr 1fr;
+	grid-gap: 5px 20px;
+	width: 95%
+}
+
+.wrapper5 {
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+	grid-gap: 5px 20px;
+	width: 95%
+}
+
+.container {
+	display: flex;
+	flex-flow: row nowrap;
+	justify-content: center;
+}
+
+.item {
+	flex-grow: 2;
+	flex-shrink: 1;
+}
