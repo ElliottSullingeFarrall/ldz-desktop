@@ -7,7 +7,12 @@ setup(
     name='LDZ',
     version='1.3',
     author='ElliottSF',
-    install_requires=install_requires,
+    install_requires=[
+        'tkcalendar',
+        'pandas',
+        'openpyxl'
+        'appdirs'
+    ],
     scripts=[
         'src/source.py',
         'src/utils.py'
