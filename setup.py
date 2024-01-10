@@ -8,6 +8,9 @@ setup(
     version='1.3',
     author='ElliottSF',
     packages=find_packages(),
+    install_requires=[
+        'tkinter'
+    ]
     scripts=[
         'src/source.py',
         'src/utils.py'
