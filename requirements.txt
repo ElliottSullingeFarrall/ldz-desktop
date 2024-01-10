@@ -7,6 +7,5 @@ pandas==2.1.4
 python-dateutil==2.8.2
 pytz==2023.3.post1
 six==1.16.0
-tk==0.1.0
 tkcalendar==1.6.1
 tzdata==2023.4
