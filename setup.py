@@ -13,7 +13,6 @@ setup(
         'openpyxl==3.1.2',
         'platformdirs'
     ],
-    python_requires='>=3.0',
     scripts=[
         'src/source.py',
         'src/utils.py'
