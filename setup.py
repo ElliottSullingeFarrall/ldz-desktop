@@ -9,7 +9,7 @@ setup(
     author='ElliottSF',
     packages=find_packages(),
     install_requires=[
-        'tkinter'
+        'tk'
     ],
     scripts=[
         'src/source.py',
