@@ -10,7 +10,7 @@ setup(
     packages=find_packages(),
     install_requires=[
         'tkinter'
-    ]
+    ],
     scripts=[
         'src/source.py',
         'src/utils.py'
