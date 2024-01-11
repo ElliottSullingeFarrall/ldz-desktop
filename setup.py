@@ -11,6 +11,8 @@ setup(
         'src/source.py',
         'src/utils.py'
     ],
+    include_package_data=True,
+    package_data={'': ['src/images/*']},
     entry_points={
         # example: file some_module.py -> function main
         #'console_scripts': ['someprogram=some_module:main']
