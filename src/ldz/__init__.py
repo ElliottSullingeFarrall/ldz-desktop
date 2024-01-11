@@ -4,10 +4,11 @@
 
 from __future__ import annotations
 
-try:
-    from .utils import *
-except ImportError:
-    from utils import *
+# try:
+#     from .utils import *
+# except ImportError:
+#     from utils import *
+from utils import *
 
 # ---------------------------------------------------------------------------- #
 #                         Base Classes - DO NOT CHANGE                         #
