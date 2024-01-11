@@ -7,5 +7,6 @@ setup(
     install_requires=install_requires,
     package_dir={'': 'src'},
     package_data={'ldz': ['images/*']},
+    scripts = ['utils.py'],
     entry_points = {'console_scripts': ['ldz = ldz:main']}
 )
