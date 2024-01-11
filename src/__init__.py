@@ -1100,6 +1100,9 @@ class EmbdASND(Profile):
 
 FILE_EXT : str = os.path.splitext(sys.argv[0])[1]
 
-if __name__ == '__main__':
+def main():
     os.makedirs(DATA_DIR, exist_ok=True); os.chdir(DATA_DIR)
     App().mainloop()
+
+if __name__ == '__main__':
+    main()
