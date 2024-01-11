@@ -14,4 +14,7 @@ setup(
     package_data={
         'ldz': ['images/*']
     },
+    entry_points = {
+        'console_scripts': ['ldz = src.__init__:main']
+    }
 )
