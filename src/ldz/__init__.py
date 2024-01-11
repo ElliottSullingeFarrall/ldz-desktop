@@ -4,7 +4,10 @@
 
 from __future__ import annotations
 
-from utils import *
+try:
+    from .utils import *
+except ImportError:
+    from utils import *
 
 # ---------------------------------------------------------------------------- #
 #                         Base Classes - DO NOT CHANGE                         #
