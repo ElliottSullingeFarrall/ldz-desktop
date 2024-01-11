@@ -5,7 +5,6 @@ with open('requirements.txt') as requirements:
 
 setup(
     install_requires=install_requires,
-    packages=find_packages(where='src'),
     package_dir={'': 'src'},
     package_data={'ldz': ['images/*']},
     entry_points = {'console_scripts': ['ldz = ldz:main']}
