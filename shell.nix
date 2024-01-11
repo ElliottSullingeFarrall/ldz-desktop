@@ -7,6 +7,7 @@ pkgs.mkShell {
       pip
     ]))
     pkgs.stdenv
+    pkgs.pypi2nix
   ];
   LD_LIBRARY_PATH = "${pkgs.stdenv.cc.cc.lib}/lib";
   # shellHook = ''
