@@ -9,7 +9,7 @@ setup(
     author='ElliottSF',
     package_dir={"": "src"},
     package_data={'ldz': ['images/*']},
-    scripts=['src/ldz/source.py'],
+    scripts=['src/ldz/__init__.py'],
     entry_points={
         # example: file some_module.py -> function main
         #'console_scripts': ['someprogram=some_module:main']
