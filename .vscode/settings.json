@@ -1,5 +1,0 @@
-{
-    "code-runner.executorMap": {
-        "python": "$pythonPath $fullFileName"
-    }
-}
