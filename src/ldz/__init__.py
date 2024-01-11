@@ -28,7 +28,7 @@ class App(tk.Tk):
         self.style.theme_use('clam')
 
         self.title(f'Select Profile')
-        self.iconphoto(True, tk.PhotoImage(file=resource_path('images/stag.png')))
+        self.iconphoto(True, tk.PhotoImage(file='images/stag.png'))
         self.resizable(False, False)
         self.geometry('250x120')
 
