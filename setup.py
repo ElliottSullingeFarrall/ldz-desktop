@@ -5,6 +5,13 @@ with open('requirements.txt') as requirements:
 
 setup(
     install_requires=install_requires,
-    package_dir={'': 'src'},
-    package_data={'ldz': ['images/*']},
+    packages=[
+        'ldz'
+    ],
+    package_dir={
+        'ldz': 'src'
+    },
+    package_data={
+        'ldz': ['images/*']
+    },
 )
