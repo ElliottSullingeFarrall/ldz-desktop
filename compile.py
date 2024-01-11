@@ -14,13 +14,13 @@ def compile():
     """    
     try:
         compiler.run([
-            f'src//ldz/__init__.py',
+            f'src/__init__.py',
             f'--onefile',
             f'--windowed',
             f'--argv-emulation',
             f'--name=LDZ',
-            f'-i=src/ldz/images/stag.{IMG_EXT[platform.system()]}',
-            f'--add-data=src/ldz/images/stag.png{os.pathsep}images',
+            f'-i=src/images/stag.{IMG_EXT[platform.system()]}',
+            f'--add-data=src/images/stag.png{os.pathsep}images',
             f'--hidden-import=babel.numbers',
             f'--noconfirm'
         ])
