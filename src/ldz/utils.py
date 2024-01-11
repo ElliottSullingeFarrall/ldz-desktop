@@ -19,6 +19,7 @@ import openpyxl
 import os
 import sys
 import platformdirs
+from importlib.resources import files
 
 # ---------------------------------------------------------------------------- #
 #                                  File Paths                                  #
@@ -42,6 +43,7 @@ def resource_path(relative_path: str) -> str:
         base_path: str = sys._MEIPASS
     except Exception:
         base_path: str = os.path.abspath(".")
+        base_path: str = files("ldz")
     os.chdir(wd)
     return os.path.join(base_path, relative_path)
 
