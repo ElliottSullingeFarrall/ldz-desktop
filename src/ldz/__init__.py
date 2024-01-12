@@ -4,10 +4,6 @@
 
 from __future__ import annotations
 
-# try:
-#     from .utils import *
-# except ImportError:
-#     from utils import *
 from utils import *
 
 # ---------------------------------------------------------------------------- #
@@ -157,7 +153,7 @@ class Profile(tk.Tk):
         table.configure(xscrollcommand=hsb.set)
 
         def delete_data(event: tk.Event) -> None:
-            """Delete data corresponding to slected row in treeview.
+            """Delete data corresponding to selected row in treeview.
 
             Args:
                 event (tk.Event): Tkinter event.
@@ -168,6 +164,8 @@ class Profile(tk.Tk):
             else:
                 row_num: int = table.index(table.selection())
                 self.df_save: pd.DataFrame = self.df_save.drop(row_num)
+                self.df_save: pd.DataFrame = self.df_save.reset_index(drop=True)
+                print(self.df_save)
                 self.save_data()
                 window.destroy()
         table.bind("<<TreeviewSelect>>", delete_data)

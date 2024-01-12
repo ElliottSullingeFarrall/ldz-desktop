@@ -43,6 +43,7 @@ def resource_path(relative_path: str) -> str:
         base_path: str = sys._MEIPASS
     except Exception:
         try:
+            # Path when run as a package
             base_path: str = files("ldz")
         except Exception:
             base_path: str = os.path.abspath(".")
