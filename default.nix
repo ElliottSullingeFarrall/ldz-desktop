@@ -2,6 +2,7 @@
 let
     pkg-build-requirements = {
         tkcalendar = [ "setuptools" ];
+        pyinstaller = [ "setuptools" ];
     };
 in
 pkgs.poetry2nix.mkPoetryApplication {
