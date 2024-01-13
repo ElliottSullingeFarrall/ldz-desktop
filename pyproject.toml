@@ -13,7 +13,7 @@ openpyxl = "^3.1.2"
 platformdirs = "^4.1.0"
 
 [tool.poetry.scripts]
-ldz = "ldz.source:main"
+ldz = "ldz:main"
 
 
 [build-system]

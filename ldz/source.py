@@ -4,10 +4,7 @@
 
 from __future__ import annotations
 
-if __name__ == '__main__':
-    from utils import *
-else:
-    from .utils import *
+from .utils import *
 
 # ---------------------------------------------------------------------------- #
 #                         Base Classes - DO NOT CHANGE                         #
