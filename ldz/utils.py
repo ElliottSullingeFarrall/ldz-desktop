@@ -42,11 +42,8 @@ def resource_path(relative_path: str) -> str:
         # PyInstaller creates a temp folder and stores path in _MEIPASS
         base_path: str = sys._MEIPASS
     except Exception:
-        try:
-            # Path when run as a package
-            base_path: str = files("ldz")
-        except Exception:
-            base_path: str = os.path.abspath(".")
+        # Resource location when run directly as module
+        base_path: str = files("ldz")
     os.chdir(wd)
     return os.path.join(base_path, relative_path)
 

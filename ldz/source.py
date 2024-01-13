@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 '''Source code for LDZ app.
 '''
 

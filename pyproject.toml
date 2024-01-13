@@ -6,15 +6,17 @@ authors = ["ElliottSullingeFarrall <elliott.chalford@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = "^3.10,<3.13"
 tkcalendar = "^1.6.1"
 pandas = "^1.5.3"
 openpyxl = "^3.1.2"
 platformdirs = "^4.1.0"
 
+[tool.poetry.group.dev.dependencies]
+pyinstaller = "^6.3.0"
+
 [tool.poetry.scripts]
 ldz = "ldz:main"
-
 
 [build-system]
 requires = ["poetry-core"]
