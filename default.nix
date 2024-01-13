@@ -7,7 +7,6 @@ in
 pkgs.poetry2nix.mkPoetryApplication {
     projectDir = ./.;
     python = pkgs.python3Full;
-    groups = [ "main" ];
     overrides = pkgs.poetry2nix.defaultPoetryOverrides.extend (self: super:
         builtins.mapAttrs (package: build-requirements:
         (builtins.getAttr package super).overridePythonAttrs (old: {
