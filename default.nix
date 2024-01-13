@@ -1,8 +1,7 @@
 { pkgs ? import <nixpkgs> {} }:
 let
     pkg-build-requirements = {
-        # tkcalendar = [ "setuptools" ];
-        # altgraph = [ "setuptools" ];
+        # Force dependencies here
     };
 in
 pkgs.poetry2nix.mkPoetryApplication {

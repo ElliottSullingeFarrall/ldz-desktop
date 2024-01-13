@@ -2,29 +2,19 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "Create Requirements File",
+            "label": "Run Program",
             "type": "shell",
-            "command": "${command:python.interpreterPath} -m pip list --format=freeze > '${file}'"
+            "command": "poetry run ldz"
         },
         {
             "label": "Install Module from Selection",
             "type": "shell",
-            "command": "${command:python.interpreterPath} -m pip install ${selectedText}"
+            "command": "poetry add ${selectedText}"
         },
         {
             "label": "Uninstall Module from Selection",
             "type": "shell",
-            "command": "${command:python.interpreterPath} -m pip uninstall ${selectedText} -y"
-        },
-        {
-            "label": "Install Module from File",
-            "type": "shell",
-            "command": "${command:python.interpreterPath} -m pip install -r ${file}"
-        },
-        {
-            "label": "Uninstall Module from File",
-            "type": "shell",
-            "command": "${command:python.interpreterPath} -m pip uninstall -r '${file}' -y"
+            "command": "poetry remove ${selectedText}"
         }
     ]
 }
