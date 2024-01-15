@@ -8,4 +8,4 @@ build/
 *.spec
 
 dist/
-result/
+result
