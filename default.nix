@@ -11,6 +11,9 @@ let
     };
 in
 poetry2nix.mkPoetryApplication {
+    pname = "ldz";
+    version = "v1.4";
+
     projectDir = ./.;
     python = pkgs.python3Full;
     preferWheels = true;
@@ -20,5 +23,14 @@ poetry2nix.mkPoetryApplication {
             buildInputs = (old.buildInputs or [ ]) ++ (builtins.map (pkg: if builtins.isString pkg then builtins.getAttr pkg super else pkg) build-requirements);
         })
         ) pkg-build-requirements
-  );
+    );
+
+    desktopItem = {
+        name = "LDZ";
+        comment = "App for use in the University of Surrey's LDZ";
+        exec = "${pkgs.pname}/bin/${pname}";
+        icon = "${pkgs.pname}/lib/python3.11/site-packages/ldz/images/stag.png";
+        terminal = false;
+        type = "Application";
+    };
 }
