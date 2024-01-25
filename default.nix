@@ -37,5 +37,7 @@ poetry2nix.mkPoetryApplication rec {
     postPatch = ''
         mkdir -p $out/share/applications
         cp ${desktopItem}/share/applications/* $out/share/applications
+        mkdir -p $out/share/pixmaps
+        ln -s $out/lib/python3.11/site-packages/ldz/images/stag.png $out/share/pixmaps/ldz/stag.png
     '';
 }
