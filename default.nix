@@ -25,7 +25,7 @@ poetry2nix.mkPoetryApplication rec {
         ) pkg-build-requirements
     );
 
-    desktopItem = {
+    desktopItem = pkgs.makeDesktopItem {
         name = "LDZ";
         comment = "App for use in the University of Surrey's LDZ";
         exec = "${pname}";
