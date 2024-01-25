@@ -28,6 +28,7 @@ poetry2nix.mkPoetryApplication rec {
     desktopItem = pkgs.makeDesktopItem {
         name = "LDZ";
         comment = "App for use in the University of Surrey's LDZ";
+        desktopName = "LDZ App";
         exec = "${pname}";
         icon = "${pname}";
         terminal = false;
