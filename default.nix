@@ -10,7 +10,7 @@ let
         # Force dependencies here
     };
 in
-poetry2nix.mkPoetryApplication {
+poetry2nix.mkPoetryApplication rec {
     pname = "ldz";
     version = "v1.4";
 
@@ -28,9 +28,13 @@ poetry2nix.mkPoetryApplication {
     desktopItem = {
         name = "LDZ";
         comment = "App for use in the University of Surrey's LDZ";
-        exec = "${pkgs.pname}/bin/${pname}";
-        icon = "${pkgs.pname}/lib/python3.11/site-packages/ldz/images/stag.png";
+        exec = "${pname}";
+        icon = "${pname}";
         terminal = false;
         type = "Application";
     };
+    postPatch = ''
+        mkdir -p $out/share/applications
+        cp ${desktopItem}/share/applications/* $out/share/applications
+    '';
 }
