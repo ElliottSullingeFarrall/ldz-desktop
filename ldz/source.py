@@ -3,7 +3,11 @@
 
 from __future__ import annotations
 
-from .utils import *
+import sys
+if getattr(sys, 'frozen', False) and hasattr(sys, '_MEIPASS'):
+    from ldz.utils import *
+else:
+    from .utils import *
 
 # ---------------------------------------------------------------------------- #
 #                         Base Classes - DO NOT CHANGE                         #
