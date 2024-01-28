@@ -1,5 +1,49 @@
 {% extends "_base.html" %}
 
 {% block main %}
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 
+<br>
+<select id="month">
+    <option value="January">January</option>
+    <option value="February">February</option>
+    <option value="March">March</option>
+    <option value="April">April</option>
+    <option value="May">May</option>
+    <option value="June">June</option>
+    <option value="July">July</option>
+    <option value="August">August</option>
+    <option value="September">September</option>
+    <option value="October">October</option>
+    <option value="November">November</option>
+    <option value="December">December</option>
+</select>
+
+<div>
+  {% for category in options %}
+    <div class="graphs-row">
+      {% for type in options[category] %}
+        <div id="{{ category }}-{{ type }}"></div>
+      {% endfor %}
+    </div>
+  {% endfor %}
+</div>
+
+<script>
+  document.getElementById('month').addEventListener('change', function() {
+    var month = this.value;
+    fetch('/getChartData/' + month)
+      .then(response => response.json())
+      .then(data => {
+        // Use the data to update the plots
+        for (var chartId in data) {
+          // Pass the data and layout objects to Plotly.react
+          Plotly.react(chartId, data[chartId].data, data[chartId].layout, {displayModeBar: false});
+        }
+      });
+  });
+
+  // Trigger the 'change' event to load the data for the current month
+  document.getElementById('month').dispatchEvent(new Event('change'));
+</script>
 {% endblock %}

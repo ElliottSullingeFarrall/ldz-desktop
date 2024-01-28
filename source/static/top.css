@@ -2,6 +2,7 @@
 	position: fixed;
 	width: 100%;
 	background-color: var(--top);
+	z-index: 1000;
 }
 
 .top a {

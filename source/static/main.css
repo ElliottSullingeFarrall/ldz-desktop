@@ -89,3 +89,18 @@ input[type="submit"] {
 input[type="submit"]:hover {
 	background-color: var(--button_active);
 }
+
+
+
+.graphs-row {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+}
+
+.graphs-row > div {
+	display: flex;
+	flex-direction: column;
+	margin: 10px;
+}
+  

@@ -1,12 +1,21 @@
-from flask import Flask, Blueprint, current_app, flash, redirect, url_for, render_template, request
+from flask import Flask, Blueprint, current_app, flash, redirect, url_for, render_template, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin, LoginManager, login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 
+import plotly.express as px
+import plotly.io as pio
+
+import json
+
+from pandas import DataFrame, Series, read_sql, read_csv, concat, to_datetime
+from pandas.errors import EmptyDataError
+
 from functools import wraps
 from pathlib import Path
-from pandas import DataFrame, read_sql, read_csv, concat
-from pandas.errors import EmptyDataError
+from shutil import rmtree
+
+import logging
 
 db = SQLAlchemy()
 
@@ -38,6 +47,7 @@ class Data:
             self.df = DataFrame()
         return self
     def __exit__(self, exception_type, exception_value, exception_traceback):
+        logging.info(self.path)
         self.df.to_csv(self.path, index=False)
         del self
 
@@ -112,6 +122,8 @@ class User(UserMixin, db.Model):
 
         db.session.delete(user)
         db.session.commit()
+
+        rmtree(Path('data') / Path(user.username))
 
     @classmethod
     def reset_password(cls, idx, form):
