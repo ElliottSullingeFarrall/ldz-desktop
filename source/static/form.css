@@ -1,0 +1,16 @@
+.row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(0, 1fr)); /* Adjust the minmax values as needed */
+  gap: 0.5em; /* Add some space around each item */
+}
+
+.row > div {
+  display: flex;
+  flex-direction: column;
+}
+
+.row > div > select, .row > div > input {
+  width: 100%;
+  box-sizing: border-box;
+  height: 40px; 
+}

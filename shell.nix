@@ -1,20 +1,19 @@
 { pkgs ? import <nixpkgs> {} }:
-
 pkgs.mkShell {
-  nativeBuildInputs = [
-    (pkgs.python3Full.withPackages(ps: with ps; [ 
-      virtualenv
-      pip
-    ]))
-    pkgs.stdenv
+  packages = [
+    pkgs.poetry
+    pkgs.python3
   ];
-  LD_LIBRARY_PATH = "${pkgs.stdenv.cc.cc.lib}/lib";
-  # shellHook = ''
-  #   export LD_LIBRARY_PATH=${pkgs.lib.makeLibraryPath [
-  #     pkgs.stdenv.cc.cc
-  #   ]}
-  # '';
+  
+  # LD_LIBRARY_PATH = "${pkgs.stdenv.cc.cc.lib}/lib";
+
+  FLASK_APP = "source";
+  FLASK_DEBUG = 1;
+  FLASK_RUN_PORT = 4000;
+
+  POETRY_VIRTUALENVS_IN_PROJECT = true;
   shellHook = ''
-    .venv/bin/python -m flask run -p 4000
+    poetry env use $(which python)
+    poetry install
   '';
 }

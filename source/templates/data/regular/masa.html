@@ -1,22 +1,22 @@
 {% extends "data/_form.html" %}
 
 {% block form %}
-<div class="container">
-    <div class="item">
+<div class="row">
+    <div>
         <label for="date">Date:</label>
         <input type="date" id="date" name="Date" required>
     </div>
-    <div class="item">
+    <div>
         <label for="in">Start Time:</label>
         <input type="time" id="in" name="In" required>
     </div>
-    <div class="item">
+    <div>
         <label for="out">End Time:</label>
         <input type="time" id="out" name="Out" required>
     </div> 
 </div>
-<div class="container">
-    <div class="item">
+<div class="row">
+    <div>
         <label for="department">Department:</label>
         <select id='department' name='Department' list="departments" required>
             <option style="display:none" disabled selected value></option>
@@ -48,7 +48,7 @@
             <option value="Veterinary Medicine">Veterinary Medicine</option>
         </select>
     </div>
-    <div class="item">
+    <div>
         <label for="level">Level:</label>
         <select id='level' name='Level' list="levels" required>
             <option style="display:none" disabled selected value></option>
@@ -66,8 +66,8 @@
         </select>
     </div>   
 </div>
-<div class="container">
-    <div class="item">
+<div class="row">
+    <div>
         <label for="query 1">Query 1:</label>
         <select id='query 1' name='Query 1' required>
             <option style="display:none" disabled selected value></option>
@@ -97,7 +97,7 @@
             </optgroup>
         </select>
     </div>
-    <div class="item">
+    <div>
         <label for="query 2">Query 2:</label>
         <select id='query 2' name='Query 2' required>
             <option value="N/A">N/A</option>
@@ -128,8 +128,8 @@
         </select>
     </div> 
 </div>
-<div class="container">
-    <div class="item">
+<div class="row">
+    <div>
         <label for="format">Format:</label>
         <select id='format' name='Format' required>
             <option style="display:none" disabled selected value></option>
@@ -137,7 +137,7 @@
             <option value="Online">Online</option>
         </select>
     </div>
-    <div class="item">
+    <div>
         <label for="location">Location:</label>
         <select id='location' name='Location' required>
             <option style="display:none" disabled selected value></option>
@@ -148,8 +148,8 @@
         </select>
     </div>
 </div>
-<div class="container">
-    <div class="item">
+<div class="row">
+    <div>
         <label for="status">Appointment Status:</label>
         <select id="status" name="Appointment Status" required>
             <option value="N/A">N/A</option>
@@ -159,12 +159,12 @@
         </select>
     </div>
 </div>
-<div class="container">
-    <div class="item">
+<div class="row">
+    <div>
         <label for="students">No. of Students:</label>
         <input type="number" id="students" name='Students' min="1" value="1" required>
     </div>
-    <div class="item">
+    <div>
         <label for="project">Project:</label>
         <input type="checkbox" id='project' name='Project'>
     </div>

@@ -155,6 +155,7 @@ def create_app():
     with app.app_context():
         db.create_all()
 
+        # Create default user
         if not User.query.count():
             default = User(username='default', password=generate_password_hash('default'), admin=True)
             db.session.add(default)
