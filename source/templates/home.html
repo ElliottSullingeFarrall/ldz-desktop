@@ -1,49 +1,87 @@
 {% extends "_base.html" %}
 
 {% block main %}
-<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-
 <br>
-<select id="month">
-    <option value="January">January</option>
-    <option value="February">February</option>
-    <option value="March">March</option>
-    <option value="April">April</option>
-    <option value="May">May</option>
-    <option value="June">June</option>
-    <option value="July">July</option>
-    <option value="August">August</option>
-    <option value="September">September</option>
-    <option value="October">October</option>
-    <option value="November">November</option>
-    <option value="December">December</option>
-</select>
+<div class="month_picker">
+  <div>
+      <select id="year">
+          <option value="2023">2023</option>
+          <option value="2024">2024</option>
+          <!-- Add more options as needed -->
+      </select>
+  </div>
+  <div>
+      <div id="months" class="months" role="group">
+          <button type="button" value="January">Jan</button>
+          <button type="button" value="February">Feb</button>
+          <button type="button" value="March">Mar</button>
+          <button type="button" value="April">Apr</button>
+          <button type="button" value="May">May</button>
+          <button type="button" value="June">Jun</button>
+          <button type="button" value="July">Jul</button>
+          <button type="button" value="August">Aug</button>
+          <button type="button" value="September">Sep</button>
+          <button type="button" value="October">Oct</button>
+          <button type="button" value="November">Nov</button>
+          <button type="button" value="December">Dec</button>
+      </div>
+  </div>
+</div>
 
 <div>
   {% for category in options %}
     <div class="graphs-row">
       {% for type in options[category] %}
-        <div id="{{ category }}-{{ type }}"></div>
+        <div id="{{ category }}:{{ type }}"></div>
       {% endfor %}
     </div>
   {% endfor %}
 </div>
 
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 <script>
-  document.getElementById('month').addEventListener('change', function() {
-    var month = this.value;
-    fetch('/getChartData/' + month)
+  function capitalise(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+
+  function updateCharts() {
+    var year = document.getElementById('year').value;
+    var month = document.querySelector('#months .active').value;
+    fetch(`{{ url_for('main.get_charts')}}/${year}/${month}`)
       .then(response => response.json())
       .then(data => {
-        // Use the data to update the plots
-        for (var chartId in data) {
-          // Pass the data and layout objects to Plotly.react
-          Plotly.react(chartId, data[chartId].data, data[chartId].layout, {displayModeBar: false});
+        for (var id in data) {
+          Plotly.react(id, data[id].data, data[id].layout, {displayModeBar: false});
         }
       });
+  };
+
+  var monthButtons = document.querySelectorAll('#months button');
+  monthButtons.forEach(function(button) {
+    button.addEventListener('click', function() {
+      // Act as toggle bar
+      monthButtons.forEach(function(btn) {
+        btn.classList.remove('active');
+      });
+      button.classList.add('active');
+
+      updateCharts();
+    });
   });
 
-  // Trigger the 'change' event to load the data for the current month
-  document.getElementById('month').dispatchEvent(new Event('change'));
+  // Default behaviour
+  var date = new Date();
+  var currentYear = date.getFullYear();
+  var currentMonth = capitalise(date.toLocaleString('default', { month: 'long' }));
+
+  document.getElementById('year').value = currentYear;
+
+  monthButtons.forEach(function(button) {
+    if (button.value == currentMonth) {
+      button.classList.add('active');
+    }
+  });
+
+  updateCharts();
 </script>
 {% endblock %}

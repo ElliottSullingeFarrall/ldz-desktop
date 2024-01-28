@@ -103,4 +103,20 @@ input[type="submit"]:hover {
 	flex-direction: column;
 	margin: 10px;
 }
+
+
+
+.month_picker {
+    display: flex;  /* Arrange the children in a row */
+    justify-content: space-between;  /* Add space between the children */
+    align-items: center;  /* Align the children vertically */
+}
+
+#year {
+    width: 100px;  /* Set a fixed width for the year select */
+}
+
+.months button {
+    margin-right: 5px;  /* Add some space to the right of each button */
+}
   

@@ -3,14 +3,10 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin, LoginManager, login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 
-import plotly.express as px
-import plotly.io as pio
-
-import json
-
 from pandas import DataFrame, Series, read_sql, read_csv, concat, to_datetime
 from pandas.errors import EmptyDataError
 
+from datetime import datetime
 from functools import wraps
 from pathlib import Path
 from shutil import rmtree
@@ -32,6 +28,9 @@ def admin_required(f):
 # ---------------------------------- Classes --------------------------------- #
 
 class Data:
+    categories = [dir for dir in Path('source/templates/data').iterdir() if dir.is_dir()]
+    options = {str(category.name) : [str(path.stem) for path in category.iterdir()] for category in categories}
+
     def __init__(self, category, type):
         self.category = category
         self.type = type
@@ -55,6 +54,21 @@ class Data:
         self.df = concat([DataFrame(row, index=[0]), self.df], ignore_index=True)
     def remove(self, idx):
         self.df = self.df.drop(idx)
+
+    def summarise_month(self, year, month, col, n=5):
+        year_number = int(year)
+        month_number = datetime.strptime(month, '%B').month
+
+        df = self.df.copy()
+        df['Date'] = to_datetime(df['Date'])
+        df = df.loc[(df['Date'].dt.month == month_number) & (df['Date'].dt.year == year_number)]
+        
+        top = df[col].value_counts().nlargest(n)
+        bot = Series(df[col].value_counts().iloc[n:].sum(), index=['other'])
+        data = concat([top, bot])
+
+        return {key: value for key, value in data.items() if value != 0}
+
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -149,10 +163,7 @@ def create_app():
     def global_vars():
         styles = [str(file.name) for file in Path('source/static').iterdir()]
 
-        categories = [dir for dir in Path('source/templates/data').iterdir() if dir.is_dir()]
-        options = {str(category.name) : [str(path.stem) for path in category.iterdir()] for category in categories}
-
-        return {'styles' : styles, 'options' : options}
+        return {'styles' : styles, 'options' : Data.options}
 
     db.init_app(app)
 
@@ -181,6 +192,8 @@ def create_app():
 
     from .user import user as user_blueprint
     app.register_blueprint(user_blueprint)
+
+    logging.getLogger().setLevel(logging.DEBUG)
 
     return app
 
