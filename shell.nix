@@ -5,7 +5,7 @@ pkgs.mkShell {
     pkgs.python3
   ];
   
-  # LD_LIBRARY_PATH = "${pkgs.stdenv.cc.cc.lib}/lib";
+  LD_LIBRARY_PATH = "${pkgs.stdenv.cc.cc.lib}/lib";
 
   FLASK_APP = "source";
   FLASK_DEBUG = 1;

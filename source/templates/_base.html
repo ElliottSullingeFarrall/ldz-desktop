@@ -8,24 +8,29 @@
     {% endfor %}
 </head>
 <body>
-    <div class="top">
-        <a onclick="openSide()">&#9776;</a>
-        <div class="menu">
-            <button class="menubtn">{{ current_user.username }} &#8964;</button>
-            <div class="menu-content">
-                <a href="{{ url_for('main.settings') }}">settings</a>
-                <a href="{{ url_for('auth.login') }}">logout</a>
+    <div class="topnav">
+        <div id="left_group">
+            <div class="button" onclick="openSide()">&#9776;</div>
+        </div>
+        <div id="right_group">
+            {% if current_user.admin %}
+            <div class="menu">
+                <div class="button">admin &#8964;</div>
+                <div class="content">
+                    <div class="item" href="{{ url_for('user.view') }}">users</div>
+                </div>
+            </div>
+            {% endif %}
+            <div class="menu">
+                <div class="button">{{ current_user.username }} &#8964;</div>
+                <div class="content">
+                    <div class="item" href="{{ url_for('main.settings') }}">settings</div>
+                    <div class="item" href="{{ url_for('auth.login') }}">logout</div>
+                </div>
             </div>
         </div>
-        {% if current_user.admin %}
-        <div class="menu">
-            <button class="menubtn">admin &#8964;</button>
-            <div class="menu-content">
-                <a href="{{ url_for('user.view') }}">users</a>
-            </div>
-        </div>
-        {% endif %}
     </div>
+    
     <div id="side" class="side">
         <a href="javascript:void(0)" class="sidebtn" onclick="closeSide()">&times;</a><br>
         <a href="{{ url_for('main.home') }}">Home</a>

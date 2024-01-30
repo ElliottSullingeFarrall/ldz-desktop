@@ -56,6 +56,7 @@ class Data:
         self.df = self.df.drop(idx)
 
     def summarise_month(self, year, month, col, n=5):
+        #TODO Clean up datetime handling
         year_number = int(year)
         month_number = datetime.strptime(month, '%B').month
 
@@ -155,34 +156,31 @@ class User(UserMixin, db.Model):
 
 def create_app():
     app = Flask(__name__)
-
     app.config['SECRET_KEY'] = 'secret-key-goes-here'
     app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{app.root_path}/../data/users.sqlite'
 
-    @app.context_processor
-    def global_vars():
-        styles = [str(file.name) for file in Path('source/static').iterdir()]
-
-        return {'styles' : styles, 'options' : Data.options}
+    logging.getLogger().setLevel(logging.DEBUG)
 
     db.init_app(app)
-
-    login_manager = LoginManager()
-    login_manager.login_view = 'auth.login'
-    login_manager.init_app(app)
-
-    @login_manager.user_loader
-    def load_user(user_id):
-        return User.query.get(int(user_id))
-
     with app.app_context():
         db.create_all()
-
-        # Create default user
+        # Create default user for empty db
         if not User.query.count():
             default = User(username='default', password=generate_password_hash('default'), admin=True)
             db.session.add(default)
             db.session.commit()
+
+    login_manager = LoginManager()
+    login_manager.login_view = 'auth.login'
+    login_manager.init_app(app)
+    @login_manager.user_loader
+    def load_user(user_id):
+        return User.query.get(int(user_id))
+    
+    @app.context_processor
+    def global_vars():
+        styles = [str(file.name) for file in Path('source/static').iterdir()]
+        return {'styles' : styles, 'options' : Data.options}
 
     from .auth import auth as auth_blueprint
     app.register_blueprint(auth_blueprint)
@@ -192,8 +190,6 @@ def create_app():
 
     from .user import user as user_blueprint
     app.register_blueprint(user_blueprint)
-
-    logging.getLogger().setLevel(logging.DEBUG)
 
     return app
 

@@ -5,8 +5,9 @@ body {
 	text-align: center;
 	font-family: Arial, sans-serif;
 	-ms-overflow-style: none;
-  	scrollbar-width: none;
+	scrollbar-width: none;
 }
+
 body::-webkit-scrollbar {
 	display: none;
 }
@@ -78,7 +79,8 @@ input[type="button"] {
 	background-color: var(--text2);
 }
 
-input[type="button"]:hover {
+input[type="button"]:hover,
+input[type="button"]:active {
 	background-color: var(--text3);
 }
 
@@ -98,7 +100,7 @@ input[type="submit"]:hover {
 	justify-content: center;
 }
 
-.graphs-row > div {
+.graphs-row>div {
 	display: flex;
 	flex-direction: column;
 	margin: 10px;
@@ -107,16 +109,20 @@ input[type="submit"]:hover {
 
 
 .month_picker {
-    display: flex;  /* Arrange the children in a row */
-    justify-content: space-between;  /* Add space between the children */
-    align-items: center;  /* Align the children vertically */
+	display: flex;
+	/* Arrange the children in a row */
+	justify-content: space-between;
+	/* Add space between the children */
+	align-items: center;
+	/* Align the children vertically */
 }
 
 #year {
-    width: 100px;  /* Set a fixed width for the year select */
+	width: 100px;
+	/* Set a fixed width for the year select */
 }
 
 .months button {
-    margin-right: 5px;  /* Add some space to the right of each button */
+	margin-right: 5px;
+	/* Add some space to the right of each button */
 }
-  

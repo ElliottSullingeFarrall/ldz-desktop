@@ -1,0 +1,68 @@
+:root {
+    --bg: var(--topnav);
+    --txt: var(--text2);
+    --txt-active: var(--text1);
+}
+.topnav {
+    position: fixed;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    z-index: 1000;
+    background-color: var(--bg);
+}
+
+.topnav > div {
+    display: flex;
+}
+
+.topnav .button {
+    font-size: 16px;
+    color: var(--txt);
+    text-decoration: none;
+    text-align: center;
+    padding: 14px 16px;
+}
+
+.topnav .menu {
+    position: relative;
+}
+
+.topnav .menu .button {
+    font-size: 16px;
+    color: var(--txt);
+    border: none;
+    background-color: inherit;
+    padding: 14px 0;
+    width: 100px;
+}
+
+.topnav .menu .content {
+    position: absolute;
+    display: none;
+    right: 0;
+    top: 100%;
+    width: 100px;
+    z-index: 1;
+    background-color: var(--bg);
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+}
+
+.topnav .menu:hover .content {
+    display: block;
+}
+
+.topnav .menu .content .item {
+    color: var(--txt);
+    text-decoration: none;
+    text-align: left;
+    display: block;
+    padding: 12px 16px;
+}
+
+.topnav .button:hover,
+.topnav .menu:hover .button,
+.topnav .menu .content .item:hover  {
+    background-color: var(--txt-active);
+    cursor: pointer;
+}
