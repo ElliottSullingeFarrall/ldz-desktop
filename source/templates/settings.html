@@ -2,7 +2,7 @@
 
 {% block main %}
 <h1>Change Password</h1>
-<form method="POST" action="{{ url_for('settings') }}">
+<form method="POST" action="{{ url_for('main.settings') }}">
     <label for="password_old">Old Password:</label>
     <input type="password" id="password_old" name="password_old" required><br>
 

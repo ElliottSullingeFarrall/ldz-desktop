@@ -1,9 +1,8 @@
-:root {
+.topnav {
     --bg: var(--topnav);
     --txt: var(--text2);
     --txt-active: var(--text1);
-}
-.topnav {
+
     position: fixed;
     display: flex;
     justify-content: space-between;

@@ -9,36 +9,36 @@
 </head>
 <body>
     <div class="topnav">
-        <div id="left_group">
+        <div id="group_left">
             <div class="button" onclick="openSide()">&#9776;</div>
         </div>
-        <div id="right_group">
+        <div id="group_right">
             {% if current_user.admin %}
             <div class="menu">
                 <div class="button">admin &#8964;</div>
                 <div class="content">
-                    <div class="item" href="{{ url_for('user.view') }}">users</div>
+                    <a class="item" href="{{ url_for('user.view') }}">users</a>
                 </div>
             </div>
             {% endif %}
             <div class="menu">
                 <div class="button">{{ current_user.username }} &#8964;</div>
                 <div class="content">
-                    <div class="item" href="{{ url_for('main.settings') }}">settings</div>
-                    <div class="item" href="{{ url_for('auth.login') }}">logout</div>
+                    <a class="item" href="{{ url_for('main.settings') }}">settings</a>
+                    <a class="item" href="{{ url_for('auth.login') }}">logout</a>
                 </div>
             </div>
         </div>
     </div>
     
-    <div id="side" class="side">
-        <a href="javascript:void(0)" class="sidebtn" onclick="closeSide()">&times;</a><br>
-        <a href="{{ url_for('main.home') }}">Home</a>
+    <div class="sidenav">
+        <div class="button" onclick="closeSide()">&times;</div>
+        <a class ="item" href="{{ url_for('main.home') }}">Home</a>
         {% for category in options %}
-            <div class="sep">{{ category|capitalize }}</div>
-                {% for type in options[category] %}
-                <a href="{{ url_for('main.data', category=category, type=type) }}">{{ type|upper }}</a>
-                {% endfor %}
+        <div class="sep">{{ category|capitalize }}</div>
+        {% for type in options[category] %}
+        <a class="item" href="{{ url_for('main.data', category=category, type=type) }}">{{ type|upper }}</a>
+        {% endfor %}
         {% endfor %}
     </div>
     
@@ -49,10 +49,10 @@
 
     <script>
         function openSide() {
-            document.getElementById("side").style.width = "200px";
+            document.getElementsByClassName("sidenav")[0].style.width = "200px";
         }
         function closeSide() {
-            document.getElementById("side").style.width = "0";
+            document.getElementsByClassName("sidenav")[0].style.width = "0";
         }
     </script>
 </body>

@@ -1,0 +1,64 @@
+.sidenav {
+	--bg: var(--text3);
+	--txt: var(--text2);
+	--txt-active: var(--text1);
+
+	position: fixed;
+	top: 0;
+	left: 0;
+	transition: 0.5s;
+	z-index: 10000;
+	background-color: var(--bg);
+	padding-top: 60px;
+	width: 0;
+	height: 100%;
+	overflow-x: hidden;
+}
+
+.sidenav .button {
+	position: absolute;
+	top: 0;
+	right: 25px;
+	margin-left: 50px;
+	font-size: 36px;
+	color: var(--txt);
+}
+
+.sidenav .item {
+	display: block;
+	transition: 0.3s;
+	padding: 8px 8px 8px 32px;
+	text-decoration: none;
+	color: var(--txt);
+	font-size: 25px;
+}
+
+.sidenav .sep {
+	display: flex;
+	position: relative;
+	padding: 5px;
+	color: var(--txt);
+	font-size: 10px;
+}
+
+.sidenav .sep::before,
+.sidenav .sep::after {
+	align-self: center;
+	background-color: var(--txt);
+	height: 1px;
+	content: "";
+}
+.sidenav .sep::before {
+	margin-right: 5px;
+	width: 10px;
+}
+.sidenav .sep::after {
+	margin-left: 5px;
+	width: 100%;
+}
+
+.sidenav .button:hover,
+.sidenav .item:hover {
+	color: var(--txt-active);
+	cursor: pointer;
+}
