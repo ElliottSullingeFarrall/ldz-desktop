@@ -188,8 +188,14 @@ def create_app():
     from .main import main as main_blueprint
     app.register_blueprint(main_blueprint)
 
+    from .data import data as data_blueprint
+    app.register_blueprint(data_blueprint)
+
     from .user import user as user_blueprint
     app.register_blueprint(user_blueprint)
+
+    from .admin import admin as admin_blueprint
+    app.register_blueprint(admin_blueprint)
 
     return app
 

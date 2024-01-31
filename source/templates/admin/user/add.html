@@ -1,0 +1,26 @@
+{% extends "_base.html" %}
+
+{% block main %}
+<h1>Add User</h1>
+<form method="POST" action="{{ url_for('admin.user_add') }}">
+    <label>Username:</label>
+    <input name="username" type="text" required>
+
+    <label>Password:</label>
+    <input name="password" type="password" required>
+
+    <label>Admin:</label>
+    <input name="admin" type="checkbox">
+
+    <input value="Add" type="submit">
+</form>
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+<ul class="flash">
+    {% for message in messages %}
+    <li>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+{% endwith %}
+{% endblock %}

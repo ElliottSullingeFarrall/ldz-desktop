@@ -1,0 +1,29 @@
+{% extends "_base.html" %}
+
+{% block main %}
+<h1>Edit User</h1>
+<form method="POST" action="{{ url_for('admin.user_edit', idx=''+idx) }}">
+    <label>New Password:</label>
+    <input name="password_new" type="password" required>
+
+    <label>Confirm Password:</label>
+    <input name="password_check" type="password" required>
+
+    <a>
+    <input value="Change" type="submit">
+    </a>
+
+    <a href="{{ url_for('admin.user_remove', idx=''+idx) }}">
+    <input value="Remove" type="button">
+    </a>
+</form>
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+<ul class="flash">
+    {% for message in messages %}
+    <li>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+{% endwith %}
+{% endblock %}

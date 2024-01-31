@@ -17,14 +17,14 @@
             <div class="menu">
                 <div class="button">admin &#8964;</div>
                 <div class="content">
-                    <a class="item" href="{{ url_for('user.view') }}">users</a>
+                    <a class="item" href="{{ url_for('admin.user_view') }}">users</a>
                 </div>
             </div>
             {% endif %}
             <div class="menu">
                 <div class="button">{{ current_user.username }} &#8964;</div>
                 <div class="content">
-                    <a class="item" href="{{ url_for('main.settings') }}">settings</a>
+                    <a class="item" href="{{ url_for('user.settings') }}">settings</a>
                     <a class="item" href="{{ url_for('auth.login') }}">logout</a>
                 </div>
             </div>
@@ -37,13 +37,12 @@
         {% for category in options %}
         <div class="sep">{{ category|capitalize }}</div>
         {% for type in options[category] %}
-        <a class="item" href="{{ url_for('main.data', category=category, type=type) }}">{{ type|upper }}</a>
+        <a class="item" href="{{ url_for('data.view', category=category, type=type) }}">{{ type|upper }}</a>
         {% endfor %}
         {% endfor %}
     </div>
     
     <div id="main">
-        <br><br>
         {% block main %}{% endblock %}
     </div>
 

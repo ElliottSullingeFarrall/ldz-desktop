@@ -1,3 +1,11 @@
+:root {
+	--text1: #f4f4f4;
+	--text2: #818181;
+	--text3: #111111;
+	--button_inactive: #007bff;
+	--button_active: #0056b3;
+	--topnav: #333333;
+}
 body {
 	margin: 0;
 	background-color: var(--text1);
@@ -12,33 +20,16 @@ body::-webkit-scrollbar {
 	display: none;
 }
 
+#main {
+	padding-top: 50px;
+}
+
 h1 {
 	margin-top: 20px;
 	color: var(--text3);
 }
 
-ul {
-	list-style-type: none;
-	margin-top: 10px;
-	color: red;
-}
 
-table {
-	width: 100%;
-	border-collapse: collapse;
-}
-
-th,
-td {
-	padding: 10px;
-	text-align: left;
-	border-bottom: 1px solid var(--text2);
-}
-
-tbody tr:hover {
-	cursor: pointer;
-	background-color: var(--text2);
-}
 
 
 

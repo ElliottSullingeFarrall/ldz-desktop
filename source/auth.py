@@ -14,4 +14,4 @@ def login():
         else:
             flash(error)
     
-    return render_template('login.html')
+    return render_template('auth/login.html')
