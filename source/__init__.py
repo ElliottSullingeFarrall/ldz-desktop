@@ -39,7 +39,6 @@ class Data:
             self.df = DataFrame()
         return self
     def __exit__(self, exception_type, exception_value, exception_traceback):
-        logging.info(self.path)
         self.df.to_csv(self.path, index=False)
         del self
 
@@ -48,14 +47,12 @@ class Data:
     def remove(self, idx):
         self.df = self.df.drop(idx)
 
-    def summarise_month(self, year, month, col, n=5):
-        #TODO Clean up datetime handling
-        year_number = int(year)
-        month_number = datetime.strptime(month, '%B').month
+    def summarise_month(self, month, col, n=5):
+        dt = datetime.strptime(month, '%Y-%m')
 
         df = self.df.copy()
         df['Date'] = to_datetime(df['Date'])
-        df = df.loc[(df['Date'].dt.month == month_number) & (df['Date'].dt.year == year_number)]
+        df = df.loc[(df['Date'].dt.month == dt.month) & (df['Date'].dt.year == dt.year)]
         
         top = df[col].value_counts().nlargest(n)
         bot = Series(df[col].value_counts().iloc[n:].sum(), index=['other'])
@@ -191,15 +188,30 @@ class App(Flask):
         def global_vars():
             return {'styles' : self.styles, 'options' : Data.options}
 
-        # ----------------------------------- Views ---------------------------------- #
+        # -------------------------------- Blueprints -------------------------------- #
 
         for filepath in (Path(__file__).parent / 'views').glob('[!_]*.py'):
-            view = import_module(f'source.views.{filepath.stem}')
-            blueprint = next(filter(lambda obj: isinstance(obj, Blueprint), view.__dict__.values()), None)
-            self.register_blueprint(blueprint)
+            name = filepath.stem
+            blueprint = import_module(f'source.views.{name}').__dict__[name]
+            self.register_blueprint(blueprint, url_prefix=f'/{name}')
+
+        # ---------------------------------- Routes ---------------------------------- #
+
+        @self.route('/sw.js')
+        def service_worker():
+            return ('', 204)
+
+        @self.route('/')
+        @self.route('/index')
+        def index():
+            return redirect(url_for('home.index'))
         
     def run(self):
         super().run()
+
+    @classmethod
+    def blueprint(cls, __name__, __file__):
+        return Blueprint(Path(__file__).stem, __name__, template_folder=f'../templates/{Path(__file__).stem}')
 
     @classmethod
     def login_required(cls, f):

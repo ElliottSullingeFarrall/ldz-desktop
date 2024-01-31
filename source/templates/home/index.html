@@ -1,0 +1,54 @@
+{% extends "_base.html" %}
+
+{% block main %}
+<div class="chart-select">
+  <input name="month" type="month">
+  <select name="category:type">
+  {% for category in options %}
+    <optgroup label="{{ category|capitalize }}">
+    {% for type in options[category] %}
+        <option value="{{ category }}:{{ type }}">{{ type|upper }}</option>
+    {% endfor %}
+    </optgroup>
+  {% endfor %}
+  </select>
+</div>
+
+<div id="chart" class="chart-hidden">
+  <!-- ----------------------------- chart here ------------------------------ -->
+</div>
+
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<script>
+  let delay = parseFloat(window.getComputedStyle(document.getElementById('chart')).transitionDuration) * 1000;
+  function chart() {
+    let [category, type] = document.querySelector('select[name="category:type"]').value.split(':');
+    let month = document.querySelector('input[name="month"]').value;
+
+    let url = `{{ url_for('home.chart') }}/${category}/${type}/${month}`;
+
+    document.getElementById('chart').classList.remove('chart-visible');
+    document.getElementById('chart').classList.add('chart-hidden');
+
+    setTimeout(() => {
+      fetch(url)
+        .then(response => response.json())
+        .then(data => {
+          let config = {displayModeBar: false};
+          Plotly.newPlot('chart', data.data, data.layout, config);
+
+          setTimeout(() => {
+            document.getElementById('chart').classList.remove('chart-hidden');
+            document.getElementById('chart').classList.add('chart-visible');
+          }, delay);
+        })
+        .catch(error => console.error('Error:', error));
+    }, delay); 
+  }
+  document.querySelector('select[name="category:type"]').addEventListener('change', chart);
+  document.querySelector('input[name="month"]').addEventListener('change', chart);
+
+  document.querySelector('input[name="month"]').value = `${new Date().getFullYear()}-${(new Date().getMonth() + 1).toString().padStart(2, '0')}`;
+  chart();
+</script>
+{% endblock %}

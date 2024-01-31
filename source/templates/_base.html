@@ -33,7 +33,7 @@
     
     <div class="sidenav">
         <div class="button" onclick="closeSide()">&times;</div>
-        <a class ="item" href="{{ url_for('main.home') }}">Home</a>
+        <a class ="item" href="{{ url_for('home.index') }}">Home</a>
         {% for category in options %}
         <div class="sep">{{ category|capitalize }}</div>
         {% for type in options[category] %}

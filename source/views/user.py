@@ -1,8 +1,8 @@
 from .. import *
 
-user = Blueprint('user', __name__)
+user = App.blueprint(__name__, __file__)
 
-@user.route('/user/settings', methods=['GET', 'POST'])
+@user.route('/settings', methods=['GET', 'POST'])
 @App.login_required
 def settings():
     if request.method == 'POST':
@@ -12,4 +12,4 @@ def settings():
         else:
             flash(error)
 
-    return render_template('user/settings.html')
+    return render_template('settings.html')
