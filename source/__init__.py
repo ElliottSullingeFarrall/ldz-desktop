@@ -1,6 +1,6 @@
 from flask import Flask, Blueprint, current_app, flash, redirect, url_for, render_template, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
-from flask_login import UserMixin, LoginManager, login_user, logout_user, login_required, current_user
+from flask_login import UserMixin, LoginManager, login_user, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from pandas import DataFrame, Series, read_sql, read_csv, concat, to_datetime
@@ -8,6 +8,7 @@ from pandas.errors import EmptyDataError
 
 from datetime import datetime
 from functools import wraps
+from importlib import import_module
 from pathlib import Path
 from shutil import rmtree
 
@@ -15,17 +16,9 @@ import logging
 
 db = SQLAlchemy()
 
-# -------------------------------- Decorators -------------------------------- #
-
-def admin_required(f):
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        if not current_user.admin:
-            return 
-        return f(*args, **kwargs)
-    return decorated_function
-
-# ---------------------------------- Classes --------------------------------- #
+# ---------------------------------------------------------------------------- #
+#                                  Data Class                                  #
+# ---------------------------------------------------------------------------- #
 
 class Data:
     categories = [dir for dir in Path('source/templates/data').iterdir() if dir.is_dir()]
@@ -70,6 +63,9 @@ class Data:
 
         return {key: value for key, value in data.items() if value != 0}
 
+# ---------------------------------------------------------------------------- #
+#                                  User Model                                  #
+# ---------------------------------------------------------------------------- #
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -152,55 +148,87 @@ class User(UserMixin, db.Model):
         else:
             return 'Passwords do not match!'
 
-# --------------------------------- Flask App -------------------------------- #
+# ---------------------------------------------------------------------------- #
+#                                   Flask App                                  #
+# ---------------------------------------------------------------------------- #
+
+class App(Flask):
+    styles = [str(file.name) for file in Path('source/static').iterdir()]
+
+    def __init__(self):
+        super().__init__(__name__)
+
+        # ---------------------------------- Config ---------------------------------- #
+
+        self.config['SECRET_KEY'] = 'secret-key-goes-here'
+        self.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{self.root_path}/../data/users.sqlite'
+
+        logging.getLogger().setLevel(logging.DEBUG)
+
+        # --------------------------------- Database --------------------------------- #
+
+        db.init_app(self)
+        with self.app_context():
+            db.create_all()
+            # Create default user for empty db
+            if not User.query.count():
+                default = User(username='default', password=generate_password_hash('default'), admin=True)
+                db.session.add(default)
+                db.session.commit()
+
+        # ----------------------------------- Login ---------------------------------- #
+
+        login_manager = LoginManager()
+        login_manager.login_view = 'auth.login'
+        login_manager.init_app(self)
+        @login_manager.user_loader
+        def load_user(user_id):
+            return User.query.get(int(user_id))
+        
+        # -------------------------------- Environment ------------------------------- #
+    
+        @self.context_processor
+        def global_vars():
+            return {'styles' : self.styles, 'options' : Data.options}
+
+        # ----------------------------------- Views ---------------------------------- #
+
+        for filepath in (Path(__file__).parent / 'views').glob('[!_]*.py'):
+            view = import_module(f'source.views.{filepath.stem}')
+            blueprint = next(filter(lambda obj: isinstance(obj, Blueprint), view.__dict__.values()), None)
+            self.register_blueprint(blueprint)
+        
+    def run(self):
+        super().run()
+
+    @classmethod
+    def login_required(cls, f):
+        @wraps(f)
+        def decorated_function(*args, **kwargs):
+            if not current_user.is_authenticated:
+                return redirect(url_for('auth.login')) 
+            return f(*args, **kwargs)
+        return decorated_function
+
+    @classmethod
+    def admin_required(cls, f):
+        @wraps(f)
+        def decorated_function(*args, **kwargs):
+            if not current_user.is_authenticated:
+                return redirect(url_for('auth.login')) 
+            if not current_user.admin:
+                return 
+            return f(*args, **kwargs)
+        return decorated_function
+
+# ---------------------------------------------------------------------------- #
+#                                    Factory                                   #
+# ---------------------------------------------------------------------------- #
 
 def create_app():
-    app = Flask(__name__)
-    app.config['SECRET_KEY'] = 'secret-key-goes-here'
-    app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{app.root_path}/../data/users.sqlite'
-
-    logging.getLogger().setLevel(logging.DEBUG)
-
-    db.init_app(app)
-    with app.app_context():
-        db.create_all()
-        # Create default user for empty db
-        if not User.query.count():
-            default = User(username='default', password=generate_password_hash('default'), admin=True)
-            db.session.add(default)
-            db.session.commit()
-
-    login_manager = LoginManager()
-    login_manager.login_view = 'auth.login'
-    login_manager.init_app(app)
-    @login_manager.user_loader
-    def load_user(user_id):
-        return User.query.get(int(user_id))
-    
-    @app.context_processor
-    def global_vars():
-        styles = [str(file.name) for file in Path('source/static').iterdir()]
-        return {'styles' : styles, 'options' : Data.options}
-
-    from .auth import auth as auth_blueprint
-    app.register_blueprint(auth_blueprint)
-
-    from .main import main as main_blueprint
-    app.register_blueprint(main_blueprint)
-
-    from .data import data as data_blueprint
-    app.register_blueprint(data_blueprint)
-
-    from .user import user as user_blueprint
-    app.register_blueprint(user_blueprint)
-
-    from .admin import admin as admin_blueprint
-    app.register_blueprint(admin_blueprint)
-
+    app = App()
     return app
 
-# ---------------------------------- Script ---------------------------------- #
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     app = create_app()
     app.run()

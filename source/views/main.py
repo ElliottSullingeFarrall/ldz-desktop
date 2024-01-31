@@ -1,4 +1,4 @@
-from . import *
+from .. import *
 
 main = Blueprint('main', __name__)
 
@@ -9,13 +9,13 @@ def service_worker():
 @main.route('/')
 @main.route('/index')
 @main.route('/home')
-@login_required
+@App.login_required
 def home():
     return render_template('home.html')
 
 @main.route('/get_charts', methods=['GET'])                       
 @main.route('/get_charts/<year>/<month>', methods=['GET'])
-@login_required
+@App.login_required
 def get_charts(year=None, month=None):
     charts = {}
     for category in Data.options:

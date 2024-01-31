@@ -1,9 +1,9 @@
-from . import *
+from .. import *
 
 user = Blueprint('user', __name__)
 
 @user.route('/user/settings', methods=['GET', 'POST'])
-@login_required
+@App.login_required
 def settings():
     if request.method == 'POST':
         error = User.change_password(request.form)

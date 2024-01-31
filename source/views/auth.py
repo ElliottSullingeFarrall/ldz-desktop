@@ -1,9 +1,10 @@
-from . import *
+from .. import *
 
 auth = Blueprint('auth', __name__)
 
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
+    logging.debug(current_user)
     if current_user:
         User.logout()
      

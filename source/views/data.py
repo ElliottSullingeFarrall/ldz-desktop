@@ -1,9 +1,9 @@
-from . import *
+from .. import *
 
 data = Blueprint('data', __name__)
 
 @data.route('/data/view/<category>/<type>', methods=['GET', 'POST'])
-@login_required
+@App.login_required
 def view(category, type):
     if request.method == 'POST':
         with Data(category, type) as data:
@@ -14,7 +14,7 @@ def view(category, type):
 
 @data.route('/data/edit/<category>/<type>')
 @data.route('/data/edit/<category>/<type>/<idx>')
-@login_required
+@App.login_required
 def edit(category, type, idx=None):
     with Data(category, type) as data:
         if idx:
