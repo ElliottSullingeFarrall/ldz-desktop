@@ -1,16 +1,89 @@
-.row {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(0, 1fr)); /* Adjust the minmax values as needed */
-  gap: 0.5em; /* Add some space around each item */
+form {
+  width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+
+  text-align: left;
+
+  border-radius: 5px;
+  background-color: var(--bg);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+
+  --bg: var(--text1);
+  --txt: var(--text1);
+  --submit-bg: var(--button_inactive);
+  --submit-active: var(--button_active);
+  --button-bg: var(--text2);
+  --button-active: var(--text3);
 }
 
-.row > div {
+form .row {
+  display: grid;
+
+  grid-template-columns: repeat(auto-fit, minmax( 0, 1fr) );
+  gap: 0.5em;
+}
+
+form .row > div {
   display: flex;
   flex-direction: column;
 }
 
-.row > div > select, .row > div > input {
-  width: 100%;
+form .row > div > input,
+form .row > div > select {
   box-sizing: border-box;
-  height: 40px; 
+  width: 100%;
+  height: 40px;
+}
+
+form .selector > div > label {
+  text-align: center;
+}
+
+form label {
+  display: block;
+
+  margin-bottom: 5px;
+}
+
+form input,
+form select {
+  width: 95%;
+  margin-bottom: 10px;
+  padding: 10px;
+
+  border: 1px solid;
+  border-radius: 5px;
+  background-color: #ffffff;
+}
+
+form input[type="button"],
+form input[type="submit"] {
+  width: 100px;
+  height: 40px;
+  padding: 10px 20px;
+
+  cursor: pointer;
+
+  color: var(--txt);
+  border: none;
+  border-radius: 5px;
+}
+
+form input[type="button"] {
+  background-color: var(--button-bg);
+}
+
+form input[type="submit"] {
+  background-color: var(--submit-bg);
+}
+
+form input[type="button"]:hover,
+form input[type="button"]:active {
+  background-color: var(--button-active);
+}
+
+form input[type="submit"]:hover,
+form input[type="submit"]:active {
+  background-color: var(--submit-active);
 }

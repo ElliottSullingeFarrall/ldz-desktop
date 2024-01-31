@@ -5,15 +5,15 @@
 <form method="POST" action="{{ url_for('main.data', category=category, type=type) }}">
     {% block form %}{% endblock %}
     <a>
-        <input type="submit" value="Submit">
-        </a>
-        
-        <a href="{{ url_for('main.edit', category=category, type=type) }}">
-        <input type="button" value="Edit">
-        </a>
+    <input value="Submit" type="submit">
+    </a>
+    
+    <a href="{{ url_for('main.edit', category=category, type=type) }}">
+    <input value="Edit" type="button">
+    </a>
 </form>
 
 <script>
-    document.getElementById('date').valueAsDate = new Date();
+    document.getElementsByName('Date')[0].valueAsDate = new Date();
 </script>
 {% endblock %}

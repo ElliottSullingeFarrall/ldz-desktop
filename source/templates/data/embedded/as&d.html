@@ -3,36 +3,36 @@
 {% block form %}
 <div class="row">
     <div>
-        <label for="date">Date:</label>
-        <input type="date" id="date" name="Date" required>
+        <label>Date:</label>
+        <input name="Date" type="date" required>
     </div>
 </div>
 <div class="row">
     <div>
-        <label for="session time">Session Time:</label>
-        <input type="number" id="session time" name="Session Time" min="0" step="0.25" required>
+        <label>Session Time:</label>
+        <input name="Session Time" type="number" min="0" step="0.25" required>
     </div>
     <div>
-        <label for="preparation time">Preparation Time:</label>
-        <input type="number" id="preparation time" name="Preparation Time" min="0" step="0.25" required>
-    </div>
-</div>
-<div class="row">
-    <div>
-        <label for="workshop name">Workshop Name:</label>
-        <input type="text" id="workshop name" name="Workshop Name" required>
+        <label>Preparation Time:</label>
+        <input name="Preparation Time" type="number" min="0" step="0.25" required>
     </div>
 </div>
 <div class="row">
     <div>
-        <label for="module">Module:</label>
-        <input type="text" id="module" name="Module" required>
+        <label>Workshop Name:</label>
+        <input name="Workshop Name" type="text" required>
     </div>
 </div>
 <div class="row">
     <div>
-        <label for="department">Department:</label>
-        <select id='department' name='Department' required>
+        <label>Module:</label>
+        <input name="Module" type="text" required>
+    </div>
+</div>
+<div class="row">
+    <div>
+        <label>Department:</label>
+        <select name="Department" required>
             <option style="display:none" disabled selected value></option>
             <option value="Unknown">Unknown</option>
             <option value="Careers">Careers</option>
@@ -63,8 +63,8 @@
         </select>
     </div>
     <div>
-        <label for="level">Level:</label>
-        <select id='level' name='Level' required>
+        <label>Level:</label>
+        <select name="Level" required>
             <option style="display:none" disabled selected value></option>
             <option value="Pre-Entry (SISC)">Pre-Entry (SISC)</option>
             <option value="Level 3 - Foundation">Level 3 - Foundation</option>
@@ -82,8 +82,8 @@
 </div>
 <div class="row">
     <div>
-        <label for="query 1">Query 1:</label>
-        <select id='query 1' name='Query 1' required>
+        <label>Query 1:</label>
+        <select name="Query 1" required>
             <option style="display:none" disabled selected value></option>
             <option value="Assessment: Annotated bibliography">Assessment: Annotated bibliography</option>
             <option value="Assessment: Research proposal">Assessment: Research proposal</option>
@@ -117,53 +117,53 @@
         </select>
     </div>
    <div>
-        <label for="query 2">Query 2:</label>
-        <select id='query 2' name='Query 2' required>
-        <option value="N/A">N/A</option>
-        <option value="Assessment: Annotated bibliography">Assessment: Annotated bibliography</option>
-        <option value="Assessment: Research proposal">Assessment: Research proposal</option>
-        <option value="Assessment: Critical Article review">Assessment: Critical Article review</option>
-        <option value="Assessment: Presentations, Posters and digital assessment (videos etc.)">Assessment: Presentations, Posters and digital assessment (videos etc.)</option>
-        <option value="Assessment: Reflective writing">Assessment: Reflective writing</option>
-        <option value="Assessment: Writing (reports, essays, etc.), incl. structure, paraphrasing, linking, clarity, concision, citation)">Assessment: Writing (reports, essays, etc.), incl. structure, paraphrasing, linking, clarity, concision, citation)</option>
-        <option value="Assessment: Writing a literature review">Assessment: Writing a literature review</option>
-        <option value="Assessment process/task: Assignment planning">Assessment process/task: Assignment planning</option>
-        <option value="Assessment process/task: Choosing topic/finding focus (dissertations)">Assessment process/task: Choosing topic/finding focus (dissertations)</option>
-        <option value="Assessment process/task: Interpreting criteria">Assessment process/task: Interpreting criteria</option>
-        <option value="Assessment process/task: Interpreting feedback">Assessment process/task: Interpreting feedback</option>
-        <option value="Assessment process/task: Interpreting Turnitin reports">Assessment process/task: Interpreting Turnitin reports</option>
-        <option value="Assessment process/task: Literature surveys and systematic reviews">Assessment process/task: Literature surveys and systematic reviews</option>
-        <option value="Assessment process/task: Referencing">Assessment process/task: Referencing</option>
-        <option value="Assessment process/task: Search strategies/identifying literature">Assessment process/task: Search strategies/identifying literature</option>
-        <option value="Assessment process/task: Sourcing and selecting evidence">Assessment process/task: Sourcing and selecting evidence</option>
-        <option value="Academic Skills: Academic integrity referral">Academic Skills: Academic integrity referral</option>
-        <option value="Academic Skills: Group or teamworking, peer-based learning">Academic Skills: Group or teamworking, peer-based learning</option>
-        <option value="Academic Skills: Planning and organising time">Academic Skills: Planning and organising time</option>
-        <option value="Academic Skills: Reading and note-making strategies">Academic Skills: Reading and note-making strategies</option>
-        <option value="Academic Skills: Using referencing software">Academic Skills: Using referencing software</option>
-        <option value="Academic Skills: Research design / methods/ology">Academic Skills: Research design / methods/ology</option>
-        <option value="Academic Skills: Revision and exam strategies">Academic Skills: Revision and exam strategies</option>
-        <option value="Critical thinking: Analysis/Writing (synthesis, evaluation, argument, position, voice)">Critical thinking: Analysis/Writing (synthesis, evaluation, argument, position, voice)</option>
-        <option value="Critical thinking: Evaluating information/engaging with literature">Critical thinking: Evaluating information/engaging with literature</option>
-        <option value="Critical thinking: Using evaluative judgement (making sense, making meaning)">Critical thinking: Using evaluative judgement (making sense, making meaning)</option>
-        <option value="Learning journey: Service introduction for new students">Learning journey: Service introduction for new students</option>
-        <option value="Learning journey: Transition between years/PTY/professional statements or applications">Learning journey: Transition between years/PTY/professional statements or applications</option>
-        <option value="Learning journey: Transition to university/UK academic setting">Learning journey: Transition to university/UK academic setting</option>
+        <label>Query 2:</label>
+        <select name="Query 2" required>
+            <option value="N/A">N/A</option>
+            <option value="Assessment: Annotated bibliography">Assessment: Annotated bibliography</option>
+            <option value="Assessment: Research proposal">Assessment: Research proposal</option>
+            <option value="Assessment: Critical Article review">Assessment: Critical Article review</option>
+            <option value="Assessment: Presentations, Posters and digital assessment (videos etc.)">Assessment: Presentations, Posters and digital assessment (videos etc.)</option>
+            <option value="Assessment: Reflective writing">Assessment: Reflective writing</option>
+            <option value="Assessment: Writing (reports, essays, etc.), incl. structure, paraphrasing, linking, clarity, concision, citation)">Assessment: Writing (reports, essays, etc.), incl. structure, paraphrasing, linking, clarity, concision, citation)</option>
+            <option value="Assessment: Writing a literature review">Assessment: Writing a literature review</option>
+            <option value="Assessment process/task: Assignment planning">Assessment process/task: Assignment planning</option>
+            <option value="Assessment process/task: Choosing topic/finding focus (dissertations)">Assessment process/task: Choosing topic/finding focus (dissertations)</option>
+            <option value="Assessment process/task: Interpreting criteria">Assessment process/task: Interpreting criteria</option>
+            <option value="Assessment process/task: Interpreting feedback">Assessment process/task: Interpreting feedback</option>
+            <option value="Assessment process/task: Interpreting Turnitin reports">Assessment process/task: Interpreting Turnitin reports</option>
+            <option value="Assessment process/task: Literature surveys and systematic reviews">Assessment process/task: Literature surveys and systematic reviews</option>
+            <option value="Assessment process/task: Referencing">Assessment process/task: Referencing</option>
+            <option value="Assessment process/task: Search strategies/identifying literature">Assessment process/task: Search strategies/identifying literature</option>
+            <option value="Assessment process/task: Sourcing and selecting evidence">Assessment process/task: Sourcing and selecting evidence</option>
+            <option value="Academic Skills: Academic integrity referral">Academic Skills: Academic integrity referral</option>
+            <option value="Academic Skills: Group or teamworking, peer-based learning">Academic Skills: Group or teamworking, peer-based learning</option>
+            <option value="Academic Skills: Planning and organising time">Academic Skills: Planning and organising time</option>
+            <option value="Academic Skills: Reading and note-making strategies">Academic Skills: Reading and note-making strategies</option>
+            <option value="Academic Skills: Using referencing software">Academic Skills: Using referencing software</option>
+            <option value="Academic Skills: Research design / methods/ology">Academic Skills: Research design / methods/ology</option>
+            <option value="Academic Skills: Revision and exam strategies">Academic Skills: Revision and exam strategies</option>
+            <option value="Critical thinking: Analysis/Writing (synthesis, evaluation, argument, position, voice)">Critical thinking: Analysis/Writing (synthesis, evaluation, argument, position, voice)</option>
+            <option value="Critical thinking: Evaluating information/engaging with literature">Critical thinking: Evaluating information/engaging with literature</option>
+            <option value="Critical thinking: Using evaluative judgement (making sense, making meaning)">Critical thinking: Using evaluative judgement (making sense, making meaning)</option>
+            <option value="Learning journey: Service introduction for new students">Learning journey: Service introduction for new students</option>
+            <option value="Learning journey: Transition between years/PTY/professional statements or applications">Learning journey: Transition between years/PTY/professional statements or applications</option>
+            <option value="Learning journey: Transition to university/UK academic setting">Learning journey: Transition to university/UK academic setting</option>
         </select>
    </div>
 </div>
 <div class="row">
     <div>
-        <label for="format">Format:</label>
-        <select id='format' name='Format' required>
+        <label>Format:</label>
+        <select name="Format" required>
             <option style="display:none" disabled selected value></option>
             <option value="In Person">In Person</option>
             <option value="Online">Online</option>
         </select>
     </div>
     <div>
-        <label for="location">Location:</label>
-        <select id='location' name='Location' required>
+        <label>Location:</label>
+        <select name="Location" required>
             <option style="display:none" disabled selected value></option>
             <option value="Stag Hill">Stag Hill</option>
             <option value="Manor Park">Manor Park</option>
@@ -173,32 +173,32 @@
     </div> 
 </div>
 <a>Staff:</a>
-<div class="row">
+<div class="row selector">
     <div>
-        <label for="lda" style="text-align: center">LDA</label>
-        <input type="checkbox" id='lda' name='LDA'>
+        <label>LDA</label>
+        <input name="LDA" type="checkbox" >
     </div>
     <div>
-        <label for="ldl" style="text-align: center">LDL</label>
-        <input type="checkbox" id='ldl' name='LDL'>
+        <label>LDL</label>
+        <input name="LDL" type="checkbox">
     </div>
     <div>
-        <label for="masa" style="text-align: center">MASA</label>
-        <input type="checkbox" id='masa' name='MASA'>
+        <label>MASA</label>
+        <input name="MASA" type="checkbox"> 
     </div>
     <div>
-        <label for="fy" style="text-align: center">FY</label>
-        <input type="checkbox" id='fy' name='FY'>
+        <label>FY</label>
+        <input name="FY" type="checkbox">
     </div>
     <div>
-        <label for="acad" style="text-align: center">Acad</label>
-        <input type="checkbox" id='acad' name='Acad'>
+        <label>Acad</label>
+        <input name="Acad" type="checkbox">
     </div>   
 </div>
 <div class="row">
     <div>
-        <label for="type">Type:</label>
-        <select id='type' name='Type' required>
+        <label>Type:</label>
+        <select name="Type" required>
             <option style="display:none" disabled selected value></option>
             <option value="Department - synchronous taught">Department - synchronous taught</option>
             <option value="Department - synchronous Q+A">Department - synchronous Q+A</option>
@@ -209,8 +209,8 @@
         </select>
     </div>
     <div>
-        <label for="contextualisation">Contextualisation:</label>
-        <select id='contextualisation' name='Contextualisation' required>
+        <label>Contextualisation:</label>
+        <select name="Contextualisation" required>
             <option style="display:none" disabled selected value></option>
             <option value="None">None</option>
             <option value="Minimal">Minimal</option>
@@ -219,8 +219,8 @@
         </select>
     </div>
     <div>
-        <label for="assessment">Assessment:</label>
-        <select id='assessment' name='Assessment' required>
+        <label>Assessment:</label>
+        <select name="Assessment" required>
             <option style="display:none" disabled selected value></option>
             <option value="No">No</option>
             <option value="Partially">Partially</option>
@@ -231,8 +231,8 @@
 </div>
 <div class="row">
     <div>
-        <label for="resources">Resources:</label>
-        <select id='resources' name='Resources' required>
+        <label>Resources:</label>
+        <select name="Resources" required>
             <option value="N/A">N/A</option>
             <option value="Not applicable to other workshops">Not applicable to other workshops</option>
             <option value="Is applicable to other workshops">Is applicable to other workshops</option>
@@ -241,12 +241,12 @@
 </div>
 <div class="row">
     <div>
-        <label for="students expected">Students Expected:</label>
-        <input type="number" id="students expected" name="Students Expected" min="0" required>
+        <label>Students Expected:</label>
+        <input name="Students Expected" type="number" min="0" required>
     </div>
     <div>
-        <label for="students arrived">Students Arrived:</label>
-        <input type="number" id="students arrived" name="Students Arrived" min="0" required>
+        <label>Students Arrived:</label>
+        <input name="Students Arrived" type="number" min="0" required>
     </div> 
 </div>
 {% endblock %}

@@ -9,23 +9,23 @@
 </head>
 <body>
     <h1>Login Page</h1>
-    <form method="POST" action="/login">
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" required><br>
+    <form method="POST" action="{{ url_for('auth.login') }}">
+        <label>Username:</label>
+        <input name="username" type="text" required><br>
 
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required><br>
+        <label>Password:</label>
+        <input name="password" type="password" required><br>
 
-        <input type="submit" value="Login">
+        <input value="Login" type="submit">
     </form>
     {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            <ul class=flashes>
-            {% for message in messages %}
-                <li>{{ message }}</li>
-            {% endfor %}
-            </ul>
-        {% endif %}
+    {% if messages %}
+    <ul class=flashes>
+    {% for message in messages %}
+        <li>{{ message }}</li>
+    {% endfor %}
+    </ul>
+    {% endif %}
     {% endwith %}
 </body>
 </html>

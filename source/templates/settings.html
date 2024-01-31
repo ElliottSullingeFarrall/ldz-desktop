@@ -3,24 +3,24 @@
 {% block main %}
 <h1>Change Password</h1>
 <form method="POST" action="{{ url_for('main.settings') }}">
-    <label for="password_old">Old Password:</label>
-    <input type="password" id="password_old" name="password_old" required><br>
+    <label>Old Password:</label>
+    <input name="password_old" type="password" required><br>
 
-    <label for="password_new">New Password:</label>
-    <input type="password" id="password_new" name="password_new" required><br>
+    <label>New Password:</label>
+    <input name="password_new" type="password" required><br>
 
-    <label for="password_check">Confirm Password:</label>
-    <input type="password" id="password_check" name="password_check" required><br>
+    <label>Confirm Password:</label>
+    <input name="password_check" type="password" required><br>
 
-    <input type="submit" value="Change">
+    <input value="Change" type="submit">
 </form>
 {% with messages = get_flashed_messages() %}
-    {% if messages %}
-        <ul class=flashes>
-        {% for message in messages %}
-            <li>{{ message }}</li>
-        {% endfor %}
-        </ul>
-    {% endif %}
+{% if messages %}
+<ul class=flashes>
+{% for message in messages %}
+    <li>{{ message }}</li>
+{% endfor %}
+</ul>
+{% endif %}
 {% endwith %}
 {% endblock %}

@@ -3,22 +3,22 @@
 {% block form %}
 <div class="row">
     <div>
-        <label for="date">Date:</label>
-        <input type="date" id="date" name="Date" required>
+        <label>Date:</label>
+        <input name="Date" type="date" required>
     </div>
     <div>
-        <label for="in">Start Time:</label>
-        <input type="time" id="in" name="In" required>
+        <label>Start Time:</label>
+        <input name="In" type="time" required>
     </div>
     <div>
-        <label for="out">End Time:</label>
-        <input type="time" id="out" name="Out" required>
+        <label>End Time:</label>
+        <input name="Out" type="time" required>
     </div>
 </div>
 <div class="row">
     <div>
-        <label for="department">Department:</label>
-        <select id='department' name='Department' list="departments" required>
+        <label>Department:</label>
+        <select name="Department" required>
             <option style="display:none" disabled selected value></option>
             <option value="Unknown">Unknown</option>
             <option value="Careers">Careers</option>
@@ -49,8 +49,8 @@
         </select>
     </div>
     <div>
-        <label for="level">Level:</label>
-        <select id='level' name='Level' list="levels" required>
+        <label>Level:</label>
+        <select name="Level" required>
             <option style="display:none" disabled selected value></option>
             <option value="Pre-Entry (SISC)">Pre-Entry (SISC)</option>
             <option value="Level 3 - Foundation">Level 3 - Foundation</option>
@@ -68,8 +68,8 @@
 </div>
 <div class="row">
     <div>
-        <label for="query 1">Query 1:</label>
-        <select id='query 1' name='Query 1' required>
+        <label>Query 1:</label>
+        <select name="Query 1" required>
             <option style="display:none" disabled selected value></option>
             <option value="Assessment: Annotated bibliography">Assessment: Annotated bibliography</option>
             <option value="Assessment: Research proposal">Assessment: Research proposal</option>
@@ -103,8 +103,8 @@
         </select>
     </div>
     <div>
-        <label for="query 2">Query 2:</label>
-        <select id='query 2' name='Query 2' required>
+        <label>Query 2:</label>
+        <select name="Query 2" required>
             <option value="N/A">N/A</option>
             <option value="Assessment: Annotated bibliography">Assessment: Annotated bibliography</option>
             <option value="Assessment: Research proposal">Assessment: Research proposal</option>
@@ -140,16 +140,16 @@
 </div>
 <div class="row">
     <div>
-        <label for="format">Format:</label>
-        <select id='format' name='Format' required>
+        <label>Format:</label>
+        <select name="Format" required>
             <option style="display:none" disabled selected value></option>
             <option value="In Person">In Person</option>
             <option value="Online">Online</option>
         </select>
     </div>
     <div>
-        <label for="location">Location:</label>
-        <select id='location' name='Location' required>
+        <label>Location:</label>
+        <select name="Location" required>
             <option style="display:none" disabled selected value></option>
             <option value="Stag Hill">Stag Hill</option>
             <option value="Manor Park">Manor Park</option>
@@ -160,8 +160,8 @@
 </div>
 <div class="row">
     <div>
-        <label for="status">Appointment Status:</label>
-        <select id="status" name="Appointment Status" required>
+        <label>Appointment Status:</label>
+        <select name="Appointment Status" required>
             <option value="N/A">N/A</option>
             <option value="Attended">Attended</option>
             <option value="No Show">No Show</option>
@@ -171,12 +171,12 @@
 </div>
 <div class="row">
     <div>
-        <label for="students">No. of Students:</label>
-        <input type="number" id="students" name='Students' min="1" value="1" required>
+        <label>No. of Students:</label>
+        <input name="Students" type="number" min="1" value="1" required>
     </div>
     <div>
-        <label for="project">Project:</label>
-        <input type="checkbox" id='project' name='Project'>
+        <label>Project:</label>
+        <input name="Project" type="checkbox">
     </div>
 </div>
 {% endblock %}

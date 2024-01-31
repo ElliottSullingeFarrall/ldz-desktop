@@ -2,6 +2,10 @@ from . import *
 
 main = Blueprint('main', __name__)
 
+@main.route('/sw.js')
+def service_worker():
+    return ('', 204)
+
 @main.route('/')
 @main.route('/index')
 @main.route('/home')
