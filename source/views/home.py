@@ -7,10 +7,12 @@ home = App.blueprint(__name__, __file__)
 def index():
     return render_template('index.html')
 
-@home.route('/chart', methods=['GET'])                       
-@home.route('/chart/<category>/<type>/<month>', methods=['GET'])
+@home.route('/charts', methods=['GET'])                       
+@home.route('/charts/<category>/<type>/<month>', methods=['GET'])
 @App.login_required
-def chart(category=None, type=None, month=None):
+def charts(category=None, type=None, month=None):
+    charts = []
+
     with Data(category, type) as data:
         chart_data = data.summarise_month(month, 'Query 1')
 
@@ -21,7 +23,6 @@ def chart(category=None, type=None, month=None):
         'hoverinfo': 'label'
     }
     layout = {
-        'title': f'{category.capitalize()} {type.upper()}',
         'paper_bgcolor': 'transparent',
         'height': 500,
         'width': 500,
@@ -29,6 +30,7 @@ def chart(category=None, type=None, month=None):
         'margin': {'l': 10, 'r': 10, 't': 30, 'b': 10}
     }
 
-    chart = {'data': [trace], 'layout': layout}
-    return jsonify(chart)
+    charts.append({'data': [trace], 'layout': layout})
+    
+    return jsonify(charts)
 

@@ -1,4 +1,4 @@
-from flask import Flask, Blueprint, current_app, flash, redirect, url_for, render_template, request, jsonify
+from flask import Flask, Blueprint, Response, current_app, flash, redirect, url_for, render_template, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin, LoginManager, login_user, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -46,6 +46,30 @@ class Data:
         self.df = concat([DataFrame(row, index=[0]), self.df], ignore_index=True)
     def remove(self, idx):
         self.df = self.df.drop(idx)
+
+    @classmethod
+    def pull(cls, form):
+        dt = datetime.strptime(form.get('month'), '%Y-%m')
+        category, type = form.get('category:type').split(':')
+        users = form.getlist('users')
+
+        df_list = []
+        for user in users:
+            path = Path('data') / Path(user) / Path(category) / Path(type).with_suffix('.csv')
+            if path.exists():
+                try:
+                    df = read_csv(path, index_col=False)
+                except EmptyDataError:
+                    continue
+            else:
+                continue
+
+            df['Date'] = to_datetime(df['Date'])
+            df = df.loc[(df['Date'].dt.month == dt.month) & (df['Date'].dt.year == dt.year)]
+
+            df_list.append(df)
+
+        return concat(df_list)
 
     def summarise_month(self, month, col, n=5):
         dt = datetime.strptime(month, '%Y-%m')
@@ -98,6 +122,11 @@ class User(UserMixin, db.Model):
         return
     
     @classmethod
+    def list(cls):
+        users = [user.username for user in cls.query.all()]
+        return users
+
+    @classmethod
     def get(cls, idx):
         table = read_sql(cls.query.statement, db.engine)
         user = cls.query.filter_by(username=table.at[idx, 'username']).first()
@@ -131,7 +160,8 @@ class User(UserMixin, db.Model):
         db.session.delete(user)
         db.session.commit()
 
-        rmtree(Path('data') / Path(user.username))
+        if (Path('data') / Path(user.username)).exists():
+            rmtree(Path('data') / Path(user.username))
 
     @classmethod
     def reset_password(cls, idx, form):
@@ -210,8 +240,8 @@ class App(Flask):
         super().run()
 
     @classmethod
-    def blueprint(cls, __name__, __file__):
-        return Blueprint(Path(__file__).stem, __name__, template_folder=f'../templates/{Path(__file__).stem}')
+    def blueprint(cls, name, file):
+        return Blueprint(Path(file).stem, name, template_folder=f'../templates/{Path(file).stem}')
 
     @classmethod
     def login_required(cls, f):

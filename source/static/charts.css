@@ -1,5 +1,5 @@
-.chart-select input,
-.chart-select select {
+.charts .select input,
+.charts .select select {
     float: right;
 
     margin: 5px;
@@ -10,7 +10,7 @@
     background-color: #ffffff;
 }
 
-#chart {
+.charts .chart {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -23,10 +23,6 @@
     aspect-ratio: 1;
 }
 
-.chart-visible {
-    opacity: 1;
-}
-
-.chart-hidden {
+.charts .hide {
     opacity: 0;
 }

@@ -49,12 +49,8 @@ def user_remove(idx=None):
 @admin.route('/data', methods=['GET', 'POST'])
 @App.admin_required
 def data():
-    #TODO Implement download method
     if request.method == 'POST':
-        error = Data.download(request.form)
-        if not error:
-            return redirect(url_for('.data'))
-        else:
-            flash(error)
+        df = Data.pull(request.form)
+        return Response(df.to_csv(index=False), mimetype='text/csv', headers={'Content-Disposition': 'attachment;filename=data.csv'})
 
-    return render_template('data.html')
+    return render_template('data.html', users=User.list())

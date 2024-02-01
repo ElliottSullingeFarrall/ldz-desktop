@@ -1,0 +1,51 @@
+{% extends "_base.html" %}
+
+{% block body %}
+<div class="topnav">
+    <div id="group_left">
+        <div class="button" onclick="openSide()">&#9776;</div>
+    </div>
+    <div id="group_right">
+        {% if current_user.admin %}
+        <div class="menu">
+            <div class="button">admin &#8964;</div>
+            <div class="content">
+                <a class="item" href="{{ url_for('admin.data') }}">data</a>
+                <a class="item" href="{{ url_for('admin.user_view') }}">users</a>
+            </div>
+        </div>
+        {% endif %}
+        <div class="menu">
+            <div class="button">{{ current_user.username }} &#8964;</div>
+            <div class="content">
+                <a class="item" href="{{ url_for('user.settings') }}">settings</a>
+                <a class="item" href="{{ url_for('auth.login') }}">logout</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="sidenav">
+    <div class="button" onclick="closeSide()">&times;</div>
+    <a class ="item" href="{{ url_for('home.index') }}">Home</a>
+    {% for category in options %}
+    <div class="sep">{{ category|capitalize }}</div>
+    {% for type in options[category] %}
+    <a class="item" href="{{ url_for('data.view', category=category, type=type) }}">{{ type|upper }}</a>
+    {% endfor %}
+    {% endfor %}
+</div>
+
+<div id="main">
+    {% block main %}{% endblock %}
+</div>
+
+<script>
+    function openSide() {
+        document.getElementsByClassName("sidenav")[0].style.width = "200px";
+    }
+    function closeSide() {
+        document.getElementsByClassName("sidenav")[0].style.width = "0";
+    }
+</script>
+{% endblock %}

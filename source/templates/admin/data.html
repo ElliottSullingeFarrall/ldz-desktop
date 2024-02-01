@@ -1,0 +1,55 @@
+{% extends "_layout.html" %}
+
+{% block main %}
+<h1>Download Data</h1>
+<form method="POST" action="{{ url_for('admin.data') }}" onsubmit="redirect()">
+    <div class="row">
+        <div>
+            <label>Month:</label>
+            <input name="month" type="month" required>
+        </div>
+        <div>
+            <label>Type:</label>
+            <select name="category:type" required>
+            {% for category in options %}
+                <optgroup label="{{ category|capitalize }}">
+                {% for type in options[category] %}
+                    <option value="{{ category }}:{{ type }}">{{ type|upper }}</option>
+                {% endfor %}
+                </optgroup>
+            {% endfor %}
+            </select>
+        </div>
+    </div>
+    <div class="row">
+        <div>
+            <label>Users:</label>
+            <select name="users" id="users" multiple required>
+            {% for user in users %}
+                <option value="{{ user }}">{{ user }}</option>
+            {% endfor %}
+            </select>
+        </div>
+    </div>
+
+    <input value="Download" type="submit">
+</form>
+
+<script>
+    function redirect() {
+        setTimeout(function() {
+            window.location.href = "{{ url_for('home.index') }}";
+        }, 25); // delay (ms)
+    }
+
+    $('#users').multiselect({
+        includeSelectAllOption: true,
+        selectAllText: 'Select All',
+        nonSelectedText: 'None selected',
+        nSelectedText: 'selected',
+        allSelectedText: 'All selected',
+    });
+
+    document.querySelector('input[name="month"]').value = `${new Date().getFullYear()}-${(new Date().getMonth() + 1).toString().padStart(2, '0')}`;
+</script>
+{% endblock %}

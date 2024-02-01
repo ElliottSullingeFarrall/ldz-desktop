@@ -87,3 +87,48 @@ form input[type="submit"]:hover,
 form input[type="submit"]:active {
   background-color: var(--submit-active);
 }
+
+/* ------------------------------ multi-select ------------------------------ */
+
+form .btn-group {
+  margin-bottom: 10px;
+}
+
+form .btn-group .multiselect {
+  width: 100%;
+  padding: 10px;
+
+  text-align: left;
+
+  border: 1px solid;
+  border-radius: 5px;
+  background-color: #ffffff;
+}
+
+form .btn-group .dropdown-menu {
+  display: none;
+
+  width: 100%;
+
+  border: 1px solid;
+  border-radius: 5px;
+  background-color: #ffffff;
+}
+
+form .btn-group.open .dropdown-menu {
+  display: block;
+}
+
+form .btn-group .multiselect-container li a label {
+  font-size: 0.9em;
+
+  vertical-align: middle;
+}
+
+form .btn-group .multiselect-container li a input[type="checkbox"] {
+  display: none;
+}
+
+form .btn-group .multiselect-container li:hover {
+  background-color: #099af2;
+}

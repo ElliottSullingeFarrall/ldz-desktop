@@ -1,16 +1,11 @@
-{% extends "_base.html" %}
+{% extends "_layout.html" %}
 
 {% block main %}
 <h1>{{ type|upper }} ({{ category|capitalize }})</h1>
 <form method="POST" action="{{ url_for('data.view', category=category, type=type) }}">
     {% block form %}{% endblock %}
-    <a>
     <input value="Submit" type="submit">
-    </a>
-    
-    <a href="{{ url_for('data.edit', category=category, type=type) }}">
-    <input value="Edit" type="button">
-    </a>
+    <input value="Edit" type="button" onclick="window.location=`{{ url_for('data.edit', category=category, type=type) }}`">
 </form>
 
 <script>

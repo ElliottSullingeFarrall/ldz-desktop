@@ -1,20 +1,20 @@
-{% extends "_base.html" %}
+{% extends "_layout.html" %}
 
 {% block main %}
 <table class="table">
     <thead>
         <tr>
-            {% for header in headers %}
+        {% for header in headers %}
             <th>{{  header  }}</th>
-            {% endfor %}
+        {% endfor %}
         </tr>
     </thead>
     <tbody>
         {% for row in table %}
         <tr onclick="edit(this)">
-            {% for entry in row %}
+        {% for entry in row %}
             <td>{{ entry }}</td>
-            {% endfor %}
+        {% endfor %}
         </tr>
         {% endfor %}
         <tr onclick="add()">
@@ -30,7 +30,7 @@
     }
     function edit(row) {
         idx = row.rowIndex - 1;
-        url = "{{ url_for('admin.user_edit', idx='') }}" + idx;
+        url = `{{ url_for('admin.user_edit', idx='') }}/${idx}`;
         window.location.replace(url);
     }
 </script>

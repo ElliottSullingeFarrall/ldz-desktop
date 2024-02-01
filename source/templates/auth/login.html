@@ -1,31 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>LDZ</title>
-    {% for style in styles %}
-    <link rel="stylesheet" href="{{ url_for('static', filename=style) }}">
-    {% endfor %}
-</head>
-<body>
-    <h1>Login Page</h1>
-    <form method="POST" action="{{ url_for('auth.login') }}">
-        <label>Username:</label>
-        <input name="username" type="text" required>
+{%extends "_base.html" %}
 
-        <label>Password:</label>
-        <input name="password" type="password" required>
+{% block body %}
+<h1>Login Page</h1>
+<form method="POST" action="{{ url_for('auth.login') }}">
+    <label>Username:</label>
+    <input name="username" type="text" required>
 
-        <input value="Login" type="submit">
-    </form>
-    {% with messages = get_flashed_messages() %}
-    {% if messages %}
-    <ul class="flash">
-        {% for message in messages %}
-        <li>{{ message }}</li>
-        {% endfor %}
-    </ul>
-    {% endif %}
-    {% endwith %}
-</body>
-</html>
+    <label>Password:</label>
+    <input name="password" type="password" required>
+
+    <input value="Login" type="submit">
+</form>
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+<ul class="flash">
+{% for message in messages %}
+    <li>{{ message }}</li>
+{% endfor %}
+</ul>
+{% endif %}
+{% endwith %}
+{% endblock %}

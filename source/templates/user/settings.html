@@ -1,4 +1,4 @@
-{% extends "_base.html" %}
+{% extends "_layout.html" %}
 
 {% block main %}
 <h1>Change Password</h1>
@@ -17,9 +17,9 @@
 {% with messages = get_flashed_messages() %}
 {% if messages %}
 <ul class="flash">
-    {% for message in messages %}
+{% for message in messages %}
     <li>{{ message }}</li>
-    {% endfor %}
+{% endfor %}
 </ul>
 {% endif %}
 {% endwith %}
