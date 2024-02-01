@@ -11,6 +11,7 @@ def index():
 @home.route('/charts/<category>/<type>/<month>', methods=['GET'])
 @App.login_required
 def charts(category=None, type=None, month=None):
+    #TODO Fix error for users with no data
     charts = []
 
     with Data(category, type) as data:
