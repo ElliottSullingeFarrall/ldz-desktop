@@ -153,7 +153,7 @@ class App(Flask):
                 logging.debug('Missing secret token')
                 abort(403)
 
-            expected_signature = 'sha1=' + hmac.new(secret_token, request.data, hashlib.sha1).hexdigest()
+            expected_signature = 'sha1=' + hmac.new(secret_token.encode(), request.data, hashlib.sha1).hexdigest()
             if not hmac.compare_digest(signature, expected_signature):
                 logging.debug('Signature check failed')
                 abort(403)
