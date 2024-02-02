@@ -164,7 +164,7 @@ class App(Flask):
                 return '', 200
             else:
                 return '', 400
-        # test
+
     def run(self):
         super().run()
 
