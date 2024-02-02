@@ -140,6 +140,20 @@ class App(Flask):
         @self.route('/index')
         def index():
             return redirect(url_for('home.index'))
+
+        @self.route('/pull', methods=['POST'])
+        def pull():
+            if request.method == 'POST':
+                repo = git.Repo('..')
+                origin = repo.remotes.origin
+                repo.create_head('master', origin.refs.master).set_tracking_branch(origin.refs.master).checkout()
+                origin.pull()
+
+                Path('path/to/file.txt').touch('/var/www/elliottsf_eu_pythonanywhere_com_wsgi.py')
+
+                return '', 200
+            else:
+                return '', 400
         
     def run(self):
         super().run()

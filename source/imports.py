@@ -12,4 +12,5 @@ from importlib import import_module
 from pathlib import Path
 from shutil import rmtree
 
+import git
 import logging
