@@ -144,7 +144,7 @@ class App(Flask):
         @self.route('/pull', methods=['POST'])
         def pull():
             if request.method == 'POST':
-                repo = git.Repo(f'{Path(self.root_path).parent}')
+                repo = git.Repo('./LDZ-Apps')
                 origin = repo.remotes.origin
                 repo.create_head('master', origin.refs.master).set_tracking_branch(origin.refs.master).checkout()
                 origin.pull()
