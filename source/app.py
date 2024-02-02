@@ -144,11 +144,13 @@ class App(Flask):
         @self.route('/pull', methods=['POST'])
         def pull():
             signature = request.headers.get('X-Hub-Signature')
-            if signature and request.data:
-                secret_token = self.config['GITHUB_SECRET_TOKEN']
-                expected_signature = 'sha1=' + hmac.new(secret_token, request.data, hashlib.sha1).hexdigest()
-                if not hmac.compare_digest(signature, expected_signature):
-                    abort(403)
+            if not signature or not request.data:
+                abort(403)
+
+            secret_token = self.config['GITHUB_SECRET_TOKEN']
+            expected_signature = 'sha1=' + hmac.new(secret_token, request.data, hashlib.sha1).hexdigest()
+            if not hmac.compare_digest(signature, expected_signature):
+                abort(403)
 
             if request.method == 'POST':
                 git.Repo('.').remotes.origin.pull()
