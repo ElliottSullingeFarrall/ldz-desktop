@@ -6,7 +6,5 @@ from app import *
 
 app = App()
 
-# test hook
-
 if __name__ == "__main__":
     app.run()
