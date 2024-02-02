@@ -33,6 +33,8 @@ class Data:
     def remove(self, idx):
         self.df = self.df.drop(idx)
 
+    #TODO Optimise these methods
+
     @classmethod
     def pull(cls, form):
         dt = datetime.strptime(form.get('month'), '%Y-%m')
@@ -55,20 +57,26 @@ class Data:
 
             df_list.append(df)
 
-        return concat(df_list)
+        if df_list:
+            return concat(df_list)
+        else:
+            return DataFrame()
 
     def summarise_month(self, month, col, n=5):
         dt = datetime.strptime(month, '%Y-%m')
 
-        df = self.df.copy()
-        df['Date'] = to_datetime(df['Date'])
-        df = df.loc[(df['Date'].dt.month == dt.month) & (df['Date'].dt.year == dt.year)]
-        
-        top = df[col].value_counts().nlargest(n)
-        bot = Series(df[col].value_counts().iloc[n:].sum(), index=['other'])
-        data = concat([top, bot])
+        if not self.df.empty:
+            df = self.df.copy()
+            df['Date'] = to_datetime(df['Date'])
+            df = df.loc[(df['Date'].dt.month == dt.month) & (df['Date'].dt.year == dt.year)]
+            
+            top = df[col].value_counts().nlargest(n)
+            bot = Series(df[col].value_counts().iloc[n:].sum(), index=['other'])
+            data = concat([top, bot])
 
-        return {key: value for key, value in data.items() if value != 0}
+            return {key: value for key, value in data.items() if value != 0}
+        else:
+            return {}
 
 # ---------------------------------------------------------------------------- #
 #                                   Flask App                                  #

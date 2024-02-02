@@ -39,7 +39,7 @@
     function redirect() {
         setTimeout(function() {
             window.location.href = "{{ url_for('home.index') }}";
-        }, 25); // delay (ms)
+        }, 50); // delay (ms) | Debug: > 25 | Deploy: > 50
     }
 
     $('#users').multiselect({
