@@ -3,5 +3,7 @@
 *.pyc
 __pycache__/
 
-data/*
+config.py
+
+data/
 *.log

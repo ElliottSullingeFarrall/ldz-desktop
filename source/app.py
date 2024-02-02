@@ -90,7 +90,7 @@ class App(Flask):
 
         # ---------------------------------- Config ---------------------------------- #
 
-        self.config['SECRET_KEY'] = 'a618991e36b41b738e21c8c68074179083fb82d0c489d7b57b2f4fb8a93bf8af'
+        self.config.from_pyfile(f'{Path(self.root_path).parent}/config.py')
         self.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{Path(self.root_path).parent}/data/users.sqlite'
 
         Path(f'{Path(self.root_path).parent}/data').mkdir(exist_ok=True)
@@ -104,7 +104,7 @@ class App(Flask):
             db.create_all()
             # Create default user for empty db
             if not User.query.count():
-                default = User(username='default', password=generate_password_hash('default'), admin=True)
+                default = User(username='default', password=generate_password_hash(self.config['SECRET_KEY']), admin=True)
                 db.session.add(default)
                 db.session.commit()
 
