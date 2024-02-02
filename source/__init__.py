@@ -6,8 +6,5 @@ from app import *
 
 app = App()
 
-import os
-logging.debug(os.getcwd())
-
 if __name__ == "__main__":
     app.run()

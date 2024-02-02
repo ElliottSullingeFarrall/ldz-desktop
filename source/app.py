@@ -146,7 +146,7 @@ class App(Flask):
             if request.method == 'POST':
                 repo = git.Repo('.')
                 origin = repo.remotes.origin
-                repo.create_head('master', origin.refs.master).set_tracking_branch(origin.refs.master).checkout()
+                # repo.create_head('master', origin.refs.master).set_tracking_branch(origin.refs.master).checkout()
                 origin.pull()
 
                 Path('/var/www/elliottsf_eu_pythonanywhere_com_wsgi.py').touch()
