@@ -145,11 +145,17 @@ class App(Flask):
         def pull():
             signature = request.headers.get('X-Hub-Signature')
             if not signature or not request.data:
+                logging.debug('Missing signature or request data')
                 abort(403)
 
             secret_token = self.config['GITHUB_SECRET_TOKEN']
+            if not secret_token:
+                logging.debug('Missing secret token')
+                abort(403)
+
             expected_signature = 'sha1=' + hmac.new(secret_token, request.data, hashlib.sha1).hexdigest()
             if not hmac.compare_digest(signature, expected_signature):
+                logging.debug('Signature check failed')
                 abort(403)
 
             if request.method == 'POST':
