@@ -149,7 +149,7 @@ class App(Flask):
                 repo.create_head('master', origin.refs.master).set_tracking_branch(origin.refs.master).checkout()
                 origin.pull()
 
-                Path('path/to/file.txt').touch('/var/www/elliottsf_eu_pythonanywhere_com_wsgi.py')
+                Path('/var/www/elliottsf_eu_pythonanywhere_com_wsgi.py').touch()
 
                 return '', 200
             else:
