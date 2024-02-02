@@ -143,14 +143,16 @@ class App(Flask):
 
         @self.route('/pull', methods=['POST'])
         def pull():
+            signature = request.headers.get('X-Hub-Signature')
+            if signature and request.data:
+                secret_token = self.config['GITHUB_SECRET_TOKEN']
+                expected_signature = 'sha1=' + hmac.new(secret_token, request.data, hashlib.sha1).hexdigest()
+                if not hmac.compare_digest(signature, expected_signature):
+                    abort(403)
+
             if request.method == 'POST':
-                repo = git.Repo('.')
-                origin = repo.remotes.origin
-                # repo.create_head('master', origin.refs.master).set_tracking_branch(origin.refs.master).checkout()
-                origin.pull()
-
+                git.Repo('.').remotes.origin.pull()
                 Path('/var/www/elliottsf_eu_pythonanywhere_com_wsgi.py').touch()
-
                 return '', 200
             else:
                 return '', 400
