@@ -4,7 +4,7 @@ let
         owner = "nix-community";
         repo = "poetry2nix";
         rev = "master";
-        sha256 = "sha256-puYyylgrBS4AFAHeyVRTjTUVD8DZdecJfymWJe7H438=";
+        sha256 = "sha256-5v8oizzm8iGl+6yTejn70CmWfR+JPGsbPdzUw2hd6gk=";
     }) {};
     pkg-build-requirements = {
         # Force dependencies here
