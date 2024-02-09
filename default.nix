@@ -3,7 +3,7 @@ let
     poetry2nix = import( pkgs.fetchFromGitHub {
         owner = "nix-community";
         repo = "poetry2nix";
-        rev = "master";
+        rev = "4eb2ac5";
         sha256 = "sha256-5v8oizzm8iGl+6yTejn70CmWfR+JPGsbPdzUw2hd6gk=";
     }) {};
     pkg-build-requirements = {
