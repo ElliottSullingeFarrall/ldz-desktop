@@ -1,4 +1,4 @@
-{ pkgs ? import <nixpkgs> {} }:
+{ pkgs }:
 let
     poetry2nix = import( pkgs.fetchFromGitHub {
         owner = "nix-community";
