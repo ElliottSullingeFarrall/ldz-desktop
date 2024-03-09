@@ -2,24 +2,32 @@
   description = "A Nix flake for the LDZ application.";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-23.11";
-    flake-utils.url = "github:numtide/flake-utils";
-    poetry2nix.url = "github:nix-community/poetry2nix";
+    nixpkgs = {
+      url = "github:NixOS/nixpkgs/nixos-23.11";
+    };
+    flake-utils = {
+      url = "github:numtide/flake-utils";
+    };
+    poetry2nix = {
+      url = "github:nix-community/poetry2nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = { self, nixpkgs, flake-utils, poetry2nix }:
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = nixpkgs.legacyPackages.${system};
-        poetry2nix = import poetry2nix { inherit pkgs; };
+        inherit (poetry2nix.lib.mkPoetry2Nix { inherit pkgs; }) mkPoetryApplication;
       in
       {
         packages = {
-          ldz = poetry2nix.mkPoetryApplication rec {
+          default = self.packages.${system}.ldz;
+          ldz = mkPoetryApplication rec {
             pname = "ldz";
             version = "v1.4";
 
-            projectDir = ./.;
+            projectDir = self;
             python = pkgs.python3Full;
             preferWheels = true;
             # overrides = poetry2nix.defaultPoetryOverrides.extend (self: super:
