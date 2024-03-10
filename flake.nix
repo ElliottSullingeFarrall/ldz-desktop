@@ -22,7 +22,7 @@
       in
       {
         packages = {
-          # default = self.packages.${system}.ldz;
+          default = self.packages.${system}.ldz;
           ldz = mkPoetryApplication rec {
             pname = "ldz";
             version = "v1.4";
