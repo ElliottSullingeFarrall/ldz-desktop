@@ -57,7 +57,9 @@
           inputsFrom = [ self.packages.${system}.ldz ];
           packages = [ pkgs.poetry ];
         };
-      }) // overlays.ldz = final: prev: {
-        ldz = self.packages.x86_64-linux.ldz;
+      }) // {
+        overlays.ldz = final: prev: {
+          ldz = self.packages.x86_64-linux.ldz;
+        };
       };
 }
