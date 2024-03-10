@@ -14,16 +14,17 @@
     };
   };
 
-  outputs = { self, nixpkgs, flake-utils, poetry2nix }:
+  outputs = { self, nixpkgs, flake-utils, poetry2nix }@inputs:
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = nixpkgs.legacyPackages.${system};
-        inherit (poetry2nix.lib.mkPoetry2Nix { inherit pkgs; }) mkPoetryApplication;
+        poetry2nix = inputs.poetry2nix.lib.mkPoetry2Nix { inherit pkgs;};
+        # inherit (poetry2nix.lib.mkPoetry2Nix { inherit pkgs; }) mkPoetryApplication;
       in
       {
         packages = {
           default = self.packages.${system}.ldz;
-          ldz = mkPoetryApplication rec {
+          ldz = poetry2nix.mkPoetryApplication rec {
             pname = "ldz";
             version = "v1.4";
 
