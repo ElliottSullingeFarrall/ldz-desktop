@@ -22,7 +22,7 @@
       in
       {
         packages = {
-          # default = self.packages.${system}.ldz;
+          default = self.packages.${system}.ldz;
           ldz = mkPoetryApplication rec {
             pname = "ldz";
             version = "v1.4";
@@ -57,11 +57,8 @@
           inputsFrom = [ self.packages.${system}.ldz ];
           packages = [ pkgs.poetry ];
         };
-        overlays.ldz = { 
-          (final: prev: {
+        overlays.ldz = final: prev: {
             ldz = self.packages.${system}.ldz;
-          });
-        };
-      }
-    )
+          };
+      });
 }
