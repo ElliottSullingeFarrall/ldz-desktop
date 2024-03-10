@@ -57,12 +57,11 @@
           inputsFrom = [ self.packages.${system}.ldz ];
           packages = [ pkgs.poetry ];
         };
+        overlays.ldz = { 
+          (final: prev: {
+            ldz = self.packages.${system}.ldz;
+          });
+        };
       }
-    ) // {
-      overlays.ldz = {
-        (_: _: {
-          ldz = self.packages.${system}.ldz;
-        })
-      };
-    };
+    )
 }
