@@ -14,10 +14,10 @@
     };
   };
 
-  outputs = { self, nixpkgs, flake-utils, poetry2nix }@inputs:
-    flake-utils.lib.eachDefaultSystem (system:
+  outputs = { self, ...}@inputs:
+    inputs.flake-utils.lib.eachDefaultSystem (system:
       let
-        pkgs = nixpkgs.legacyPackages.${system};
+        pkgs = inputs.nixpkgs.legacyPackages.${system};
         poetry2nix = inputs.poetry2nix.lib.mkPoetry2Nix { inherit pkgs;};
         # inherit (poetry2nix.lib.mkPoetry2Nix { inherit pkgs; }) mkPoetryApplication;
       in
