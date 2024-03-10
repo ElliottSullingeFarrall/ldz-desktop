@@ -21,7 +21,7 @@
         inherit (poetry2nix.lib.mkPoetry2Nix { inherit pkgs; }) mkPoetryApplication;
       in
       {
-        packages = {
+        legacyPackages = {
           # default = self.packages.${system}.ldz;
           ldz = mkPoetryApplication rec {
             pname = "ldz";
