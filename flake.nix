@@ -19,7 +19,6 @@
       let
         pkgs = inputs.nixpkgs.legacyPackages.${system};
         poetry2nix = inputs.poetry2nix.lib.mkPoetry2Nix { inherit pkgs;};
-        # inherit (poetry2nix.lib.mkPoetry2Nix { inherit pkgs; }) mkPoetryApplication;
       in
       {
         packages = {
@@ -28,7 +27,7 @@
             pname = "ldz";
             version = "v1.4";
 
-            projectDir = ./.;
+            projectDir = self;
             python = pkgs.python3Full;
             preferWheels = true;
             # overrides = poetry2nix.defaultPoetryOverrides.extend (self: super:
@@ -54,9 +53,23 @@
             '';
           };
         };
-        devShells.default = pkgs.mkShell {
-          inputsFrom = [ self.packages.${system}.ldz ];
-          packages = [ pkgs.poetry ];
+        devShells = {
+          default = self.devShells.${system}.ldz;
+          ldz = pkgs.mkShell {
+            inputsFrom = [ self.packages.${system}.ldz ];
+            packages = with pkgs; [ poetry python3Full ];
+
+            # LD_LIBRARY_PATH = "${pkgs.stdenv.cc.cc.lib}/lib";
+
+            POETRY_VIRTUALENVS_IN_PROJECT = true;
+            shellHook = ''
+              poetry env use $(which python)
+              poetry install
+            '';
+          };
+        overlay = final: prev: {
+          ldz = self.packages.${system}.ldz;
         };
-      });
+        };
+      })
 }
