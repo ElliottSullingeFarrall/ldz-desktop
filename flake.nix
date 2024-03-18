@@ -56,7 +56,7 @@
         devShells = {
           default = self.devShells.${system}.ldz;
           ldz = pkgs.mkShell {
-            # inputsFrom = [ self.packages.${system}.ldz ];
+            inputsFrom = [ self.packages.${system}.ldz ];
             packages = with pkgs; [ poetry python3Full ];
 
             # LD_LIBRARY_PATH = "${pkgs.stdenv.cc.cc.lib}/lib";
