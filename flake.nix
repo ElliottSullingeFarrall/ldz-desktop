@@ -20,7 +20,7 @@
         pkgs = inputs.nixpkgs.legacyPackages.${system};
         poetry2nix = inputs.poetry2nix.lib.mkPoetry2Nix { inherit pkgs;};
       in
-      {
+      rec {
         packages = rec {
           default = ldz;
           ldz = poetry2nix.mkPoetryApplication rec {
