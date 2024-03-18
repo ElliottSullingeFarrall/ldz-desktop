@@ -20,9 +20,9 @@
         pkgs = inputs.nixpkgs.legacyPackages.${system};
         poetry2nix = inputs.poetry2nix.lib.mkPoetry2Nix { inherit pkgs;};
       in
-      rec {
-        packages = rec {
-          default = ldz;
+      {
+        packages = {
+          default = self.packages.${system}.ldz;
           ldz = poetry2nix.mkPoetryApplication rec {
             pname = "ldz";
             version = "v1.4";
@@ -54,8 +54,9 @@
           };
         };
         devShells = {
-          default = pkgs.mkShell {
-            inputsFrom = [ ldz ];
+          default = self.devShells.${system}.ldz;
+          ldz = pkgs.mkShell {
+            inputsFrom = [ self.packages.${system}.ldz ];
             packages = with pkgs; [ poetry python3Full ];
 
             # LD_LIBRARY_PATH = "${pkgs.stdenv.cc.cc.lib}/lib";
