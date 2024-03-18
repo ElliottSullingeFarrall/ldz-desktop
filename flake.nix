@@ -15,7 +15,7 @@
   };
 
   outputs = { self, ...}@inputs:
-    (inputs.flake-utils.lib.eachDefaultSystem (system:
+    inputs.flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = inputs.nixpkgs.legacyPackages.${system};
         poetry2nix = inputs.poetry2nix.lib.mkPoetry2Nix { inherit pkgs;};
@@ -68,9 +68,8 @@
             '';
           };
         };
-      })) // {
-      overlay = final: prev: {
-        ldz = self.packages.${system}.ldz;
-      };
-    };
+        overlay = final: prev: {
+          ldz = self.packages.${system}.ldz;
+        };
+      });
 }
