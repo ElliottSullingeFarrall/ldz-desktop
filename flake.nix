@@ -27,7 +27,7 @@
             pname = "ldz";
             version = "v1.4";
 
-            projectDir = ./.;
+            projectDir = self;
             python = pkgs.python3Full;
             preferWheels = true;
             # overrides = poetry2nix.defaultPoetryOverrides.extend (self: super:
