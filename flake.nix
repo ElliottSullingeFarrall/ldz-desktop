@@ -53,9 +53,8 @@
             '';
           };
         };
-        devShells = rec {
-          default = ldz;
-          ldz = pkgs.mkShell {
+        devShells = {
+          default = pkgs.mkShell {
             inputsFrom = [ self.packages.${system}.ldz ];
             packages = with pkgs; [ poetry python3Full ];
 
