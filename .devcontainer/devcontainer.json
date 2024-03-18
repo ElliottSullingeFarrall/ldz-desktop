@@ -5,5 +5,14 @@
 	"build": {
 		"context": ".",
 		"dockerfile": "./Dockerfile"
-	}
+	},
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"formulahendry.code-runner",
+				"MichaelCurrin.auto-commit-msg"
+			]
+		}
+	},
+	"initializeCommand": "xhost +"
 }

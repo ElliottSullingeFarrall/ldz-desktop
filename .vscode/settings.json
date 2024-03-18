@@ -1,5 +1,5 @@
 {
     "code-runner.executorMap": {
-        "python": "poetry run ldz #"
+        "python": "poetry run ldz"
     }
 }
