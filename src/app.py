@@ -7,7 +7,7 @@ from db import *
 # ---------------------------------------------------------------------------- #
 
 class Data:
-    categories = [dir for dir in Path('source/templates/data').iterdir() if dir.is_dir()]
+    categories = [dir for dir in Path('src/templates/data').iterdir() if dir.is_dir()]
     options = {str(category.name) : [str(path.stem) for path in category.iterdir()] for category in categories}
 
     def __init__(self, category, type):
@@ -83,7 +83,7 @@ class Data:
 # ---------------------------------------------------------------------------- #
 
 class App(Flask):
-    styles = [str(file.name) for file in Path('source/static').iterdir()]
+    styles = [str(file.name) for file in Path('src/static').iterdir()]
 
     def __init__(self):
         super().__init__(__name__)
@@ -127,7 +127,7 @@ class App(Flask):
 
         for filepath in (Path(__file__).parent / 'views').glob('[!_]*.py'):
             name = filepath.stem
-            blueprint = import_module(f'source.views.{name}').__dict__[name]
+            blueprint = import_module(f'src.views.{name}').__dict__[name]
             self.register_blueprint(blueprint, url_prefix=f'/{name}')
 
         # ---------------------------------- Routes ---------------------------------- #
