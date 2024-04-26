@@ -1,0 +1,172 @@
+{% extends "data/_form.html" %}
+
+{% block form %}
+<div class="row">
+    <div>
+        <label>Date:</label>
+        <input name="Date" type="date" required>
+    </div>
+    <div>
+        <label>Start Time:</label>
+        <input name="In" type="time" required>
+    </div>
+    <div>
+        <label>End Time:</label>
+        <input name="Out" type="time" required>
+    </div> 
+</div>
+<div class="row">
+    <div>
+        <label>Department:</label>
+        <select name="Department" required>
+            <option style="display:none" disabled selected value></option>
+            <option value="Unknown">Unknown</option>
+            <option value="Careers">Careers</option>
+            <option value="Biosciences and Medicine">Biosciences and Medicine</option>
+            <option value="Business School">Business School</option>
+            <option value="Centre for Environment and Sustainability">Centre for Environment and Sustainability</option>
+            <option value="Chemical and Process Engineering">Chemical and Process Engineering</option>
+            <option value="Chemistry">Chemistry</option>
+            <option value="Civil and Environmental Engineering">Civil and Environmental Engineering</option>
+            <option value="Computer Science">Computer Science</option>
+            <option value="Economics">Economics</option>
+            <option value="Electrical and Electronic Engineering">Electrical and Electronic Engineering</option>
+            <option value="Guildford School of Acting">Guildford School of Acting</option>
+            <option value="Health Sciences">Health Sciences</option>
+            <option value="Higher Education">Higher Education</option>
+            <option value="Hospitality and Tourism Management">Hospitality and Tourism Management</option>
+            <option value="Law">Law</option>
+            <option value="Literature and Languages">Literature and Languages</option>
+            <option value="Mathematics">Mathematics</option>
+            <option value="Mechanical Engineering Sciences">Mechanical Engineering Sciences</option>
+            <option value="Music and Media">Music and Media</option>
+            <option value="Physics">Physics</option>
+            <option value="Politics">Politics</option>
+            <option value="Psychology">Psychology</option>
+            <option value="Sociology">Sociology</option>
+            <option value="Technology Enhanced Learning">Technology Enhanced Learning</option>
+            <option value="Veterinary Medicine">Veterinary Medicine</option>
+        </select>
+    </div>
+    <div>
+        <label>Level:</label>
+        <select name="Level" required>
+            <option style="display:none" disabled selected value></option>
+            <option value="Pre-Entry (SISC)">Pre-Entry (SISC)</option>
+            <option value="Level 3 - Foundation">Level 3 - Foundation</option>
+            <option value="Level 4 - 1st year">Level 4 - 1st year</option>
+            <option value="Level 5 - 2nd year">Level 5 - 2nd year</option>
+            <option value="Level 6 - 3rd to final year">Level 6 - 3rd to final year</option>
+            <option value="Placement Year">Placement Year</option>
+            <option value="Level 7 - Masters">Level 7 - Masters</option>
+            <option value="Level 8 - PhD">Level 8 - PhD</option>
+            <option value="Staff">Staff</option>
+            <option value="Other">Other</option>
+            <option value="Not collected">Not collected</option>
+        </select>
+    </div>   
+</div>
+<div class="row">
+    <div>
+        <label>Query 1:</label>
+        <select name="Query 1" required>
+            <option style="display:none" disabled selected value></option>
+            <optgroup label="Maths">
+                <option value="Maths: Algebra">Maths: Algebra</option>
+                <option value="Maths: Calculus">Maths: Calculus</option>
+                <option value="Maths: Complex Numbers">Maths: Complex Numbers</option>
+                <option value="Maths: Numeracy">Maths: Numeracy</option>
+                <option value="Maths: Trigonometry">Maths: Trigonometry</option>
+                <option value="Maths: Vector Calculus">Maths: Vector Calculus</option>
+                <option value="Maths: Other">Maths: Other</option>
+            </optgroup>
+            <optgroup label="Software">
+                <option value="Software: Excel">Software: Excel</option>
+                <option value="Software: LaTeX">Software: LaTeX</option>
+                <option value="Software: Matlab">Software: Matlab</option>
+                <option value="Software: R">Software: R</option>
+                <option value="Software: SPSS">Software: SPSS</option>
+                <option value="Software: Other">Software: Other</option>
+            </optgroup>
+            <optgroup label="Statistics">
+                <option value="Statistics: Data Collection">Statistics: Data Collection</option>
+                <option value="Statistics: Data Presentation">Statistics: Data Presentation</option>
+                <option value="Statistics: Statistical Testing">Statistics: Statistical Testing</option>
+                <option value="Statistics: Statistical Theory">Statistics: Statistical Theory</option>
+                <option value="Statistics: Other">Statistics: Other</option>
+            </optgroup>
+        </select>
+    </div>
+    <div>
+        <label>Query 2:</label>
+        <select name="Query 2" required>
+            <option value="N/A">N/A</option>
+            <optgroup label="Maths">
+                <option value="Maths: Algebra">Maths: Algebra</option>
+                <option value="Maths: Calculus">Maths: Calculus</option>
+                <option value="Maths: Complex Numbers">Maths: Complex Numbers</option>
+                <option value="Maths: Numeracy">Maths: Numeracy</option>
+                <option value="Maths: Trigonometry">Maths: Trigonometry</option>
+                <option value="Maths: Vector Calculus">Maths: Vector Calculus</option>
+                <option value="Maths: Other">Maths: Other</option>
+            </optgroup>
+            <optgroup label="Software">
+                <option value="Software: Excel">Software: Excel</option>
+                <option value="Software: LaTeX">Software: LaTeX</option>
+                <option value="Software: Matlab">Software: Matlab</option>
+                <option value="Software: R">Software: R</option>
+                <option value="Software: SPSS">Software: SPSS</option>
+                <option value="Software: Other">Software: Other</option>
+            </optgroup>
+            <optgroup label="Statistics">
+                <option value="Statistics: Data Collection">Statistics: Data Collection</option>
+                <option value="Statistics: Data Presentation">Statistics: Data Presentation</option>
+                <option value="Statistics: Statistical Testing">Statistics: Statistical Testing</option>
+                <option value="Statistics: Statistical Theory">Statistics: Statistical Theory</option>
+                <option value="Statistics: Other">Statistics: Other</option>
+            </optgroup>
+        </select>
+    </div> 
+</div>
+<div class="row">
+    <div>
+        <label>Format:</label>
+        <select name="Format" required>
+            <option style="display:none" disabled selected value></option>
+            <option value="In Person">In Person</option>
+            <option value="Online">Online</option>
+        </select>
+    </div>
+    <div>
+        <label>Location:</label>
+        <select name="Location" required>
+            <option style="display:none" disabled selected value></option>
+            <option value="Stag Hill">Stag Hill</option>
+            <option value="Manor Park">Manor Park</option>
+            <option value="Off-Campus">Off-Campus</option>
+            <option value="Kate Granger">Kate Granger</option>
+        </select>
+    </div>
+</div>
+<div class="row">
+    <div>
+        <label>Appointment Status:</label>
+        <select name="Appointment Status" required>
+            <option value="N/A">N/A</option>
+            <option value="Attended">Attended</option>
+            <option value="No Show">No Show</option>
+            <option value="Cancelled">Cancelled</option>
+        </select>
+    </div>
+</div>
+<div class="row">
+    <div>
+        <label>No. of Students:</label>
+        <input name="Students" type="number" min="1" value="1" required>
+    </div>
+    <div>
+        <label>Project:</label>
+        <input name="Project" type="checkbox">
+    </div>
+</div>
+{% endblock %}

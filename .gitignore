@@ -6,5 +6,5 @@ __pycache__/
 
 config.py
 
-data/
+data/*
 *.log

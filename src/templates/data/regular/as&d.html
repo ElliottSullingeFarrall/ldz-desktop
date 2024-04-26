@@ -1,0 +1,182 @@
+{% extends "data/_form.html" %}
+
+{% block form %}
+<div class="row">
+    <div>
+        <label>Date:</label>
+        <input name="Date" type="date" required>
+    </div>
+    <div>
+        <label>Start Time:</label>
+        <input name="In" type="time" required>
+    </div>
+    <div>
+        <label>End Time:</label>
+        <input name="Out" type="time" required>
+    </div>
+</div>
+<div class="row">
+    <div>
+        <label>Department:</label>
+        <select name="Department" required>
+            <option style="display:none" disabled selected value></option>
+            <option value="Unknown">Unknown</option>
+            <option value="Careers">Careers</option>
+            <option value="Biosciences and Medicine">Biosciences and Medicine</option>
+            <option value="Business School">Business School</option>
+            <option value="Centre for Environment and Sustainability">Centre for Environment and Sustainability</option>
+            <option value="Chemical and Process Engineering">Chemical and Process Engineering</option>
+            <option value="Chemistry">Chemistry</option>
+            <option value="Civil and Environmental Engineering">Civil and Environmental Engineering</option>
+            <option value="Computer Science">Computer Science</option>
+            <option value="Economics">Economics</option>
+            <option value="Electrical and Electronic Engineering">Electrical and Electronic Engineering</option>
+            <option value="Guildford School of Acting">Guildford School of Acting</option>
+            <option value="Health Sciences">Health Sciences</option>
+            <option value="Higher Education">Higher Education</option>
+            <option value="Hospitality and Tourism Management">Hospitality and Tourism Management</option>
+            <option value="Law">Law</option>
+            <option value="Literature and Languages">Literature and Languages</option>
+            <option value="Mathematics">Mathematics</option>
+            <option value="Mechanical Engineering Sciences">Mechanical Engineering Sciences</option>
+            <option value="Music and Media">Music and Media</option>
+            <option value="Physics">Physics</option>
+            <option value="Politics">Politics</option>
+            <option value="Psychology">Psychology</option>
+            <option value="Sociology">Sociology</option>
+            <option value="Technology Enhanced Learning">Technology Enhanced Learning</option>
+            <option value="Veterinary Medicine">Veterinary Medicine</option>
+        </select>
+    </div>
+    <div>
+        <label>Level:</label>
+        <select name="Level" required>
+            <option style="display:none" disabled selected value></option>
+            <option value="Pre-Entry (SISC)">Pre-Entry (SISC)</option>
+            <option value="Level 3 - Foundation">Level 3 - Foundation</option>
+            <option value="Level 4 - 1st year">Level 4 - 1st year</option>
+            <option value="Level 5 - 2nd year">Level 5 - 2nd year</option>
+            <option value="Level 6 - 3rd to final year">Level 6 - 3rd to final year</option>
+            <option value="Placement Year">Placement Year</option>
+            <option value="Level 7 - Masters">Level 7 - Masters</option>
+            <option value="Level 8 - PhD">Level 8 - PhD</option>
+            <option value="Staff">Staff</option>
+            <option value="Other">Other</option>
+            <option value="Not collected">Not collected</option>
+        </select>
+    </div>
+</div>
+<div class="row">
+    <div>
+        <label>Query 1:</label>
+        <select name="Query 1" required>
+            <option style="display:none" disabled selected value></option>
+            <option value="Assessment: Annotated bibliography">Assessment: Annotated bibliography</option>
+            <option value="Assessment: Research proposal">Assessment: Research proposal</option>
+            <option value="Assessment: Critical Article review">Assessment: Critical Article review</option>
+            <option value="Assessment: Presentations, Posters and digital assessment (videos etc.)">Assessment: Presentations, Posters and digital assessment (videos etc.)</option>
+            <option value="Assessment: Reflective writing">Assessment: Reflective writing</option>
+            <option value="Assessment: Writing (reports, essays, etc.), incl. structure, paraphrasing, linking, clarity, concision, citation)">Assessment: Writing (reports, essays, etc.), incl. structure, paraphrasing, linking, clarity, concision, citation)</option>
+            <option value="Assessment: Writing a literature review">Assessment: Writing a literature review</option>
+            <option value="Assessment process/task: Assignment planning">Assessment process/task: Assignment planning</option>
+            <option value="Assessment process/task: Choosing topic/finding focus (dissertations)">Assessment process/task: Choosing topic/finding focus (dissertations)</option>
+            <option value="Assessment process/task: Interpreting criteria">Assessment process/task: Interpreting criteria</option>
+            <option value="Assessment process/task: Interpreting feedback">Assessment process/task: Interpreting feedback</option>
+            <option value="Assessment process/task: Interpreting Turnitin reports">Assessment process/task: Interpreting Turnitin reports</option>
+            <option value="Assessment process/task: Literature surveys and systematic reviews">Assessment process/task: Literature surveys and systematic reviews</option>
+            <option value="Assessment process/task: Referencing">Assessment process/task: Referencing</option>
+            <option value="Assessment process/task: Search strategies/identifying literature">Assessment process/task: Search strategies/identifying literature</option>
+            <option value="Assessment process/task: Sourcing and selecting evidence">Assessment process/task: Sourcing and selecting evidence</option>
+            <option value="Academic Skills: Academic integrity referral">Academic Skills: Academic integrity referral</option>
+            <option value="Academic Skills: Group or teamworking, peer-based learning">Academic Skills: Group or teamworking, peer-based learning</option>
+            <option value="Academic Skills: Planning and organising time">Academic Skills: Planning and organising time</option>
+            <option value="Academic Skills: Reading and note-making strategies">Academic Skills: Reading and note-making strategies</option>
+            <option value="Academic Skills: Using referencing software">Academic Skills: Using referencing software</option>
+            <option value="Academic Skills: Research design / methods/ology">Academic Skills: Research design / methods/ology</option>
+            <option value="Academic Skills: Revision and exam strategies">Academic Skills: Revision and exam strategies</option>
+            <option value="Critical thinking: Analysis/Writing (synthesis, evaluation, argument, position, voice)">Critical thinking: Analysis/Writing (synthesis, evaluation, argument, position, voice)</option>
+            <option value="Critical thinking: Evaluating information/engaging with literature">Critical thinking: Evaluating information/engaging with literature</option>
+            <option value="Critical thinking: Using evaluative judgement (making sense, making meaning)">Critical thinking: Using evaluative judgement (making sense, making meaning)</option>
+            <option value="Learning journey: Service introduction for new students">Learning journey: Service introduction for new students</option>
+            <option value="Learning journey: Transition between years/PTY/professional statements or applications">Learning journey: Transition between years/PTY/professional statements or applications</option>
+            <option value="Learning journey: Transition to university/UK academic setting">Learning journey: Transition to university/UK academic setting</option>
+        </select>
+    </div>
+    <div>
+        <label>Query 2:</label>
+        <select name="Query 2" required>
+            <option value="N/A">N/A</option>
+            <option value="Assessment: Annotated bibliography">Assessment: Annotated bibliography</option>
+            <option value="Assessment: Research proposal">Assessment: Research proposal</option>
+            <option value="Assessment: Critical Article review">Assessment: Critical Article review</option>
+            <option value="Assessment: Presentations, Posters and digital assessment (videos etc.)">Assessment: Presentations, Posters and digital assessment (videos etc.)</option>
+            <option value="Assessment: Reflective writing">Assessment: Reflective writing</option>
+            <option value="Assessment: Writing (reports, essays, etc.), incl. structure, paraphrasing, linking, clarity, concision, citation)">Assessment: Writing (reports, essays, etc.), incl. structure, paraphrasing, linking, clarity, concision, citation)</option>
+            <option value="Assessment: Writing a literature review">Assessment: Writing a literature review</option>
+            <option value="Assessment process/task: Assignment planning">Assessment process/task: Assignment planning</option>
+            <option value="Assessment process/task: Choosing topic/finding focus (dissertations)">Assessment process/task: Choosing topic/finding focus (dissertations)</option>
+            <option value="Assessment process/task: Interpreting criteria">Assessment process/task: Interpreting criteria</option>
+            <option value="Assessment process/task: Interpreting feedback">Assessment process/task: Interpreting feedback</option>
+            <option value="Assessment process/task: Interpreting Turnitin reports">Assessment process/task: Interpreting Turnitin reports</option>
+            <option value="Assessment process/task: Literature surveys and systematic reviews">Assessment process/task: Literature surveys and systematic reviews</option>
+            <option value="Assessment process/task: Referencing">Assessment process/task: Referencing</option>
+            <option value="Assessment process/task: Search strategies/identifying literature">Assessment process/task: Search strategies/identifying literature</option>
+            <option value="Assessment process/task: Sourcing and selecting evidence">Assessment process/task: Sourcing and selecting evidence</option>
+            <option value="Academic Skills: Academic integrity referral">Academic Skills: Academic integrity referral</option>
+            <option value="Academic Skills: Group or teamworking, peer-based learning">Academic Skills: Group or teamworking, peer-based learning</option>
+            <option value="Academic Skills: Planning and organising time">Academic Skills: Planning and organising time</option>
+            <option value="Academic Skills: Reading and note-making strategies">Academic Skills: Reading and note-making strategies</option>
+            <option value="Academic Skills: Using referencing software">Academic Skills: Using referencing software</option>
+            <option value="Academic Skills: Research design / methods/ology">Academic Skills: Research design / methods/ology</option>
+            <option value="Academic Skills: Revision and exam strategies">Academic Skills: Revision and exam strategies</option>
+            <option value="Critical thinking: Analysis/Writing (synthesis, evaluation, argument, position, voice)">Critical thinking: Analysis/Writing (synthesis, evaluation, argument, position, voice)</option>
+            <option value="Critical thinking: Evaluating information/engaging with literature">Critical thinking: Evaluating information/engaging with literature</option>
+            <option value="Critical thinking: Using evaluative judgement (making sense, making meaning)">Critical thinking: Using evaluative judgement (making sense, making meaning)</option>
+            <option value="Learning journey: Service introduction for new students">Learning journey: Service introduction for new students</option>
+            <option value="Learning journey: Transition between years/PTY/professional statements or applications">Learning journey: Transition between years/PTY/professional statements or applications</option>
+            <option value="Learning journey: Transition to university/UK academic setting">Learning journey: Transition to university/UK academic setting</option>
+        </select>
+    </div>
+</div>
+<div class="row">
+    <div>
+        <label>Format:</label>
+        <select name="Format" required>
+            <option style="display:none" disabled selected value></option>
+            <option value="In Person">In Person</option>
+            <option value="Online">Online</option>
+        </select>
+    </div>
+    <div>
+        <label>Location:</label>
+        <select name="Location" required>
+            <option style="display:none" disabled selected value></option>
+            <option value="Stag Hill">Stag Hill</option>
+            <option value="Manor Park">Manor Park</option>
+            <option value="Off-Campus">Off-Campus</option>
+            <option value="Kate Granger">Kate Granger</option>
+        </select>
+    </div>
+</div>
+<div class="row">
+    <div>
+        <label>Appointment Status:</label>
+        <select name="Appointment Status" required>
+            <option value="N/A">N/A</option>
+            <option value="Attended">Attended</option>
+            <option value="No Show">No Show</option>
+            <option value="Cancelled">Cancelled</option>
+        </select>
+    </div>
+</div>
+<div class="row">
+    <div>
+        <label>No. of Students:</label>
+        <input name="Students" type="number" min="1" value="1" required>
+    </div>
+    <div>
+        <label>Project:</label>
+        <input name="Project" type="checkbox">
+    </div>
+</div>
+{% endblock %}
