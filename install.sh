@@ -6,5 +6,5 @@ poetry install --no-root
 if [ ! -f config.py ]; then
     touch config.py
     random_key=$(openssl rand -base64 32)
-    echo "KEY = '$random_key'" >> config.py
+    echo "SECRET_KEY = '$random_key'" >> config.py
 fi
