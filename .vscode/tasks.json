@@ -1,13 +1,15 @@
 {
     "version": "2.0.0",
+    "presentation": {
+        "echo": false,
+        "showReuseMessage": false,
+        "clear": true
+    },
     "tasks": [
         {
-            "label": "Run Flask App",
+            "label": "Run App",
             "type": "shell",
-            "linux": {
-                "command": "poetry run flask run"
-            },
-            "dependsOn": "",
+            "command": "nix develop --command bash -c 'uwsgi --plugin python3 --http :4000 --home .venv --wsgi-file wsgi.py'",
             "problemMatcher": [],
             "group": {
                 "kind": "build",
@@ -17,12 +19,12 @@
         {
             "label": "Install Module from Selection",
             "type": "shell",
-            "command": "poetry add ${selectedText}"
+            "command": "nix develop --command bash -c  'poetry add ${selectedText}'"
         },
         {
             "label": "Uninstall Module from Selection",
             "type": "shell",
-            "command": "poetry remove ${selectedText}"
+            "command": "nix develop --command bash -c 'poetry remove ${selectedText}'"
         }
     ]
 }

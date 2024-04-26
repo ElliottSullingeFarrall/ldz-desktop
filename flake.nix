@@ -21,25 +21,22 @@
         poetry2nix = inputs.poetry2nix.lib.mkPoetry2Nix { inherit pkgs;};
       in
       {
-        devShells = {
-          default = pkgs.mkShell {
-            packages = [
-              pkgs.poetry
-              pkgs.python3
-            ];
-            
-            LD_LIBRARY_PATH = "${pkgs.stdenv.cc.cc.lib}/lib";
+        devShells.default = pkgs.mkShell {
+          packages = with pkgs; [
+            openssl
+            (uwsgi.override { plugins = [ "python3" ]; })
 
-            FLASK_APP = "src";
-            FLASK_DEBUG = 1;
-            FLASK_RUN_PORT = 4000;
+            poetry
+            python3
+          ];
+          
+          LD_LIBRARY_PATH = "${pkgs.stdenv.cc.cc.lib}/lib";
 
-            POETRY_VIRTUALENVS_IN_PROJECT = true;
-            shellHook = ''
-              poetry env use $(which python)
-              poetry install
-            '';
-          };
+          POETRY_VIRTUALENVS_IN_PROJECT = true;
+          shellHook = ''
+            poetry env use $(which python)
+            poetry install --no-root
+          '';
         };
       });
 }
