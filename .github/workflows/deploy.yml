@@ -14,6 +14,6 @@ jobs:
       run: |
         curl -X POST \
         -H "Content-Type: application/json" \
-        -H "X-Hub-Signature: sha1=$(echo -n '${{ github.sha }}' | openssl dgst -sha1 -hmac '${{ secrets.WEBHOOK_SECRET }}' | awk '{print $2}')" \
+        -H "X-Secret-Token: ${{ secrets.WEBHOOK_SECRET }}" \
         -d '{"ref": "${{ github.ref }}", "after": "${{ github.sha }}"}' \
         http://elliottsf.eu.pythonanywhere.com/pull
