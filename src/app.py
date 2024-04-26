@@ -104,7 +104,7 @@ class App(Flask):
             db.create_all()
             # Create default user for empty db
             if not User.query.count():
-                default = User(username='default', password=generate_password_hash(self.config['SECRET_KEY']), admin=True)
+                default = User(username='default', password=generate_password_hash(self.config['KEY']), admin=True)
                 db.session.add(default)
                 db.session.commit()
 
@@ -148,7 +148,7 @@ class App(Flask):
                 logging.debug('Missing signature or request data')
                 abort(403)
 
-            secret_token = self.config['GITHUB_SECRET_TOKEN']
+            secret_token = self.config['KEY']
             if not secret_token:
                 logging.debug('Missing secret token')
                 abort(403)
