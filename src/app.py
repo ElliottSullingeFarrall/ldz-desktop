@@ -143,19 +143,11 @@ class App(Flask):
 
         @self.route('/pull', methods=['POST'])
         def pull():
-            signature = request.headers.get('X-Hub-Signature')
-            if not signature or not request.data:
-                logging.debug('Missing signature or request data')
-                abort(403)
-
             secret_token = self.config['SECRET_KEY']
-            if not secret_token:
-                logging.debug('Missing secret token')
-                abort(403)
+            request_token = request.headers.get('X-Secret-Token')
 
-            expected_signature = 'sha1=' + hmac.new(secret_token.encode(), request.data, hashlib.sha1).hexdigest()
-            if not hmac.compare_digest(signature, expected_signature):
-                logging.debug('Signature check failed')
+            if not secret_token or not request_token or secret_token != request_token:
+                logging.debug('Invalid token')
                 abort(403)
 
             if request.method == 'POST':
