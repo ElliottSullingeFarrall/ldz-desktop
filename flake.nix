@@ -23,6 +23,8 @@
       {
         devShells.default = pkgs.mkShell {
           packages = with pkgs; [
+            inotify-tools
+
             openssl
             (uwsgi.override { plugins = [ "python3" ]; })
 

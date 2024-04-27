@@ -9,7 +9,7 @@
         {
             "label": "Run App",
             "type": "shell",
-            "command": "nix develop --command bash -c 'uwsgi --plugin python3 --http :4000 --home .venv --wsgi-file wsgi.py'",
+            "command": "nix develop --command bash -c '${workspaceFolder}/run.sh'",
             "problemMatcher": [],
             "group": {
                 "kind": "build",

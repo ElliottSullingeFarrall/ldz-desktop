@@ -1,4 +1,4 @@
-name: Trigger Webhook
+name: Deploy
 
 on:
   push:

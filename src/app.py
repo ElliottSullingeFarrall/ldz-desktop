@@ -62,19 +62,15 @@ class Data:
         else:
             return DataFrame()
 
-    def summarise_month(self, month, col, n=5):
-        dt = datetime.strptime(month, '%Y-%m')
-
+    def summarise(self, year):
         if not self.df.empty:
             df = self.df.copy()
             df['Date'] = to_datetime(df['Date'])
-            df = df.loc[(df['Date'].dt.month == dt.month) & (df['Date'].dt.year == dt.year)]
+            df = df[df['Date'].dt.year == int(year)]
             
-            top = df[col].value_counts().nlargest(n)
-            bot = Series(df[col].value_counts().iloc[n:].sum(), index=['other'])
-            data = concat([top, bot])
+            data = df['Date'].dt.month.value_counts().sort_index().to_dict()
 
-            return {key: value for key, value in data.items() if value != 0}
+            return data
         else:
             return {}
 
@@ -95,7 +91,8 @@ class App(Flask):
 
         Path(f'{Path(self.root_path).parent}/data').mkdir(exist_ok=True)
 
-        logging.getLogger().setLevel(logging.DEBUG)
+        # logging.getLogger().setLevel(logging.DEBUG)
+        logging.basicConfig(level=logging.DEBUG, filename='flask.log')
 
         # --------------------------------- Database --------------------------------- #
 
@@ -121,7 +118,7 @@ class App(Flask):
     
         @self.context_processor
         def global_vars():
-            return {'styles' : self.styles, 'options' : Data.options}
+            return {'styles' : self.styles, 'options' : Data.options, 'current_year' : datetime.now().year}
 
         # -------------------------------- Blueprints -------------------------------- #
 
