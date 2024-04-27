@@ -1,0 +1,9 @@
+{% extends "_layout.html" %}
+
+{% block main %}
+<form method="POST">
+    <h2>Are you sure you want to proceed?</h2>
+    <input type="submit" name="confirm" value="Confirm">
+    <input type="button" name="cancel" value="Cancel" onclick=" window.history.back()">
+</form>
+{% endblock %}

@@ -8,7 +8,7 @@
     <div id="group_right">
         {% if current_user.admin %}
         <div class="menu">
-            <div class="button">admin &#8964;</div>
+            <div class="button">admin &#x25BC;</div>
             <div class="content">
                 <a class="item" href="{{ url_for('admin.data') }}">data</a>
                 <a class="item" href="{{ url_for('admin.user_view') }}">users</a>
@@ -16,7 +16,7 @@
         </div>
         {% endif %}
         <div class="menu">
-            <div class="button">{{ current_user.username }} &#8964;</div>
+            <div class="button">{{ current_user.username }} &#x25BC;</div>
             <div class="content">
                 <a class="item" href="{{ url_for('user.settings') }}">settings</a>
                 <a class="item" href="{{ url_for('auth.login') }}">logout</a>
@@ -31,7 +31,7 @@
     {% for category in options %}
     <div class="sep">{{ category|capitalize }}</div>
     {% for type in options[category] %}
-    <a class="item" href="{{ url_for('data.view', category=category, type=type) }}">{{ type|upper }}</a>
+    <a class="item" href="{{ url_for('data.add', category=category, type=type) }}">{{ type|upper }}</a>
     {% endfor %}
     {% endfor %}
 </div>

@@ -13,7 +13,7 @@ class Data:
     def __init__(self, category, type):
         self.category = category
         self.type = type
-        self.path = Path('data') / Path(current_user.username) / Path(category) / Path(type).with_suffix('.csv')
+        self.path = Path('data') / Path(current_user.username) / Path(category) / Path(unescape(type)).with_suffix('.csv')
     def __enter__(self):
         if self.path.exists():
             try:
@@ -89,7 +89,6 @@ class App(Flask):
 
         Path(f'{Path(self.root_path).parent}/data').mkdir(exist_ok=True)
 
-        # logging.getLogger().setLevel(logging.DEBUG)
         logging.basicConfig(level=logging.DEBUG, filename='flask.log')
 
         # --------------------------------- Database --------------------------------- #
@@ -186,4 +185,15 @@ class App(Flask):
             if not current_user.admin:
                 return 
             return f(*args, **kwargs)
+        return decorated_function
+    
+    @classmethod
+    def confirm_required(cls, f):
+        @wraps(f)
+        def decorated_function(*args, **kwargs):
+            if request.method == 'GET':
+                return render_template('confirm.html')
+            elif request.method == 'POST':
+                if 'confirm' in request.form:
+                    return f(*args, **kwargs)
         return decorated_function

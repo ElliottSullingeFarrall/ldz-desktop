@@ -49,8 +49,9 @@ def user_edit(idx):
             
     return render_template('user/edit.html', idx=idx)
 
-@admin.route('/user/remove/<idx>')
+@admin.route('/user/remove/<idx>', methods=['GET', 'POST'])
 @App.admin_required
+@App.confirm_required
 def user_remove(idx=None):
     User.remove(int(idx))
     return redirect(url_for('.user_view'))

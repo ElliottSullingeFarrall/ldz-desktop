@@ -6,6 +6,10 @@
 	--button_active: #0056b3;
 	--topnav: #333333;
 }
+:root::-webkit-scrollbar {
+	display: none;
+}
+
 body {
 	margin: 0;
 	background-color: var(--text1);
@@ -14,10 +18,6 @@ body {
 	font-family: Arial, sans-serif;
 	-ms-overflow-style: none;
 	scrollbar-width: none;
-}
-
-body::-webkit-scrollbar {
-	display: none;
 }
 
 #main {

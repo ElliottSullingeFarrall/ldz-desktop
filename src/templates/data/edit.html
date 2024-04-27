@@ -23,7 +23,7 @@
 <script>
     function remove(row) {
         idx = row.rowIndex - 1;
-        url = `{{ url_for('data.edit', category=category, type=type) }}/${idx}`;
+        url = `{{ url_for('data.remove', category=category, type=type) }}/${idx}`;
         window.location.replace(url);
     }
 </script>

@@ -114,3 +114,4 @@ class User(UserMixin, db.Model):
             return
         else:
             return 'Passwords do not match!'
+    
