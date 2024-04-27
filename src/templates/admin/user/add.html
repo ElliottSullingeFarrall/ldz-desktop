@@ -13,6 +13,7 @@
     <input name="admin" type="checkbox">
 
     <input value="Add" type="submit">
+    <input value="Import" type="button" onclick="window.location=`{{ url_for('admin.user_import') }}`">
 </form>
 {% with messages = get_flashed_messages() %}
 {% if messages %}

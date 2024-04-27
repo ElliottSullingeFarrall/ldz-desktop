@@ -71,6 +71,28 @@ class User(UserMixin, db.Model):
             return 'User already exists!'
 
     @classmethod
+    def import_csv(cls, files):
+        file = files['users']
+
+        if file.filename == '':
+            return 'No selected file!'
+        if not file.filename.endswith('.csv'):
+            return 'Invalid file type!'
+        
+        with NamedTemporaryFile(suffix='.csv') as temp:
+            file.save(temp.name)
+            df = read_csv(temp.name)
+        
+        for _, row in df.iterrows():
+            user = cls.query.filter_by(username=row['username']).first()
+            if not user:
+                user = cls(username=row['username'], password=generate_password_hash(row['username']), admin=bool(row.get('admin')))
+                db.session.add(user)
+            else:
+                return 'User already exists!'
+        db.session.commit()
+
+    @classmethod
     def remove(cls, idx):
         table = read_sql(cls.query.statement, db.engine)
         user = cls.query.filter_by(username=table.at[idx, 'username']).first()

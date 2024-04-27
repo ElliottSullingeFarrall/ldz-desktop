@@ -1,0 +1,20 @@
+{% extends "_layout.html" %}
+
+{% block main %}
+<h1>Import Users</h1>
+<form method="POST" action="{{ url_for('admin.user_import') }}" enctype="multipart/form-data">
+    <label>Users:</label>
+    <input type="file" name="users">
+    
+    <input type="submit" value="Import">
+</form>
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+<ul class="flash">
+{% for message in messages %}
+    <li>{{ message }}</li>
+{% endfor %}
+</ul>
+{% endif %}
+{% endwith %}
+{% endblock %}

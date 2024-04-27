@@ -22,6 +22,17 @@ def user_add():
 
     return render_template('admin/user/add.html')
 
+@admin.route('/user/import', methods=['GET', 'POST'])
+@App.admin_required
+def user_import():
+    if request.method == 'POST':
+        error = User.import_csv(request.files)
+        if not error:
+            return redirect(url_for('.user_view'))
+        else:
+            flash(error)
+    return render_template('user/import.html')
+
 @admin.route('/user/edit/<idx>', methods=['GET', 'POST'])
 @App.admin_required
 def user_edit(idx):

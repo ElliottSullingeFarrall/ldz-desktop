@@ -33,8 +33,6 @@ class Data:
     def remove(self, idx):
         self.df = self.df.drop(idx)
 
-    #TODO Optimise these methods
-
     @classmethod
     def pull(cls, form):
         dt = datetime.strptime(form.get('month'), '%Y-%m')
@@ -144,7 +142,6 @@ class App(Flask):
             request_token = request.headers.get('X-Secret-Token')
 
             if not secret_token or not request_token or secret_token != request_token:
-                logging.debug('Invalid token')
                 abort(403)
 
             if request.method == 'POST':
