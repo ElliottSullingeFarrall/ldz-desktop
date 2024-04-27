@@ -10,10 +10,26 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Trigger Webhook
+    - name: Trigger Pull
       run: |
         curl -X POST \
         -H "Content-Type: application/json" \
         -H "X-Secret-Token: ${{ secrets.WEBHOOK_SECRET }}" \
         -d '{"ref": "${{ github.ref }}", "after": "${{ github.sha }}"}' \
         http://elliottsf.eu.pythonanywhere.com/pull
+
+    - name: Wait
+      run: sleep 10
+
+    - name: Check Pull
+      id: check_pull
+      run: |
+        CURRENT_VERSION=$(curl -s --fail http://elliottsf.eu.pythonanywhere.com/version)
+        EXIT_CODE=$?
+        if [[ $EXIT_CODE -ne 0 ]]; then
+          echo "Failed to acquire version"
+          exit 1
+        elif [[ "$CURRENT_VERSION" != "${{ github.sha }}" ]]; then
+          echo "Pull did not complete successfully"
+          exit 1
+        fi

@@ -149,10 +149,20 @@ class App(Flask):
 
             if request.method == 'POST':
                 git.Repo('.').remotes.origin.pull()
+                with open('VERSION', 'w') as version_file:
+                    version_file.write(git.Repo('.').head.object.hexsha)
                 Path('/var/www/elliottsf_eu_pythonanywhere_com_wsgi.py').touch()
                 return '', 200
             else:
                 return '', 400
+            
+        @self.route('/version')
+        def version():
+            if Path('VERSION').exists():
+                with open('VERSION', 'r') as version_file:
+                    return version_file.read()
+            else:
+                abort(404)
 
     def run(self):
         super().run()
