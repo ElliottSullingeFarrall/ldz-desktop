@@ -44,6 +44,12 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
+      - name: Extract Version
+        id: extract_version
+        run: |
+          version=$(poetry version -s)
+          echo "VERSION=$version" >> $GITHUB_ENV
+
       - name: Download Artifacts
         uses: actions/download-artifact@v3
         with:
@@ -57,6 +63,8 @@ jobs:
       - name: Create Release
         uses: ncipollo/release-action@v1.14.0
         with:
+          tag: v${{ env.VERSION }}
+          releaseName: Release v${{ env.VERSION }}
           artifacts: |
             dist/windows/*
             dist/macos/*
