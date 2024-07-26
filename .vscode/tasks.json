@@ -7,9 +7,9 @@
     },
     "tasks": [
         {
-            "label": "Compile App",
+            "label": "Build App",
             "type": "shell",
-            "command": "nix develop --command bash -c 'poetry run python compile.py'",
+            "command": "poetry run python build.py",
             "problemMatcher": [],
             "group": {
                 "kind": "build",

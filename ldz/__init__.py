@@ -1,1 +1,4 @@
-from .source import main
+from ldz.main import main
+
+if __name__ == '__main__':
+    main()

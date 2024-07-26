@@ -37,8 +37,9 @@ def resource_path(relative_path: str) -> str:
         str: Path of resource in compiled app.
     """    
     wd: str = os.getcwd()
-    os.chdir(os.path.dirname(sys.argv[0]))
+    # os.chdir(os.path.dirname(sys.argv[0]))
     try:
+        os.chdir(os.path.dirname(sys.argv[0]))
         # PyInstaller creates a temp folder and stores path in _MEIPASS
         base_path: str = sys._MEIPASS
     except Exception:

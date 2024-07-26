@@ -1,13 +1,9 @@
 '''Source code for LDZ app.
 '''
 
-from __future__ import annotations
+from ldz.utils import *
 
-import sys
-if getattr(sys, 'frozen', False) and hasattr(sys, '_MEIPASS'):
-    from ldz.utils import *
-else:
-    from .utils import *
+FROZEN : bool = getattr(sys, 'frozen', False) and hasattr(sys, '_MEIPASS')
 
 # ---------------------------------------------------------------------------- #
 #                         Base Classes - DO NOT CHANGE                         #
@@ -31,7 +27,7 @@ class App(tk.Tk):
         self.style.theme_use('clam')
 
         self.title(f'Select Profile')
-        self.iconphoto(True, tk.PhotoImage(file=resource_path('images/stag.png')))
+        self.iconphoto(True, tk.PhotoImage(file=resource_path('assets/stag.png')))
         self.resizable(False, False)
         self.geometry('250x120')
 
@@ -1108,6 +1104,3 @@ FILE_EXT : str = os.path.splitext(sys.argv[0])[1]
 def main():
     os.makedirs(DATA_DIR, exist_ok=True); os.chdir(DATA_DIR)
     App().mainloop()
-
-if __name__ == '__main__':
-    main()

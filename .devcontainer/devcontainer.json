@@ -1,18 +1,5 @@
-// For format details, see https://aka.ms/devcontainer.json. For config options, see the
-// README at: https://github.com/devcontainers/templates/tree/main/src/docker-existing-dockerfile
 {
-	"name": "Existing Dockerfile",
-	"build": {
-		"context": ".",
-		"dockerfile": "./Dockerfile"
-	},
-	"customizations": {
-		"vscode": {
-			"extensions": [
-				"formulahendry.code-runner",
-				"MichaelCurrin.auto-commit-msg"
-			]
-		}
-	},
+	"name": "Nix Container",
+	"image": "ghcr.io/xtruder/nix-devcontainer:latest",
 	"initializeCommand": "xhost +"
 }

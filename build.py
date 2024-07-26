@@ -1,26 +1,26 @@
-"""Module for compiling app.
+"""Module for building app.
 """
 
 from __future__ import annotations
 
-import PyInstaller.__main__ as compiler
+import PyInstaller.__main__ as builder
 import os
 import platform
 
 IMG_EXT: dict[str, str]  = {'Windows' : 'ico', 'Darwin' : 'icns', 'Linux' : 'ico'}
 
-def compile():
-    """Compiles app.
+def build():
+    """Builds app.
     """    
     try:
-        compiler.run([
-            f'ldz/source.py',
+        builder.run([
+            f'ldz/__init__.py',
             f'--onefile',
             f'--windowed',
             f'--argv-emulation',
             f'--name=ldz_{platform.system()}',
-            f'-i=ldz/images/stag.{IMG_EXT[platform.system()]}',
-            f'--add-data=ldz/images/stag.png{os.pathsep}images',
+            f'-i=ldz/assets/stag.{IMG_EXT[platform.system()]}',
+            f'--add-data=ldz/assets/stag.png{os.pathsep}assets',
             f'--hidden-import=babel.numbers',
             f'--noconfirm'
         ])
@@ -29,4 +29,4 @@ def compile():
         print(f'The platform: {platform.system()} is not supported!')
 
 if __name__ == '__main__':
-    compile()
+    build()
