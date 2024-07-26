@@ -74,6 +74,7 @@ jobs:
         with:
           tag: v${{ env.VERSION }}
           releaseName: Release v${{ env.VERSION }}
+          omitBody: true
           artifacts: |
             dist/windows/*
             dist/macos/*
