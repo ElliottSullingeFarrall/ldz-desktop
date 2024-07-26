@@ -24,8 +24,8 @@ jobs:
       - name: Setup Environment
         uses: packetcoders/action-setup-cache-python-poetry@v1.2.0
         with:
-          python-version: 3.10
-          poetry-version: 1.7.1
+          python-version: "3.10"
+          poetry-version: "1.7.1"
 
       - name: Build Executable
         run: |
