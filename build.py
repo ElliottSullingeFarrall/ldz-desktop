@@ -18,7 +18,7 @@ def build():
             f'--onefile',
             f'--windowed',
             f'--argv-emulation',
-            f'--name=ldz_{platform.system()}',
+            f'--name=ldz',
             f'-i=ldz/assets/stag.{IMG_EXT[platform.system()]}',
             f'--add-data=ldz/assets/stag.png{os.pathsep}assets',
             f'--hidden-import=babel.numbers',

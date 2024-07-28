@@ -21,6 +21,8 @@ import sys
 import platformdirs
 from importlib.resources import files
 
+FROZEN: bool = getattr(sys, 'frozen', False) and hasattr(sys, '_MEIPASS')
+
 # ---------------------------------------------------------------------------- #
 #                                  File Paths                                  #
 # ---------------------------------------------------------------------------- #
@@ -36,16 +38,10 @@ def resource_path(relative_path: str) -> str:
     Returns:
         str: Path of resource in compiled app.
     """    
-    wd: str = os.getcwd()
-    # os.chdir(os.path.dirname(sys.argv[0]))
-    try:
-        os.chdir(os.path.dirname(sys.argv[0]))
-        # PyInstaller creates a temp folder and stores path in _MEIPASS
+    if FROZEN:
         base_path: str = sys._MEIPASS
-    except Exception:
-        # Resource location when run directly as module
+    else:
         base_path: str = files("ldz")
-    os.chdir(wd)
     return os.path.join(base_path, relative_path)
 
 # ---------------------------------------------------------------------------- #
@@ -60,7 +56,7 @@ def gridx(self: tk.Widget, *args, **kwargs) -> tk.Widget:
     """    
     self.grid(*args, **kwargs)
     return self
-tk.Widget.gridx: callable = gridx
+tk.Widget.gridx = gridx
 
 def expand_dropdown(event: tk.Event):
     """Function to expand dropdown menu to accomodate longest possible option.

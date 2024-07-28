@@ -3,8 +3,6 @@
 
 from ldz.utils import *
 
-FROZEN : bool = getattr(sys, 'frozen', False) and hasattr(sys, '_MEIPASS')
-
 # ---------------------------------------------------------------------------- #
 #                         Base Classes - DO NOT CHANGE                         #
 # ---------------------------------------------------------------------------- #
@@ -50,7 +48,7 @@ class App(tk.Tk):
             """            
             profile_name: str = table.item(table.focus())['values'][0]
             self.withdraw()
-            self.profile: Profile = self.profiles[profile_name](self)
+            self.profile = self.profiles[profile_name](self)
             self.profile.mainloop()
         table.bind("<<TreeviewSelect>>", select_profile)
 
@@ -162,8 +160,8 @@ class Profile(tk.Tk):
                 pass
             else:
                 row_num: int = table.index(table.selection())
-                self.df_save: pd.DataFrame = self.df_save.drop(row_num)
-                self.df_save: pd.DataFrame = self.df_save.reset_index(drop=True)
+                self.df_save  = self.df_save.drop(row_num)
+                self.df_save = self.df_save.reset_index(drop=True)
                 print(self.df_save)
                 self.save_data()
                 window.destroy()
@@ -241,7 +239,7 @@ class Field():
             mode (str, optional): Trace mode ('read', 'write', etc.). Defaults to ''.
         """        
         for var, name in zip(self.vars, self.names):
-            self.profile.df_curr[name]: str = var.get()
+            self.profile.df_curr[name] = var.get()
 
     def reset(self) -> None:
         """Reset fields to their default values.
@@ -276,7 +274,7 @@ class Submit():
         if '' in self.profile.df_curr.values():
             messagebox.showinfo(parent=self.profile, message='Please fill in all the fields.')
         else:
-            self.profile.df_save: pd.DataFrame = pd.concat([self.profile.df_save, pd.DataFrame([self.profile.df_curr])], ignore_index=True)
+            self.profile.df_save = pd.concat([self.profile.df_save, pd.DataFrame([self.profile.df_curr])], ignore_index=True)
             self.profile.save_data()
             for field in self.profile.fields:
                 field.reset()
@@ -336,8 +334,8 @@ class Times(Field):
             index (str, optional): Index of variable (if variable is a list). Defaults to ''.
             mode (str, optional): Trace mode ('read', 'write', etc.). Defaults to ''.
         """        
-        self.profile.df_curr[self.names[0]]: str = f'{datetime.strptime(f"{self.vars[0].get()}:{self.vars[1].get()}", "%H:%M"):%H:%M}'
-        self.profile.df_curr[self.names[1]]: str = f'{datetime.strptime(f"{self.vars[2].get()}:{self.vars[3].get()}", "%H:%M"):%H:%M}'
+        self.profile.df_curr[self.names[0]] = f'{datetime.strptime(f"{self.vars[0].get()}:{self.vars[1].get()}", "%H:%M"):%H:%M}'
+        self.profile.df_curr[self.names[1]] = f'{datetime.strptime(f"{self.vars[2].get()}:{self.vars[3].get()}", "%H:%M"):%H:%M}'
 
 class Nums(Field):
     """Class for dual number entry field.
@@ -470,15 +468,15 @@ class ChoCho(Field):
             index (str, optional): Index of variable (if variable is a list). Defaults to ''.
             mode (str, optional): Trace mode ('read', 'write', etc.). Defaults to ''.
         """         
-        self.profile.df_curr[self.names[0]]: str = self.vars[0].get()
+        self.profile.df_curr[self.names[0]] = self.vars[0].get()
         if self.vars[0].get() == self.default:
-            self.field1['state']: str  = 'readonly'
+            self.field1['state'] = 'readonly'
             if self.vars[1].get() == self.on_value:
                 self.vars[1].set(self.off_value)
         else:
-            self.field1['state']: str = 'disabled'
+            self.field1['state'] = 'disabled'
             self.vars[1].set(self.on_value)
-        self.profile.df_curr[self.names[1]]: str = self.vars[1].get()
+        self.profile.df_curr[self.names[1]] = self.vars[1].get()
 
 class ChkCho(Field):
     """Class for dual ticbox/dropdown entry field with linking.
@@ -528,10 +526,10 @@ class ChkCho(Field):
         if self.link:
             self.profile.df_curr[self.names[0]] = self.vars[0].get()
             if self.vars[0].get() == self.default:
-                self.field1['state']: str  = 'disabled'
+                self.field1['state'] = 'disabled'
                 self.vars[1].set(self.off_value)
             else:
-                self.field1['state']: str = 'readonly'
+                self.field1['state'] = 'readonly'
                 if self.vars[1].get() == self.off_value:
                     self.vars[1].set(self.on_value)
             self.profile.df_curr[self.names[1]] = self.vars[1].get()
@@ -1098,8 +1096,6 @@ class EmbdASND(Profile):
 # ---------------------------------------------------------------------------- #
 #                            Script - DO NOT CHANGE                            #
 # ---------------------------------------------------------------------------- #
-
-FILE_EXT : str = os.path.splitext(sys.argv[0])[1]
 
 def main():
     os.makedirs(DATA_DIR, exist_ok=True); os.chdir(DATA_DIR)
