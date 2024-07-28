@@ -7,9 +7,9 @@
     },
     "tasks": [
         {
-            "label": "Build App",
+            "label": "Run App",
             "type": "shell",
-            "command": "poetry run python build.py",
+            "command": "poetry run ldz",
             "problemMatcher": [],
             "group": {
                 "kind": "build",

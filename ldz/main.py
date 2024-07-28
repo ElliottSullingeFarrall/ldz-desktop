@@ -74,7 +74,7 @@ class Profile(tk.Tk):
         self.app: App = app
 
         self.title(f'{self.name}')
-        self.resizable(False, False)
+        # self.resizable(False, False)
         self.protocol("WM_DELETE_WINDOW", lambda: [self.destroy(), self.app.destroy()])
 
         menubar: tk.Menu  = tk.Menu(self)
@@ -162,7 +162,6 @@ class Profile(tk.Tk):
                 row_num: int = table.index(table.selection())
                 self.df_save  = self.df_save.drop(row_num)
                 self.df_save = self.df_save.reset_index(drop=True)
-                print(self.df_save)
                 self.save_data()
                 window.destroy()
         table.bind("<<TreeviewSelect>>", delete_data)
@@ -390,14 +389,17 @@ class Nums(Field):
 class Text(Field):
     """Class for text entry field.
     """  
-    def __init__(self, profile: Profile, name: str = '') -> None:
+    def __init__(self, profile: Profile, name: str = '', default = None) -> None:
         """Constructor for Text class.
 
         Args:
             profile (Profile): Profile containing field.
             name (str, optional): Name of field. Defaults to ''.
         """        
-        super().__init__(profile, names=(name,), defaults=('',))
+        super().__init__(profile, names=(name,), defaults=(default,))
+
+        if default:
+            self.vars[0].set(default)
 
         ttk.Label(self.profile, text=f'{self.names[0]}:').gridx(row=self.row, column=0, sticky='e')
         ttk.Entry(self.profile, textvariable=self.vars[0]).gridx(row=self.row, column=1, sticky='ew', columnspan=3)
@@ -637,39 +639,44 @@ class MASA(Profile):
         'Maths: Complex Numbers',
         'Maths: Numeracy',
         'Maths: Trigonometry',
-        'Maths: Vector Calculus',
         'Maths: Other',
+        'Statistics: Data Collection/Handling',
+        'Statistics: Data Presentation/Writing Up Results',
+        'Statistics: Statistical Testing',
+        'Statistics: Statistical Theory',
+        'Statistics: Probability',
+        'Statistics: Sample Size Calculations',
+        'Statistics: Understanding Research Papers',
+        'Statistics: Other',
         'Software: Excel',
-        'Software: LaTeX',
+        'Software: GraphPad',
+        'Software: Jamovi',
         'Software: Matlab',
         'Software: R',
         'Software: SPSS',
-        'Software: Other',
-        'Statistics: Data Collection',
-        'Statistics: Data Presentation',
-        'Statistics: Statistical Testing',
-        'Statistics: Statistical Theory',
-        'Statistics: Other']),
+        'Software: Other']),
         Choice(self,    name  =  'Query 2',                 values =  [
-        'N/A',
         'Maths: Algebra',
         'Maths: Calculus',
         'Maths: Complex Numbers',
         'Maths: Numeracy',
         'Maths: Trigonometry',
-        'Maths: Vector Calculus',
         'Maths: Other',
+        'Statistics: Data Collection/Handling',
+        'Statistics: Data Presentation/Writing Up Results',
+        'Statistics: Statistical Testing',
+        'Statistics: Statistical Theory',
+        'Statistics: Probability',
+        'Statistics: Sample Size Calculations',
+        'Statistics: Understanding Research Papers',
+        'Statistics: Other',
         'Software: Excel',
-        'Software: LaTeX',
+        'Software: GraphPad',
+        'Software: Jamovi',
         'Software: Matlab',
         'Software: R',
         'Software: SPSS',
-        'Software: Other',
-        'Statistics: Data Collection',
-        'Statistics: Data Presentation',
-        'Statistics: Statistical Testing',
-        'Statistics: Statistical Theory',
-        'Statistics: Other'], default = 'N/A'),
+        'Software: Other'], default = 'N/A'),
         Choice(self,    name  =  'Level',                   values =  [
         'Pre-Entry (SISC)',
         'Level 3 - Foundation',
@@ -694,6 +701,7 @@ class MASA(Profile):
         'No Show',
         'Cancelled'], on_value = 'Attended'),
         NumChk(self,    names = ('# Students', 'Project'))
+        Text(self,      name  =  'Notes',                   default = 'N/A')
 
 class ASND(Profile):
     """Class for AS&D profile.
@@ -820,6 +828,7 @@ class ASND(Profile):
             'No Show',
             'Cancelled'], on_value = 'Attended')
         NumChk(self,    names = ('# Students', 'Project'))
+        Text(self,      name  =  'Notes',                   default = 'N/A')
 
 class EmbdMASA(Profile):
     """Class for MASA (Embedded) profile.
@@ -871,39 +880,44 @@ class EmbdMASA(Profile):
             'Maths: Complex Numbers',
             'Maths: Numeracy',
             'Maths: Trigonometry',
-            'Maths: Vector Calculus',
             'Maths: Other',
+            'Statistics: Data Collection/Handling',
+            'Statistics: Data Presentation/Writing Up Results',
+            'Statistics: Statistical Testing',
+            'Statistics: Statistical Theory',
+            'Statistics: Probability',
+            'Statistics: Sample Size Calculations',
+            'Statistics: Understanding Research Papers',
+            'Statistics: Other',
             'Software: Excel',
-            'Software: LaTeX',
+            'Software: GraphPad',
+            'Software: Jamovi',
             'Software: Matlab',
             'Software: R',
             'Software: SPSS',
-            'Software: Other',
-            'Statistics: Data Collection',
-            'Statistics: Data Presentation',
-            'Statistics: Statistical Testing',
-            'Statistics: Statistical Theory',
-            'Statistics: Other'])
+            'Software: Other'])
         Choice(self,    name  =  'Topic 2',                                 values =  [
-            'N/A',
             'Maths: Algebra',
             'Maths: Calculus',
             'Maths: Complex Numbers',
             'Maths: Numeracy',
             'Maths: Trigonometry',
-            'Maths: Vector Calculus',
             'Maths: Other',
+            'Statistics: Data Collection/Handling',
+            'Statistics: Data Presentation/Writing Up Results',
+            'Statistics: Statistical Testing',
+            'Statistics: Statistical Theory',
+            'Statistics: Probability',
+            'Statistics: Sample Size Calculations',
+            'Statistics: Understanding Research Papers',
+            'Statistics: Other',
             'Software: Excel',
-            'Software: LaTeX',
+            'Software: GraphPad',
+            'Software: Jamovi',
             'Software: Matlab',
             'Software: R',
             'Software: SPSS',
-            'Software: Other',
-            'Statistics: Data Collection',
-            'Statistics: Data Presentation',
-            'Statistics: Statistical Testing',
-            'Statistics: Statistical Theory',
-            'Statistics: Other'], default = 'N/A')
+            'Software: Other'], default = 'N/A')
         Choice(self,    name  =  'Level',                                   values =  [
             'Pre-Entry (SISC)',
             'Level 3 - Foundation',
@@ -945,6 +959,7 @@ class EmbdMASA(Profile):
             'Not applicable to other workshops',
             'Is applicable to other workshops'], on_value = 'Not applicable to other workshops')
         Nums(self,      names = ('Expected', 'Arrived'), label = '# Students')
+        Text(self,      name  =  'Notes',                   default = 'N/A')
 
 class EmbdASND(Profile):
     """Class for AS&D (Embedded) profile.
@@ -1092,11 +1107,14 @@ class EmbdASND(Profile):
             'Not applicable to other workshops',
             'Is applicable to other workshops'], on_value = 'Not applicable to other workshops')
         Nums(self,      names = ('Expected', 'Arrived'), label = '# Students')
+        Text(self,      name  =  'Notes',                   default = 'N/A')
 
 # ---------------------------------------------------------------------------- #
 #                            Script - DO NOT CHANGE                            #
 # ---------------------------------------------------------------------------- #
 
 def main():
+    """Run app.
+    """
     os.makedirs(DATA_DIR, exist_ok=True); os.chdir(DATA_DIR)
     App().mainloop()

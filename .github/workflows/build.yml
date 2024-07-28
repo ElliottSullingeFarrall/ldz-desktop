@@ -32,6 +32,12 @@ jobs:
         run: |
           poetry run python build.py
 
+      - name: Zip App
+        if: matrix.os == 'macos-latest'
+        run: |
+          cd dist
+          zip -r app.zip *.app
+
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
         with:
