@@ -25,7 +25,7 @@ class App(tk.Tk):
         self.style.theme_use('clam')
 
         self.title(f'Select Profile')
-        self.iconphoto(True, tk.PhotoImage(file=resource_path('assets/stag.png')))
+        self.iconphoto(True, tk.PhotoImage(file=resource_path('asets/stag.png')))
         self.resizable(False, False)
         self.geometry('250x120')
 
@@ -959,7 +959,7 @@ class EmbdMASA(Profile):
             'Not applicable to other workshops',
             'Is applicable to other workshops'], on_value = 'Not applicable to other workshops')
         Nums(self,      names = ('Expected', 'Arrived'), label = '# Students')
-        Text(self,      name  =  'Notes',                   default = 'N/A')
+        Text(self,      name  =  'Notes',                                   default = 'N/A')
 
 class EmbdASND(Profile):
     """Class for AS&D (Embedded) profile.
@@ -1107,7 +1107,7 @@ class EmbdASND(Profile):
             'Not applicable to other workshops',
             'Is applicable to other workshops'], on_value = 'Not applicable to other workshops')
         Nums(self,      names = ('Expected', 'Arrived'), label = '# Students')
-        Text(self,      name  =  'Notes',                   default = 'N/A')
+        Text(self,      name  =  'Notes',                                   default = 'N/A')
 
 # ---------------------------------------------------------------------------- #
 #                            Script - DO NOT CHANGE                            #
@@ -1116,5 +1116,18 @@ class EmbdASND(Profile):
 def main():
     """Run app.
     """
-    os.makedirs(DATA_DIR, exist_ok=True); os.chdir(DATA_DIR)
-    App().mainloop()
+
+    if os.path.exists('CRASH.dump'):
+        os.remove('CRASH.dump')
+
+    try:
+        os.makedirs(DATA_DIR, exist_ok=True)
+        App().mainloop()
+    except Exception as error:
+        with open('CRASH.dump', 'w') as file:
+            file.write('An error occurred:\n')
+            file.write(str(error) + '\n')
+            file.write('Traceback:\n')
+            file.write(traceback.format_exc())
+        print(f'An error occurred. Details have been written to CRASH.dump.')
+        exit(1)

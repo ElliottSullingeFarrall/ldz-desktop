@@ -32,11 +32,14 @@ jobs:
       - name : Test App
         run: |
           ./dist/ldz.exe &
-          pid=$!
           sleep 30
-          kill $pid
-          wait $pid
-          exit $?
+          if [ -f ./dist/CRASH.dump ]; then
+            echo "CRASH.dump found. Test failed."
+            cat ./dist/CRASH.dump
+            exit 1
+          else
+            echo "No CRASH.dump found. Test passed."
+          fi
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
@@ -69,12 +72,15 @@ jobs:
 
       - name : Test App
         run: |
-          open -a ./dist/ldz.app &
+          open -a dist/ldz.app &
           sleep 30
-          pid=$(pgrep -n ldz)
-          kill $pid
-          wait $pid
-          exit $?
+          if [ -f ./dist/CRASH.dump ]; then
+            echo "CRASH.dump found. Test failed."
+            cat ./dist/CRASH.dump
+            exit 1
+          else
+            echo "No CRASH.dump found. Test passed."
+          fi
 
       - name: Zip App
         run: |

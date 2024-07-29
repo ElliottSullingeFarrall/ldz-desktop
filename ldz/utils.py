@@ -18,6 +18,7 @@ import openpyxl
 
 import os
 import sys
+import traceback
 import platformdirs
 from importlib.resources import files
 
