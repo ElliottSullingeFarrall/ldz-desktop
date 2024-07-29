@@ -32,10 +32,10 @@ jobs:
       - name : Test App
         run: |
           ./dist/ldz.exe &
-          sleep 30
+          sleep 10
           if [ -f ./CRASH.dump ]; then
-            echo "CRASH.dump found. Test failed."
             cat ./CRASH.dump
+            echo "CRASH.dump found. Test failed."
             exit 1
           else
             echo "No CRASH.dump found. Test passed."
@@ -73,12 +73,12 @@ jobs:
       - name : Test App
         run: |
           open -a "$PWD/dist/ldz.app" &
-          sleep 30
+          sleep 10
           ls -al
           ls -al ./dist 
           if [ -f ./dist/CRASH.dump ]; then
-            echo "CRASH.dump found. Test failed."
             cat ./dist/CRASH.dump
+            echo "CRASH.dump found. Test failed."
             exit 1
           else
             echo "No CRASH.dump found. Test passed."

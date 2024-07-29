@@ -1117,9 +1117,14 @@ def main():
     """Run app.
     """
 
-    print(pathlib.Path(os.path.dirname(os.path.abspath(sys.executable))))
-    if FROZEN and platform.system() == "Darwin":
-        os.chdir(pathlib.Path(os.path.dirname(os.path.abspath(sys.executable))))
+    # if FROZEN and platform.system() == "Darwin":
+    #     current_path = pathlib.Path(sys.argv[0]).resolve()
+    #     while current_path != current_path.parent:
+    #         if any(child.suffix == '.app' for child in current_path.iterdir()):
+    #             os.chdir(current_path)
+    #         current_path = current_path.parent
+
+    os.chdir(sys.argv[0])
 
     if os.path.exists('CRASH.dump'):
         os.remove('CRASH.dump')
