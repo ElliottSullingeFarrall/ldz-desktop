@@ -1,0 +1,14 @@
+.venv
+.direnv
+
+.DS_Store
+
+__pycache__
+
+build/
+*.spec
+
+dist/
+result
+
+*.dump

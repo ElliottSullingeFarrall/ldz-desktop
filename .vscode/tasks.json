@@ -1,0 +1,30 @@
+{
+    "version": "2.0.0",
+    "presentation": {
+        "echo": false,
+        "showReuseMessage": false,
+        "clear": true
+    },
+    "tasks": [
+        {
+            "label": "Run App",
+            "type": "shell",
+            "command": "poetry run ldz",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "Install Module from Selection",
+            "type": "shell",
+            "command": "poetry add ${selectedText}"
+        },
+        {
+            "label": "Uninstall Module from Selection",
+            "type": "shell",
+            "command": "poetry remove ${selectedText}"
+        }
+    ],
+}
