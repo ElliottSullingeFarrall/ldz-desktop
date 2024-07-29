@@ -28,7 +28,7 @@ jobs:
           python-version: "3.10"
           poetry-version: "1.7.1"
 
-      - name: Build Executable
+      - name: Build App
         run: |
           poetry run python build.py
 
@@ -36,7 +36,7 @@ jobs:
         if: matrix.os == 'macos-latest'
         run: |
           cd dist
-          zip -r app.zip *.app
+          zip -r ldz.zip *.app
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
@@ -60,7 +60,6 @@ jobs:
           poetry-version: "1.7.1"
 
       - name: Extract Version
-        id: extract_version
         run: |
           version=$(poetry version -s)
           echo "VERSION=$version" >> $GITHUB_ENV
@@ -79,7 +78,6 @@ jobs:
         uses: ncipollo/release-action@v1.14.0
         with:
           tag: v${{ env.VERSION }}
-          releaseName: Release v${{ env.VERSION }}
           generateReleaseNotes: true
           artifacts: |
             dist/windows/*

@@ -39,6 +39,7 @@ class App(tk.Tk):
             table.insert(parent='', index='end', values=(profile,))
         table.bind('<Motion>', 'break')
         table.pack(fill='both', expand='True')
+        raise Exception
 
         def select_profile(event: tk.Event):
             """Initialise profile window based on selection in treeview.
@@ -74,7 +75,7 @@ class Profile(tk.Tk):
         self.app: App = app
 
         self.title(f'{self.name}')
-        # self.resizable(False, False)
+        self.resizable(False, False)
         self.protocol("WM_DELETE_WINDOW", lambda: [self.destroy(), self.app.destroy()])
 
         menubar: tk.Menu  = tk.Menu(self)
