@@ -1117,14 +1117,17 @@ def main():
     """Run app.
     """
 
-    # if FROZEN and platform.system() == "Darwin":
-    #     current_path = pathlib.Path(sys.argv[0]).resolve()
-    #     while current_path != current_path.parent:
-    #         if any(child.suffix == '.app' for child in current_path.iterdir()):
-    #             os.chdir(current_path)
-    #         current_path = current_path.parent
-
-    os.chdir(pathlib.Path(sys.argv[0]).parent)
+    if FROZEN:
+        if platform.system() == "Darwin":
+            # Change working directory to the direcotry containing the app bundle
+            current_path = pathlib.Path(sys.argv[0]).resolve()
+            while current_path != current_path.parent:
+                if any(child.suffix == '.app' for child in current_path.iterdir()):
+                    os.chdir(current_path)
+                current_path = current_path.parent
+        else:
+            # Change working directory to the directory containing the executable
+            os.chdir(pathlib.Path(sys.argv[0]).parent)
 
     if os.path.exists('CRASH.dump'):
         os.remove('CRASH.dump')

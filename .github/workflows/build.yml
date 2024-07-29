@@ -35,8 +35,8 @@ jobs:
           sleep 10
           ls -al
           ls -al ./dist
-          if [ -f ./CRASH.dump ]; then
-            cat ./CRASH.dump
+          if [ -f ./dist/CRASH.dump ]; then
+            cat ./dump/CRASH.dump
             echo "CRASH.dump found. Test failed."
             exit 1
           else
