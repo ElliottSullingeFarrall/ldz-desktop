@@ -1130,4 +1130,4 @@ def main():
             file.write('Traceback:\n')
             file.write(traceback.format_exc())
         print(f'An error occurred. Details have been written to CRASH.dump.')
-        exit(1)
+        sys.exit(1)

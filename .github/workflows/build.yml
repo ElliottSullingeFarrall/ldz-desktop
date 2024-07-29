@@ -72,7 +72,7 @@ jobs:
 
       - name : Test App
         run: |
-          open -a dist/ldz.app &
+          open -a "$PWD/dist/ldz.app" &
           sleep 30
           if [ -f ./dist/CRASH.dump ]; then
             echo "CRASH.dump found. Test failed."
