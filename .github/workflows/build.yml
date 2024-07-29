@@ -33,6 +33,8 @@ jobs:
         run: |
           ./dist/ldz.exe &
           sleep 10
+          ls -al
+          ls -al ./dist
           if [ -f ./CRASH.dump ]; then
             cat ./CRASH.dump
             echo "CRASH.dump found. Test failed."

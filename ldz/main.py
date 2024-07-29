@@ -1124,7 +1124,7 @@ def main():
     #             os.chdir(current_path)
     #         current_path = current_path.parent
 
-    os.chdir(sys.argv[0])
+    os.chdir(os.dirname(pathlib.Path(sys.argv[0])))
 
     if os.path.exists('CRASH.dump'):
         os.remove('CRASH.dump')
