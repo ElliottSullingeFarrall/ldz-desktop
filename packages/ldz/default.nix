@@ -26,6 +26,6 @@ mkPoetryApplication rec {
     mkdir -p $out/share/applications
     cp ${desktopItem}/share/applications/* $out/share/applications
     mkdir -p $out/share/pixmaps
-    ln -s $out/lib/python3.11/site-packages/ldz/assets/stag.png $out/share/pixmaps/ldz.png
+    ln -s $out/lib/python3.10/site-packages/ldz/assets/stag.png $out/share/pixmaps/ldz.png 
   '';
 }
