@@ -6,17 +6,14 @@ on:
       - main
 
 jobs:
-  build:
-    strategy:
-      matrix:
-        os: [windows-latest, macos-latest]
-    
-    runs-on: ${{ matrix.os }}
+  build-windows:
     defaults:
       run:
         shell: bash
     permissions:
       contents: write
+
+    runs-on: windows-latest
 
     steps:
       - name: Checkout Repository
@@ -32,20 +29,66 @@ jobs:
         run: |
           poetry run python build.py
 
-      - name: Zip App
-        if: matrix.os == 'macos-latest'
+      - name : Test App
         run: |
-          cd dist
-          zip -r ldz.zip *.app
+          ./dist/ldz.exe &
+          pid=$!
+          sleep 30
+          kill $pid
+          wait $pid
+          exit $?
 
       - name: Upload Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-          name: build-${{ matrix.os }}
-          path: dist/*
+          name: build-windows
+          path: dist/ldz.exe
+
+  build-macos:
+    defaults:
+      run:
+        shell: bash
+    permissions:
+      contents: write
+
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Environment
+        uses: packetcoders/action-setup-cache-python-poetry@v1.2.0
+        with:
+          python-version: "3.10"
+          poetry-version: "1.7.1"
+
+      - name: Build App
+        run: |
+          poetry run python build.py
+
+      - name : Test App
+        run: |
+          ./dist/ldz.app &
+          pid=$!
+          sleep 30
+          kill $pid
+          wait $pid
+          exit $?
+
+      - name: Zip App
+        run: |
+          cd dist
+          zip -r ldz.zip ldz.app
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-macos
+          path: dist/ldz.zip
 
   release:
-    needs: build
+    needs: [build-windows, build-macos]
     
     runs-on: ubuntu-latest
     
@@ -65,11 +108,11 @@ jobs:
           echo "VERSION=$version" >> $GITHUB_ENV
 
       - name: Download Artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: build-windows-latest
           path: dist/windows
-      - uses: actions/download-artifact@v3
+      - uses: actions/download-artifact@v4
         with:
           name: build-macos-latest
           path: dist/macos
