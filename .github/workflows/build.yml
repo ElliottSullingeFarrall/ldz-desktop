@@ -70,8 +70,8 @@ jobs:
       - name : Test App
         run: |
           open ./dist/ldz.app &
-          pid=$!
           sleep 30
+          pid=$(pgrep -f ldz.app)
           kill $pid
           wait $pid
           exit $?
