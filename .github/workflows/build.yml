@@ -5,14 +5,13 @@ on:
     branches:
       - main
 
-jobs:
-  build-windows:
-    defaults:
-      run:
-        shell: bash
-    permissions:
-      contents: write
+defaults:
+  run:
+    shell: bash
+permissions:
+  contents: write
 
+jobs:
     runs-on: windows-latest
 
     steps:
@@ -33,8 +32,6 @@ jobs:
         run: |
           ./dist/ldz.exe &
           sleep 10
-          ls -al
-          ls -al ./dist
           if [ -f ./dist/CRASH.dump ]; then
             cat ./dist/CRASH.dump
             echo "CRASH.dump found. Test failed."
@@ -50,12 +47,6 @@ jobs:
           path: dist/ldz.exe
 
   build-macos:
-    defaults:
-      run:
-        shell: bash
-    permissions:
-      contents: write
-
     runs-on: macos-latest
 
     steps:
@@ -76,8 +67,6 @@ jobs:
         run: |
           open -a "$PWD/dist/ldz.app" &
           sleep 10
-          ls -al
-          ls -al ./dist 
           if [ -f ./dist/CRASH.dump ]; then
             cat ./dist/CRASH.dump
             echo "CRASH.dump found. Test failed."
@@ -98,9 +87,8 @@ jobs:
           path: dist/ldz.zip
 
   release:
-    needs: [build-windows, build-macos]
-    
     runs-on: ubuntu-latest
+    needs: [build-windows, build-macos]
     
     steps:
       - name: Checkout Repository
@@ -120,11 +108,11 @@ jobs:
       - name: Download Artifacts
         uses: actions/download-artifact@v4
         with:
-          name: build-windows-latest
+          name: build-windows
           path: dist/windows
       - uses: actions/download-artifact@v4
         with:
-          name: build-macos-latest
+          name: build-macos
           path: dist/macos
 
       - name: Create Release
