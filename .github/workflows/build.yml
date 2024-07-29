@@ -36,7 +36,7 @@ jobs:
           ls -al
           ls -al ./dist
           if [ -f ./dist/CRASH.dump ]; then
-            cat ./dump/CRASH.dump
+            cat ./dist/CRASH.dump
             echo "CRASH.dump found. Test failed."
             exit 1
           else
