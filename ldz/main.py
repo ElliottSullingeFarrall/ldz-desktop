@@ -1117,6 +1117,9 @@ def main():
     """Run app.
     """
 
+    if FROZEN and platform.system() == "Darwin":
+        os.chdir(pathlib.Path(os.path.dirname(os.path.abspath(__file__))))
+
     if os.path.exists('CRASH.dump'):
         os.remove('CRASH.dump')
 

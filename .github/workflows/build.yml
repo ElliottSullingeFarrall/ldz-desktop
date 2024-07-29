@@ -33,11 +33,9 @@ jobs:
         run: |
           ./dist/ldz.exe &
           sleep 30
-          ls -al
-          ls -al ./dist 
-          if [ -f ./dist/CRASH.dump ]; then
+          if [ -f ./CRASH.dump ]; then
             echo "CRASH.dump found. Test failed."
-            cat ./dist/CRASH.dump
+            cat ./CRASH.dump
             exit 1
           else
             echo "No CRASH.dump found. Test passed."
