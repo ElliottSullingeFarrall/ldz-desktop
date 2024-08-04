@@ -1,5 +1,5 @@
 {
-	"name": "Nix Container",
-	"image": "ghcr.io/xtruder/nix-devcontainer:latest",
-	"initializeCommand": "xhost +"
+  "name": "Nix Container",
+  "image": "ghcr.io/xtruder/nix-devcontainer:latest",
+  "initializeCommand": "xhost +"
 }

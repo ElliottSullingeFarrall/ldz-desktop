@@ -1,12 +1,18 @@
 { mkShell
 , pkgs
+, inputs
+, system
 , ...
 }:
 
 mkShell {
   name = "poetry";
 
-  packages = with pkgs; [ poetry python310Full ];
+  buildInputs = inputs.self.checks.${system}.pre-commit.enabledPackages;
+  packages = with pkgs; [
+    python310Full
+    poetry
+  ];
 
   LD_LIBRARY_PATH = "${pkgs.stdenv.cc.cc.lib}/lib";
 
@@ -14,5 +20,5 @@ mkShell {
   shellHook = ''
     poetry env use $(which python)
     poetry install
-  '';
+  '' + inputs.self.checks.${system}.pre-commit.shellHook;
 }
