@@ -12,6 +12,7 @@ mkShell {
   packages = with pkgs; [
     python310Full
     poetry
+    ruff
   ];
 
   LD_LIBRARY_PATH = "${pkgs.stdenv.cc.cc.lib}/lib";
