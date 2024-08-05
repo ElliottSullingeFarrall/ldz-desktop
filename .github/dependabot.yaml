@@ -9,6 +9,6 @@ updates:
     schedule:
       interval: "monthly"
   - package-ecosystem: "devcontainers"
-    directory: ".devcontainer"
+    directory: "/"
     schedule:
       interval: "monthly"
